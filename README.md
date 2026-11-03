@@ -57,45 +57,6 @@ Silhouette peaks mathematically at k = 2 (0.24), which only splits arid inland f
 
 ---
 
-## 📸 Screenshots
-
-> 💡 Replace the placeholders below with real screenshots from the live app. Save them in `assets/screenshots/` using the file names shown.
-
-<table>
-<tr>
-<td align="center" width="50%">
-<img src="assets/screenshots/01-hero.png" alt="Hero section"/><br/>
-<b>Landing Page</b>
-</td>
-<td align="center" width="50%">
-<img src="assets/screenshots/02-station-field.png" alt="3D station field"/><br/>
-<b>3D Station Field</b>
-</td>
-</tr>
-<tr>
-<td align="center">
-<img src="assets/screenshots/03-regime-discovery.png" alt="Regime discovery"/><br/>
-<b>Regime Discovery</b>
-</td>
-<td align="center">
-<img src="assets/screenshots/04-dendrogram.png" alt="Ward dendrogram"/><br/>
-<b>Hierarchical Dendrogram</b>
-</td>
-</tr>
-<tr>
-<td align="center">
-<img src="assets/screenshots/05-pca-space.png" alt="PCA latent space"/><br/>
-<b>PCA Latent Space</b>
-</td>
-<td align="center">
-<img src="assets/screenshots/06-model-registry.png" alt="Model registry"/><br/>
-<b>Model Comparison Suite</b>
-</td>
-</tr>
-</table>
-
----
-
 ## 🔬 ML Pipeline
 
 <img src="pipeline.svg" alt="8-stage ML pipeline" width="100%"/>
