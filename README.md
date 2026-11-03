@@ -228,7 +228,6 @@ Distributed under the [MIT License](LICENSE).
 **Sagar**
 B.Tech CSE · Lovely Professional University
 
-[![GitHub](https://img.shields.io/badge/GitHub-@your--username-181717?style=for-the-badge&logo=github)](https://github.com/your-username)
 
 ⭐ *If you found this project interesting, consider giving it a star!*
 
