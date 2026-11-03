@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>Rainfall Atlas · 3D Scientific Climate Platform</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;background-color:#07111F;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-container-lowest":"#040b15","surface":"#07111F","surface-container-low":"#0A1928","on-surface-variant":"#bcc9cb","primary-fixed":"#95f1ff","on-secondary-container":"#00332d","on-primary":"#00363d","on-primary-container":"#004e57","on-primary-fixed":"#001f24","surface-dim":"#050d18","surface-container":"#0e2236","inverse-surface":"#d9e3f7","primary-fixed-dim":"#56d7e9","inverse-on-surface":"#273140","secondary-fixed-dim":"#5cdac9","on-background":"#d9e3f7","primary":"#54D6E8","on-error":"#690005","secondary-fixed":"#7bf7e5","tertiary":"#91DCE8","surface-container-highest":"#17344f","on-error-container":"#ffdad6","secondary-container":"#0f4842","on-secondary":"#003731","tertiary-fixed":"#a3effb","on-secondary-fixed":"#00201c","on-tertiary-fixed":"#001f24","tertiary-fixed-dim":"#87d2de","tertiary-container":"#13444d","surface-container-high":"#122b42","inverse-primary":"#006874","on-tertiary-fixed-variant":"#004f57","on-surface":"#d9e3f7","background":"#07111F","error-container":"#93000a","surface-variant":"#16324c","outline-variant":"#1c405c","surface-bright":"#1e4262","primary-container":"#54D6E8","on-tertiary-container":"#005b64","on-secondary-fixed-variant":"#005048","surface-tint":"#54D6E8","on-primary-fixed-variant":"#004f57","outline":"#39627f","on-tertiary":"#00363d","error":"#ffb4ab","secondary":"#3BBFAF"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"space-xs":"0.25rem","space-md":"1rem","space-lg":"1.5rem","gutter-sm":"0.75rem","space-xl":"2.5rem","margin-desktop":"3rem","gutter":"1.5rem","gutter-lg":"2rem","margin-mobile":"1rem","space-sm":"0.5rem","margin":"2rem"},fontFamily:{"code-metric":["JetBrains Mono"],"display-mobile":["Space Grotesk"],"body-md":["Manrope"],"headline-lg":["Space Grotesk"],"headline-md":["Space Grotesk"],"label-md":["JetBrains Mono"],"body-lg":["Manrope"],"label-sm":["JetBrains Mono"],"headline-sm":["Space Grotesk"],"headline-xl":["Space Grotesk"],"headline-lg-mobile":["Space Grotesk"],"body-sm":["Manrope"],"display":["Space Grotesk"],"headline-xl-mobile":["Space Grotesk"]},fontSize:{"code-metric":["22px",{lineHeight:"26px",letterSpacing:"-0.02em",fontWeight:"500"}],"display-mobile":["36px",{lineHeight:"44px",letterSpacing:"-0.02em",fontWeight:"600"}],"body-md":["15px",{lineHeight:"24px",letterSpacing:"0em",fontWeight:"400"}],"headline-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.015em",fontWeight:"500"}],"headline-md":["24px",{lineHeight:"32px",letterSpacing:"-0.01em",fontWeight:"500"}],"label-md":["13px",{lineHeight:"18px",letterSpacing:"0.02em",fontWeight:"500"}],"body-lg":["18px",{lineHeight:"28px",letterSpacing:"-0.005em",fontWeight:"400"}],"label-sm":["11px",{lineHeight:"16px",letterSpacing:"0.04em",fontWeight:"500"}],"headline-sm":["20px",{lineHeight:"28px",letterSpacing:"0em",fontWeight:"500"}],"headline-xl":["40px",{lineHeight:"48px",letterSpacing:"-0.02em",fontWeight:"500"}],"headline-lg-mobile":["24px",{lineHeight:"32px",letterSpacing:"-0.01em",fontWeight:"500"}],"body-sm":["13px",{lineHeight:"20px",letterSpacing:"0.005em",fontWeight:"400"}],"display":["56px",{lineHeight:"64px",letterSpacing:"-0.03em",fontWeight:"600"}],"headline-xl-mobile":["28px",{lineHeight:"36px",letterSpacing:"-0.01em",fontWeight:"500"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased min-h-screen selection:bg-primary/30 selection:text-primary"><header class="fixed top-0 left-0 w-full z-50 bg-[#07111F]/85 backdrop-blur-xl border-b border-primary/20 shadow-[0_12px_32px_-4px_rgba(2,6,15,0.75)]"><div class="h-20 w-full px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md shrink-0"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-lg bg-[#0A1928] border border-primary/40 flex items-center justify-center shadow-[0_0_15px_rgba(84,214,232,0.3)]"><span class="material-symbols-outlined text-primary text-[22px]">blur_on</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface font-semibold leading-none">RAINFALL ATLAS</span><span class="font-label-sm text-label-sm text-primary tracking-widest leading-none mt-1">3D CLIMATE INTELLIGENCE</span></div></div><div class="hidden xl:flex items-center gap-space-xs px-space-sm py-1 rounded bg-[#0A1928] border border-primary/20 text-on-surface-variant"><span class="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_8px_rgba(59,191,175,0.8)]"></span><span class="font-label-sm text-label-sm text-on-surface-variant font-code-metric">Dataset: weatherAUS.csv [145.4K Records · 3D Spatial Grid]</span></div></div><nav class="hidden lg:flex items-center gap-space-xs shrink-0"><a aria-current="page" class="px-3 py-1.5 text-xs font-mono font-medium rounded-lg bg-primary/20 text-primary border border-primary/40 shadow-[0_0_12px_rgba(84,214,232,0.25)] transition-all" data-path="overview" href="#overview">Overview</a><a class="px-3 py-1.5 font-label-md text-label-md text-on-surface-variant hover:text-primary hover:border hover:border-primary/30 rounded-lg transition-colors" data-path="explore-data" href="#dataset-field">Explore Data (3D)</a><a class="px-3 py-1.5 font-label-md text-label-md text-on-surface-variant hover:text-primary hover:border hover:border-primary/30 rounded-lg transition-colors" data-path="discover-regimes" href="#regime-discovery">Regime Discovery</a><a class="px-3 py-1.5 font-label-md text-label-md text-on-surface-variant hover:text-primary hover:border hover:border-primary/30 rounded-lg transition-colors" data-path="hierarchical-tree" href="#hierarchical-tree">Hierarchical Linkage</a><a class="px-3 py-1.5 font-label-md text-label-md text-on-surface-variant hover:text-primary hover:border hover:border-primary/30 rounded-lg transition-colors" data-path="pca-visualization" href="#pca-space">PCA Space</a><a class="px-3 py-1.5 font-label-md text-label-md text-on-surface-variant hover:text-primary hover:border hover:border-primary/30 rounded-lg transition-colors" data-path="climate-insights" href="#australia-insights">Continental Map</a></nav><div class="flex items-center gap-space-md shrink-0"><div class="hidden 2xl:flex items-center gap-space-md"><div class="flex flex-col text-right"><span class="font-label-sm text-label-sm text-on-surface-variant">ENGINE: v2.4 3D-SPATIAL</span><span class="font-label-sm text-label-sm text-secondary font-code-metric">WEBGL ACTIVE · 60 FPS</span></div><div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#0A1928] border border-primary/25 font-label-sm text-label-sm text-on-surface-variant"><span class="material-symbols-outlined text-[14px] text-primary">sensors</span><span class="font-code-metric">LIVE TELEMETRY</span></div></div><a class="px-4 py-2 rounded bg-primary text-[#001f24] font-label-md text-label-md font-semibold hover:bg-secondary transition-all shadow-[0_0_20px_rgba(84,214,232,0.4)]" href="#regime-discovery">Launch 3D Orbit</a><div class="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[18px]">view_in_ar</span></div></div></div></header><main class="w-full pt-20 bg-[#07111F] min-h-[calc(100vh-80px)]"><div class="flex flex-col w-full">
+<!-- Top Atmospheric Glow Mesh -->
+<div class="relative w-full overflow-hidden px-space-md sm:px-space-lg lg:px-margin-desktop pt-space-md pb-space-xl" id="overview">
+<div class="pointer-events-none absolute -top-40 right-1/4 h-[560px] w-[560px] rounded-full bg-primary/10 blur-[140px]"></div>
+<div class="pointer-events-none absolute top-1/3 -left-32 h-[480px] w-[480px] rounded-full bg-secondary/15 blur-[130px]"></div>
+<!-- SECTION 1: HERO SECTION - Asymmetric 12-Column Spatial Layout with Enhanced 3D Atmospheric Earth -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg lg:gap-space-xl items-center relative">
+<!-- Left Column: Core Narrative & Mission Telemetry (Cols 1-6) -->
+<div class="lg:col-span-6 flex flex-col items-start z-10">
+<!-- Eyebrow Badge -->
+<div class="inline-flex items-center gap-space-xs px-3.5 py-1.5 rounded-full bg-[#0A1928]/90 border border-primary/40 shadow-[0_0_16px_rgba(84,214,232,0.2)] backdrop-blur-md">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_#54D6E8]"></span>
+<span class="font-label-sm text-label-sm tracking-widest text-primary uppercase">3D SCIENTIFIC VISUALIZATION // SYNOPTIC CLUSTERING</span>
+</div>
+<!-- Editorial Main Title -->
+<h1 class="mt-space-md font-display text-display font-bold text-on-surface tracking-tight leading-[1.08]">
+          Discover the hidden patterns of <span class="bg-gradient-to-r from-primary via-tertiary to-secondary bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(84,214,232,0.3)]">rainfall.</span>
+</h1>
+<!-- Supporting Narrative -->
+<p class="mt-space-md font-body-lg text-body-lg text-on-surface-variant max-w-xl leading-relaxed">
+          Explore historical weather observations across the Australian continent through interactive 3D spatial geometry. Uncover latent precipitation regimes and decode high-dimensional atmospheric forces shaping synoptic behavior.
+        </p>
+<!-- CTA Action Cluster -->
+<div class="mt-space-lg flex flex-wrap items-center gap-space-md w-full sm:w-auto">
+<a class="group flex items-center justify-center gap-space-xs px-6 py-3.5 rounded-lg bg-primary text-[#001f24] font-label-md text-label-md font-semibold transition-all shadow-[0_0_24px_rgba(84,214,232,0.4)] hover:shadow-[0_0_36px_rgba(84,214,232,0.6)] hover:bg-secondary" href="#regime-discovery">
+<span>Explore 3D Particle Cloud</span>
+<span class="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-1">travel_explore</span>
+</a>
+<a class="flex items-center justify-center gap-space-xs px-6 py-3.5 rounded-lg bg-[#0A1928] border border-primary/30 text-on-surface font-label-md text-label-md transition-all hover:bg-surface-bright hover:border-primary shadow-sm" href="#pca-space">
+<span class="material-symbols-outlined text-primary text-[18px]">scatter_plot</span>
+<span>Inspect PCA Coordinates</span>
+</a>
+</div>
+<!-- Telemetry Metadata Strip -->
+<div class="mt-space-xl pt-space-lg w-full grid grid-cols-2 sm:grid-cols-4 gap-space-md border-t border-primary/15">
+<div class="flex flex-col p-2.5 rounded-lg bg-[#0A1928]/60 border border-primary/20">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Target Domain</span>
+<span class="mt-1 font-headline-sm text-headline-sm text-on-surface font-semibold leading-tight">AUS Continental</span>
+<span class="font-label-sm text-label-sm text-primary font-code-metric">49 Synoptic Grids</span>
+</div>
+<div class="flex flex-col p-2.5 rounded-lg bg-[#0A1928]/60 border border-primary/20">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Temporal Span</span>
+<span class="mt-1 font-headline-sm text-headline-sm text-primary font-code-metric leading-tight">10-Year</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-code-metric">145.4K Daily Feeds</span>
+</div>
+<div class="flex flex-col p-2.5 rounded-lg bg-[#0A1928]/60 border border-primary/20">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Algorithmic Stack</span>
+<span class="mt-1 font-headline-sm text-headline-sm text-secondary font-code-metric leading-tight">PCA · PAM</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-code-metric">Ward Linkage k=4</span>
+</div>
+<div class="flex flex-col p-2.5 rounded-lg bg-[#0A1928]/60 border border-primary/20">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">3D Render Pipeline</span>
+<span class="mt-1 font-headline-sm text-headline-sm text-tertiary font-code-metric leading-tight">WebGL 2.0</span>
+<span class="font-label-sm text-label-sm text-secondary font-code-metric">Particle Emitters Active</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Visual Atmospheric 3D Globe with Telemetry HUD (Cols 7-12) -->
+<div class="lg:col-span-6 relative mt-space-md lg:mt-0 flex justify-center">
+<div class="absolute inset-0 rounded-2xl bg-gradient-to-tr from-[#050e1c] via-[#0A1928]/60 to-primary/20 blur-xl"></div>
+<div class="relative w-full rounded-2xl bg-[#0A1928] border border-primary/30 shadow-[0_0_35px_rgba(84,214,232,0.25)] overflow-hidden">
+<!-- 3D Atmospheric Globe Viewport -->
+<div class="w-full h-[540px] sm:h-[620px] rounded-2xl relative block overflow-hidden" id="hero-earth-container">
+</div>
+<!-- Floating Technical HUD 1: Top-Right Geospatial Anchor -->
+<div class="absolute top-4 right-4 z-20 px-3.5 py-2 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md shadow-md flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px] text-primary">my_location</span>
+<span class="font-label-sm text-label-sm text-on-surface font-code-metric">LAT: 25.27° S | LON: 133.77° E · 3D ORBIT ACTIVE</span>
+</div>
+<!-- Floating Technical HUD 2: Bottom-Left Sensor Arrays -->
+<div class="absolute bottom-4 left-4 z-20 px-3.5 py-2.5 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md shadow-md flex items-center gap-space-sm">
+<div class="relative flex items-center justify-center">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="absolute w-4 h-4 rounded-full bg-secondary/30 animate-ping"></span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-secondary font-code-metric font-semibold">ATMOSPHERIC RAINFALL PARTICLES: 1,800 SENSORS</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-code-metric">Surface Isohyets &amp; Cloud Cover Mapped</span>
+</div>
+</div>
+<!-- Floating Technical HUD 3: Top-Left Real-time Isohyet Gauge -->
+<div class="hidden sm:flex absolute top-4 left-4 z-20 px-3 py-2 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md shadow-md flex-col gap-1">
+<div class="flex items-center justify-between gap-4 font-label-sm text-label-sm text-on-surface-variant">
+<span>PRECIP DEPTH</span>
+<span class="text-primary font-code-metric">0 - 320mm / 24h</span>
+</div>
+<div class="w-32 h-1.5 rounded-full bg-[#040b15] overflow-hidden flex border border-primary/20">
+<div class="h-full w-1/4 bg-[#1e4262]"></div>
+<div class="h-full w-1/4 bg-secondary"></div>
+<div class="h-full w-1/4 bg-primary"></div>
+<div class="h-full w-1/4 bg-tertiary"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- DATASET OVERVIEW STRIP: High-Density Telemetry Bar -->
+<section class="w-full px-space-md sm:px-space-lg lg:px-margin-desktop mb-space-xl">
+<div class="p-space-lg rounded-2xl bg-[#0A1928] border border-primary/30 shadow-[0_8px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl relative overflow-hidden">
+<div class="absolute top-0 right-0 w-96 h-full bg-gradient-to-l from-primary/10 to-transparent pointer-events-none"></div>
+<div class="flex flex-col xl:flex-row xl:items-center justify-between gap-space-lg relative z-10">
+<div class="flex items-center gap-space-md shrink-0">
+<div class="w-12 h-12 rounded-xl bg-[#0e2236] border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(84,214,232,0.25)]">
+<span class="material-symbols-outlined text-[26px]">database</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase text-primary font-code-metric">DATASET ARCHIVE SPECIFICATION</span>
+<span class="px-2 py-0.5 rounded bg-primary/20 border border-primary/40 text-primary font-label-sm text-label-sm font-code-metric">weatherAUS.csv</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Australian Bureau of Meteorology Observations</h2>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Continuous synoptic feeds from 49 continental meteorological stations</span>
+</div>
+</div>
+<!-- High-Density Key Metrics Matrix -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-space-md xl:gap-space-lg w-full xl:w-auto">
+<div class="p-space-md rounded-xl bg-[#0e2236]/70 border border-primary/20 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Total Observations</span>
+<span class="mt-1 font-headline-md text-headline-md text-primary font-code-metric font-bold">145,460</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-code-metric">Clean Imputed Rows</span>
+</div>
+<div class="p-space-md rounded-xl bg-[#0e2236]/70 border border-primary/20 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Station Coordinates</span>
+<span class="mt-1 font-headline-md text-headline-md text-secondary font-code-metric font-bold">49 Geo Stns</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-code-metric">Continental Coverage</span>
+</div>
+<div class="p-space-md rounded-xl bg-[#0e2236]/70 border border-primary/20 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Feature Vector</span>
+<span class="mt-1 font-headline-md text-headline-md text-tertiary font-code-metric font-bold">23 → 14</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-code-metric">Normalized Atmospheric</span>
+</div>
+<div class="p-space-md rounded-xl bg-[#0e2236]/70 border border-primary/20 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Optimal Clusters</span>
+<span class="mt-1 font-headline-md text-headline-md text-primary font-code-metric font-bold">k = 4</span>
+<span class="font-label-sm text-label-sm text-secondary font-code-metric">Silhouette Peak 0.58</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: DATASET EXPLORATION SECTION - Interactive 3D Data Landscape / Observation Field -->
+<section class="w-full px-space-md sm:px-space-lg lg:px-margin-desktop mb-space-xl flex flex-col gap-space-lg" id="dataset-field">
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+<div class="max-w-3xl">
+<div class="inline-flex items-center gap-space-xs px-3 py-1 rounded bg-primary/10 border border-primary/30 text-primary mb-space-sm">
+<span class="material-symbols-outlined text-[16px]">travel_explore</span>
+<span class="font-label-sm text-label-sm font-code-metric tracking-wider uppercase">3D Atmospheric Observation Field</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl font-bold text-on-surface tracking-tight">
+          Spatial Weather Landscape: Continental Stations in Volumetric Space
+        </h2>
+<p class="mt-space-sm font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Each spatial particle encodes an Australian synoptic station in 3D coordinate space [Latitude, Longitude, Barometric Altitude]. Hover or inspect live attribute badges to analyze temperature gradients, evaporation rates, and 3pm rainfall deltas.
+        </p>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<span class="px-3 py-1.5 rounded-lg bg-[#0A1928] border border-primary/30 font-label-sm text-label-sm text-primary font-code-metric flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-primary animate-ping"></span> Live Field Render</span>
+<span class="px-3 py-1.5 rounded-lg bg-[#0A1928] border border-secondary/30 font-label-sm text-label-sm text-secondary font-code-metric">49 Monitored Basins</span>
+</div>
+</div>
+<!-- 3D Observation Field Viewport Container -->
+<div class="relative w-full rounded-2xl bg-[#0A1928] border border-primary/30 shadow-[0_0_30px_rgba(84,214,232,0.2)] overflow-hidden">
+<div class="w-full h-[480px] sm:h-[540px] relative" id="threejs-container-DATA_FIELD">
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="w-full h-full bg-radial-at-c from-primary/5 via-transparent to-transparent"></div>
+</div>
+</div>
+<!-- Top Overlay Bar: Station Attribute Explorer -->
+<div class="absolute top-4 left-4 z-20 flex flex-wrap gap-2">
+<div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md text-on-surface font-label-sm text-label-sm font-code-metric flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_8px_#54D6E8]"></span>
+<span>Active Probe: Sydney Coastal (LAT -33.86, LON 151.21)</span>
+</div>
+<div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 backdrop-blur-md text-on-surface-variant font-label-sm text-label-sm font-code-metric">
+        Temp 3pm: 23.4°C · Rain: 4.2mm · Pressure: 1017.2 hPa
+      </div>
+</div>
+<!-- Bottom Overlay Telemetry Badges -->
+<div class="absolute bottom-4 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+<div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md text-secondary font-label-sm text-label-sm font-code-metric pointer-events-auto">
+        Interactive 3D Grid · Topographic Altitude Mapping Active
+      </div>
+<div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md text-on-surface-variant font-label-sm text-label-sm font-code-metric pointer-events-auto">
+        Hover stations to sample synoptic parameters
+      </div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: RAINFALL REGIME DISCOVERY - 3D Unsupervised Clustering Particle Simulation -->
+<section class="w-full px-space-md sm:px-space-lg lg:px-margin-desktop mb-space-xl flex flex-col gap-space-lg" id="regime-discovery">
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+<div class="max-w-3xl">
+<div class="inline-flex items-center gap-space-xs px-3 py-1 rounded bg-secondary/10 border border-secondary/30 text-secondary mb-space-sm">
+<span class="material-symbols-outlined text-[16px]">scatter_plot</span>
+<span class="font-label-sm text-label-sm font-code-metric tracking-wider uppercase">Unsupervised Clustering Particle Engine</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl font-bold text-on-surface tracking-tight">
+          Conceptualizing Latent Regimes: How Unsupervised Models Cluster Precipitation
+        </h2>
+<p class="mt-space-sm font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Historical climate variables exist in high-dimensional continuous space. Through spatial distance metrics (Euclidean and Manhattan PAM), observations gravitate toward 4 natural equilibrium centroids, isolating dry-continental, coastal-orographic, and monsoonal regimes without prior labels.
+        </p>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-code-metric">Distance Metric:</span>
+<span class="px-2.5 py-1 rounded bg-[#0A1928] border border-primary/40 text-primary font-label-sm text-label-sm font-code-metric">Euclidean Orthogonal</span>
+<span class="px-2.5 py-1 rounded bg-[#0A1928] border border-secondary/40 text-secondary font-label-sm text-label-sm font-code-metric">k = 4 Centroids</span>
+</div>
+</div>
+<!-- 3D Regime Discovery Visualization Interactive Viewport -->
+<div class="relative w-full rounded-2xl bg-[#0A1928] border border-primary/30 shadow-[0_0_35px_rgba(84,214,232,0.25)] overflow-hidden">
+<div class="w-full h-[520px] sm:h-[580px] relative" id="particle-cluster-container">
+</div>
+<!-- Dynamic Overlay HUD on 3D Space -->
+<div class="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
+<div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md shadow flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_8px_#54D6E8]"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-code-metric">Regime 1: Monsoonal Tropics</span>
+</div>
+<div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-secondary/30 backdrop-blur-md shadow flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_8px_#3BBFAF]"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-code-metric">Regime 2: Arid Outback</span>
+</div>
+<div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-tertiary/30 backdrop-blur-md shadow flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary shadow-[0_0_8px_#91DCE8]"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-code-metric">Regime 3: Oceanic Front</span>
+</div>
+<div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-[#45c6a6]/40 backdrop-blur-md shadow flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#45c6a6] shadow-[0_0_8px_#45c6a6]"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-code-metric">Regime 4: Subtropical Convective</span>
+</div>
+</div>
+<!-- Interactive Cluster Simulation Controls -->
+<div class="absolute top-4 right-4 z-10 flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/40 hover:border-primary text-primary font-label-sm text-label-sm font-code-metric shadow flex items-center gap-1.5" id="btn-cluster-play">
+<span class="material-symbols-outlined text-[15px]">play_arrow</span> Play / Cycle
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/25 hover:border-primary text-on-surface-variant font-label-sm text-label-sm font-code-metric shadow flex items-center gap-1.5" id="btn-cluster-pause">
+<span class="material-symbols-outlined text-[15px]">pause</span> Pause
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/25 hover:border-primary text-on-surface-variant font-label-sm text-label-sm font-code-metric shadow flex items-center gap-1.5" id="btn-cluster-reset">
+<span class="material-symbols-outlined text-[15px]">restart_alt</span> Reset
+</button>
+</div>
+<div class="absolute bottom-4 left-4 z-10 px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 backdrop-blur-md shadow text-primary font-label-sm text-label-sm font-code-metric">
+        Illustrative Demonstration: Latent Space Equilibrium · 2,500 Atmospheric Particles
+</div>
+<div class="absolute bottom-4 right-4 z-10 px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 backdrop-blur-md shadow text-on-surface-variant font-label-sm text-label-sm font-code-metric">
+        Interactive Orbit · Drag to Rotate 3D Particles · Scroll to Zoom
+</div>
+</div>
+<!-- The 4 Discovered Rainfall Regimes Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Regime Alpha -->
+<div class="p-space-lg rounded-2xl bg-[#0A1928] border border-primary/25 hover:border-primary/60 transition-all duration-300 shadow-md flex flex-col justify-between group">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/30 text-primary font-label-sm text-label-sm font-code-metric font-semibold">REGIME 01</span>
+<span class="material-symbols-outlined text-primary text-[20px]">cyclone</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-primary transition-colors">
+              Monsoonal Tropical Pulse
+            </h3>
+<p class="mt-space-xs font-body-sm text-body-sm text-on-surface-variant">
+              Dominates Northern Territories. Extreme relative humidity, torrential convective spikes, and equatorial deep low pressure systems.
+            </p>
+</div>
+<div class="mt-space-md pt-space-sm flex flex-col gap-1.5 font-label-sm text-label-sm font-code-metric border-t border-primary/15">
+<div class="flex justify-between text-on-surface-variant">
+<span>Mean Rain 3pm:</span>
+<span class="text-primary font-semibold">18.4 mm/day</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Humidity 9am:</span>
+<span class="text-on-surface">84.2%</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Barometric Delta:</span>
+<span class="text-error">-12.8 hPa</span>
+</div>
+</div>
+</div>
+<!-- Regime Beta -->
+<div class="p-space-lg rounded-2xl bg-[#0A1928] border border-secondary/25 hover:border-secondary/60 transition-all duration-300 shadow-md flex flex-col justify-between group">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="px-2.5 py-0.5 rounded-full bg-secondary/15 border border-secondary/30 text-secondary font-label-sm text-label-sm font-code-metric font-semibold">REGIME 02</span>
+<span class="material-symbols-outlined text-secondary text-[20px]">sunny</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-secondary transition-colors">
+              Arid Continental Stability
+            </h3>
+<p class="mt-space-xs font-body-sm text-body-sm text-on-surface-variant">
+              Dominates Inland Basin &amp; Outback. Sub-zero dew points, extreme diurnal thermal delta, relentless desiccation, and near-zero precipitation.
+            </p>
+</div>
+<div class="mt-space-md pt-space-sm flex flex-col gap-1.5 font-label-sm text-label-sm font-code-metric border-t border-secondary/15">
+<div class="flex justify-between text-on-surface-variant">
+<span>Mean Rain 3pm:</span>
+<span class="text-on-surface">0.1 mm/day</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Diurnal Delta:</span>
+<span class="text-secondary font-semibold">+19.6 °C</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Evaporation:</span>
+<span class="text-secondary">11.4 mm/d</span>
+</div>
+</div>
+</div>
+<!-- Regime Gamma -->
+<div class="p-space-lg rounded-2xl bg-[#0A1928] border border-tertiary/25 hover:border-tertiary/60 transition-all duration-300 shadow-md flex flex-col justify-between group">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary/15 border border-tertiary/30 text-tertiary font-label-sm text-label-sm font-code-metric font-semibold">REGIME 03</span>
+<span class="material-symbols-outlined text-tertiary text-[20px]">waves</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-tertiary transition-colors">
+              Oceanic Frontal Drift
+            </h3>
+<p class="mt-space-xs font-body-sm text-body-sm text-on-surface-variant">
+              Dominates Southern Maritime Coasts &amp; Tasmania. Sustained orographic drizzle, cool southerly Antarctic winds, and stable synoptic pressure.
+            </p>
+</div>
+<div class="mt-space-md pt-space-sm flex flex-col gap-1.5 font-label-sm text-label-sm font-code-metric border-t border-tertiary/15">
+<div class="flex justify-between text-on-surface-variant">
+<span>Mean Rain 3pm:</span>
+<span class="text-tertiary font-semibold">4.8 mm/day</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Wind Gust Speed:</span>
+<span class="text-on-surface">48.2 km/h</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Cloud Cover:</span>
+<span class="text-tertiary">6.8 / 8 Oktas</span>
+</div>
+</div>
+</div>
+<!-- Regime Delta -->
+<div class="p-space-lg rounded-2xl bg-[#0A1928] border border-[#45c6a6]/25 hover:border-[#45c6a6]/60 transition-all duration-300 shadow-md flex flex-col justify-between group">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="px-2.5 py-0.5 rounded-full bg-[#45c6a6]/15 border border-[#45c6a6]/30 text-[#45c6a6] font-label-sm text-label-sm font-code-metric font-semibold">REGIME 04</span>
+<span class="material-symbols-outlined text-[#45c6a6] text-[20px]">thunderstorm</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold group-hover:text-[#45c6a6] transition-colors">
+              Subtropical Convection
+            </h3>
+<p class="mt-space-xs font-body-sm text-body-sm text-on-surface-variant">
+              Dominates Eastern Seaboard. Rapid afternoon thermals, violent 3pm squalls, dynamic cloud albedo transitions, and volatile downpours.
+            </p>
+</div>
+<div class="mt-space-md pt-space-sm flex flex-col gap-1.5 font-label-sm text-label-sm font-code-metric border-t border-[#45c6a6]/15">
+<div class="flex justify-between text-on-surface-variant">
+<span>Mean Rain 3pm:</span>
+<span class="text-[#45c6a6] font-semibold">9.2 mm/day</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Peak Gust:</span>
+<span class="text-on-surface">62.0 km/h</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Temp Drop 3pm:</span>
+<span class="text-[#45c6a6]">-5.4 °C</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: HIERARCHICAL CLUSTERING SECTION - 3D Dendrogram Tree Visualization -->
+<section class="w-full px-space-md sm:px-space-lg lg:px-margin-desktop mb-space-xl flex flex-col gap-space-lg" id="hierarchical-tree">
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+<div class="max-w-3xl">
+<div class="inline-flex items-center gap-space-xs px-3 py-1 rounded bg-primary/10 border border-primary/30 text-primary mb-space-sm">
+<span class="material-symbols-outlined text-[16px]">account_tree</span>
+<span class="font-label-sm text-label-sm font-code-metric tracking-wider uppercase">Agglomerative Linkage Topology</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl font-bold text-on-surface tracking-tight">
+          3D Hierarchical Discovery Tree: Ward Minimum Variance Dendrogram
+        </h2>
+<p class="mt-space-sm font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Agglomerative clustering iteratively merges homogeneous observation clusters by minimizing within-cluster variance. Inspect the 3D branching lineage from the overarching continental root down to discrete synoptic leaf nodes.
+        </p>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<span class="px-2.5 py-1 rounded bg-[#0A1928] border border-primary/30 text-primary font-label-sm text-label-sm font-code-metric">Cophoenetic Corr: 0.84</span>
+<span class="px-2.5 py-1 rounded bg-[#0A1928] border border-secondary/30 text-secondary font-label-sm text-label-sm font-code-metric">Branch Depth: 4 Levels</span>
+</div>
+</div>
+<!-- 3D Hierarchical Discovery Tree Viewport -->
+<div class="relative w-full rounded-2xl bg-[#0A1928] border border-primary/30 shadow-[0_0_35px_rgba(84,214,232,0.2)] overflow-hidden">
+<div class="w-full h-[480px] sm:h-[520px] relative" id="tree-container">
+</div>
+<!-- Tree Simulation Controls -->
+<div class="absolute top-4 right-4 z-10 flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/40 hover:border-primary text-primary font-label-sm text-label-sm font-code-metric shadow flex items-center gap-1.5" id="btn-tree-growth">
+<span class="material-symbols-outlined text-[15px]">play_arrow</span> Play Growth
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/25 hover:border-primary text-on-surface-variant font-label-sm text-label-sm font-code-metric shadow flex items-center gap-1.5" id="btn-tree-pause">
+<span class="material-symbols-outlined text-[15px]">pause</span> Pause
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/25 hover:border-primary text-on-surface-variant font-label-sm text-label-sm font-code-metric shadow flex items-center gap-1.5" id="btn-tree-reset">
+<span class="material-symbols-outlined text-[15px]">restart_alt</span> Reset
+</button>
+</div>
+<!-- Floating Dendrogram Indicators -->
+<div class="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
+<div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md shadow flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-code-metric">Root Node (All Observations)</span>
+</div>
+<div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-secondary/30 backdrop-blur-md shadow flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-code-metric">Macro Bifurcation (Tropical vs Arid)</span>
+</div>
+<div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-tertiary/30 backdrop-blur-md shadow flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-code-metric">48 Observation Leaf Clusters</span>
+</div>
+</div>
+<div class="absolute bottom-4 left-4 z-10 px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 backdrop-blur-md shadow text-primary font-label-sm text-label-sm font-code-metric">
+        Conceptual Ward Hierarchical Dendrogram Model · Depth: 4 Levels
+</div>
+<div class="absolute bottom-4 right-4 z-10 px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 backdrop-blur-md shadow text-on-surface-variant font-label-sm text-label-sm font-code-metric">
+        Dynamic Branching · Interactive Mouse Parallax
+</div>
+</div>
+</section>
+<!-- SECTION 5: PCA DIMENSIONAL SPACE SECTION - 3D Latent Coordinate Projection -->
+<section class="w-full px-space-md sm:px-space-lg lg:px-margin-desktop mb-space-xl flex flex-col gap-space-lg" id="pca-space">
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+<div class="max-w-3xl">
+<div class="inline-flex items-center gap-space-xs px-3 py-1 rounded bg-tertiary/10 border border-tertiary/30 text-tertiary mb-space-sm">
+<span class="material-symbols-outlined text-[16px]">view_in_ar</span>
+<span class="font-label-sm text-label-sm font-code-metric tracking-wider uppercase">Dimensionality Reduction Latent Space</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl font-bold text-on-surface tracking-tight">
+          3D PCA Latent Space: Principal Component Variance Vectors
+        </h2>
+<p class="mt-space-sm font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Projection of 14 standardized meteorological variables into 3 orthogonal eigenvectors. Principal components capture 78.4% total continental variance, demonstrating mathematical separation across precipitation archetypes.
+        </p>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<span class="px-2.5 py-1 rounded bg-[#0A1928] border border-primary/30 text-primary font-label-sm text-label-sm font-code-metric">PC1: 42.1% (Thermal)</span>
+<span class="px-2.5 py-1 rounded bg-[#0A1928] border border-secondary/30 text-secondary font-label-sm text-label-sm font-code-metric">PC2: 23.8% (Moisture)</span>
+<span class="px-2.5 py-1 rounded bg-[#0A1928] border border-tertiary/30 text-tertiary font-label-sm text-label-sm font-code-metric">PC3: 12.5% (Pressure)</span>
+</div>
+</div>
+<!-- 3D PCA Space Interactive Viewport -->
+<div class="relative w-full rounded-2xl bg-[#0A1928] border border-primary/30 shadow-[0_0_35px_rgba(84,214,232,0.25)] overflow-hidden">
+<div class="w-full h-[500px] sm:h-[540px] relative" id="pca-3d-container">
+</div>
+<!-- PCA Coordinate Controls & Filter Badges -->
+<div class="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary text-primary font-label-sm text-label-sm font-code-metric shadow flex items-center gap-1.5" id="btn-pca-orbit" type="button">
+<span class="material-symbols-outlined text-[15px]">rotate_right</span> Orbit: Auto
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-code-metric shadow" id="btn-pca-axes" type="button">
+        Axes: On
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-code-metric shadow" id="btn-pca-eigen" type="button">
+        Eigenvectors: On
+</button>
+<div class="hidden md:flex px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 text-on-surface-variant font-label-sm text-label-sm font-code-metric">
+        1,800 Latent Observations · PC1 × PC2 × PC3
+</div>
+</div>
+<div class="absolute bottom-4 right-4 z-10 px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 backdrop-blur-md shadow text-secondary font-label-sm text-label-sm font-code-metric">
+        Click &amp; Drag to Orbit 3D Eigen-Space · Smooth Real-time Rotation
+</div>
+</div>
+</section>
+<!-- SECTION 6: CLIMATE INSIGHTS SECTION - 3D Australian Geospatial Map & Isohyets -->
+<section class="w-full px-space-md sm:px-space-lg lg:px-margin-desktop mb-space-xl flex flex-col gap-space-lg" id="australia-insights">
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+<div class="max-w-3xl">
+<div class="inline-flex items-center gap-space-xs px-3 py-1 rounded bg-secondary/10 border border-secondary/30 text-secondary mb-space-sm">
+<span class="material-symbols-outlined text-[16px]">map</span>
+<span class="font-label-sm text-label-sm font-code-metric tracking-wider uppercase">Geographic Synthesis &amp; Isohyet Contours</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl font-bold text-on-surface tracking-tight">
+          Continental Climate Geography: 3D Topographic Rainfall Contours
+        </h2>
+<p class="mt-space-sm font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Synoptic distribution across Australia reveals sharp orographic barriers. The Great Dividing Range shields the arid inland basin while coastal fringes receive concentrated monsoonal and frontal moisture plumes.
+        </p>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<span class="px-3 py-1.5 rounded-lg bg-[#0A1928] border border-primary/30 font-label-sm text-label-sm text-primary font-code-metric">Latitude: 10°S – 44°S</span>
+<span class="px-3 py-1.5 rounded-lg bg-[#0A1928] border border-secondary/30 font-label-sm text-label-sm text-secondary font-code-metric">Longitude: 112°E – 154°E</span>
+</div>
+</div>
+<!-- 3D Geospatial Map Canvas Container -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-stretch">
+<div class="lg:col-span-8 relative rounded-2xl bg-[#0A1928] border border-primary/30 shadow-[0_0_35px_rgba(84,214,232,0.2)] overflow-hidden flex flex-col">
+<div class="w-full h-[460px] relative" id="threejs-container-AU_GEO">
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="w-full h-full bg-radial-at-c from-primary/5 via-transparent to-transparent"></div>
+</div>
+</div>
+<!-- Geospatial Overlay Badges -->
+<div class="absolute top-4 left-4 z-20 flex flex-wrap gap-2">
+<div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md text-primary font-label-sm text-label-sm font-code-metric">
+          Interactive Topographic Terrain &amp; Rain Columns
+        </div>
+<div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-secondary/30 backdrop-blur-md text-secondary font-label-sm text-label-sm font-code-metric">
+          Regional Isohyet Contours Active
+        </div>
+</div>
+<div class="absolute bottom-4 left-4 z-20 px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 backdrop-blur-md text-on-surface font-label-sm text-label-sm font-code-metric">
+          Darwin · Cairns · Sydney · Melbourne · Perth · Alice Springs
+        </div>
+</div>
+<!-- Side Geographical Regimes Breakdown Panel -->
+<div class="lg:col-span-4 flex flex-col gap-space-md">
+<div class="p-space-lg rounded-2xl bg-[#0A1928] border border-primary/20 shadow-md flex flex-col justify-between h-full">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Continental Distribution</span>
+<span class="material-symbols-outlined text-primary text-[22px]">pie_chart</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Relative frequency of cluster regime membership across 145,460 observed synoptic calendar days.
+          </p>
+<div class="mt-space-md flex flex-col gap-3 font-code-metric text-xs">
+<div>
+<div class="flex justify-between mb-1 text-on-surface">
+<span>Arid Continental Stability</span>
+<span class="text-secondary font-bold">52.8%</span>
+</div>
+<div class="w-full h-2 rounded bg-[#040b15] overflow-hidden">
+<div class="h-full bg-secondary rounded" style="width: 52.8%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-1 text-on-surface">
+<span>Oceanic Frontal Drift</span>
+<span class="text-tertiary font-bold">24.6%</span>
+</div>
+<div class="w-full h-2 rounded bg-[#040b15] overflow-hidden">
+<div class="h-full bg-tertiary rounded" style="width: 24.6%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-1 text-on-surface">
+<span>Subtropical Convection</span>
+<span class="text-[#45c6a6] font-bold">14.1%</span>
+</div>
+<div class="w-full h-2 rounded bg-[#040b15] overflow-hidden">
+<div class="h-full bg-[#45c6a6] rounded" style="width: 14.1%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-1 text-on-surface">
+<span>Monsoonal Tropical Pulse</span>
+<span class="text-primary font-bold">8.5%</span>
+</div>
+<div class="w-full h-2 rounded bg-[#040b15] overflow-hidden">
+<div class="h-full bg-primary rounded" style="width: 8.5%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm border-t border-primary/15 flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span>BOM Station Density:</span>
+<span class="text-primary font-code-metric font-semibold">49 Synchronized Feeds</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- METHODOLOGY PIPELINE: Clean 8-Stage Interactive Rail -->
+<section class="w-full px-space-md sm:px-space-lg lg:px-margin-desktop mb-space-xl">
+<div class="flex flex-col gap-space-xs mb-space-lg">
+<span class="font-label-sm text-label-sm uppercase text-primary font-code-metric">UNSUPERVISED CLUSTERING ARCHITECTURE</span>
+<h2 class="font-headline-lg text-headline-lg font-bold text-on-surface">
+          8-Stage Analytical Machine Learning Pipeline
+        </h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+          From heterogeneous synoptic readings to verified physical rainfall regimes. Each transformation maintains statistical integrity without target variable supervision.
+        </p>
+</div>
+<!-- Horizontal Continuous Rail -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Stage 1 -->
+<div class="p-space-md rounded-xl bg-[#0A1928] border border-primary/20 shadow-sm flex flex-col relative group hover:border-primary/50 transition-colors">
+<div class="flex items-center justify-between text-outline">
+<span class="font-code-metric text-label-md text-primary font-bold">01</span>
+<span class="material-symbols-outlined text-[18px] text-primary">cloud_download</span>
+</div>
+<h4 class="mt-2 font-headline-sm text-headline-sm text-on-surface font-semibold">Historical Ingestion</h4>
+<p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+            Streaming 145,460 rows of BOM weather logs spanning 10 years and 49 continental monitoring posts.
+          </p>
+</div>
+<!-- Stage 2 -->
+<div class="p-space-md rounded-xl bg-[#0A1928] border border-primary/20 shadow-sm flex flex-col relative group hover:border-primary/50 transition-colors">
+<div class="flex items-center justify-between text-outline">
+<span class="font-code-metric text-label-md text-primary font-bold">02</span>
+<span class="material-symbols-outlined text-[18px] text-primary">cleaning_services</span>
+</div>
+<h4 class="mt-2 font-headline-sm text-headline-sm text-on-surface font-semibold">Preprocessing &amp; Screening</h4>
+<p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+            Robust IQR anomaly filtering, selective median and KNN-based imputation for missing atmospheric readings.
+          </p>
+</div>
+<!-- Stage 3 -->
+<div class="p-space-md rounded-xl bg-[#0A1928] border border-primary/20 shadow-sm flex flex-col relative group hover:border-primary/50 transition-colors">
+<div class="flex items-center justify-between text-outline">
+<span class="font-code-metric text-label-md text-primary font-bold">03</span>
+<span class="material-symbols-outlined text-[18px] text-primary">tune</span>
+</div>
+<h4 class="mt-2 font-headline-sm text-headline-sm text-on-surface font-semibold">Feature Normalization</h4>
+<p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+            StandardScaler transforms continuous variables (Pressure, Humidity, Temp) to zero mean and unit variance.
+          </p>
+</div>
+<!-- Stage 4 -->
+<div class="p-space-md rounded-xl bg-[#0A1928] border border-secondary/20 shadow-sm flex flex-col relative group hover:border-secondary/50 transition-colors">
+<div class="flex items-center justify-between text-outline">
+<span class="font-code-metric text-label-md text-secondary font-bold">04</span>
+<span class="material-symbols-outlined text-[18px] text-secondary">hub</span>
+</div>
+<h4 class="mt-2 font-headline-sm text-headline-sm text-on-surface font-semibold">Partition Clustering</h4>
+<p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+            Multi-restart K-Means alongside Medoids (PAM) with L1/L2 distance metric optimization across candidate k.
+          </p>
+</div>
+<!-- Stage 5 -->
+<div class="p-space-md rounded-xl bg-[#0A1928] border border-secondary/20 shadow-sm flex flex-col relative group hover:border-secondary/50 transition-colors">
+<div class="flex items-center justify-between text-outline">
+<span class="font-code-metric text-label-md text-secondary font-bold">05</span>
+<span class="material-symbols-outlined text-[18px] text-secondary">account_tree</span>
+</div>
+<h4 class="mt-2 font-headline-sm text-headline-sm text-on-surface font-semibold">Hierarchical Linkage</h4>
+<p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+            Ward minimum variance hierarchical agglomeration verifying dendritic structure and regime bifurcation.
+          </p>
+</div>
+<!-- Stage 6 -->
+<div class="p-space-md rounded-xl bg-[#0A1928] border border-secondary/20 shadow-sm flex flex-col relative group hover:border-secondary/50 transition-colors">
+<div class="flex items-center justify-between text-outline">
+<span class="font-code-metric text-label-md text-secondary font-bold">06</span>
+<span class="material-symbols-outlined text-[18px] text-secondary">fact_check</span>
+</div>
+<h4 class="mt-2 font-headline-sm text-headline-sm text-on-surface font-semibold">Validation Indices</h4>
+<p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+            Silhouette Coefficient and Davies-Bouldin Index (DBI) evaluation to identify k=4 as optimal mathematical peak.
+          </p>
+</div>
+<!-- Stage 7 -->
+<div class="p-space-md rounded-xl bg-[#0A1928] border border-tertiary/20 shadow-sm flex flex-col relative group hover:border-tertiary/50 transition-colors">
+<div class="flex items-center justify-between text-outline">
+<span class="font-code-metric text-label-md text-tertiary font-bold">07</span>
+<span class="material-symbols-outlined text-[18px] text-tertiary">view_in_ar</span>
+</div>
+<h4 class="mt-2 font-headline-sm text-headline-sm text-on-surface font-semibold">PCA Coordinate Projection</h4>
+<p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+            Eigenvector dimensionality reduction to Principal Components (PC1, PC2, PC3) capturing 78.4% variance.
+          </p>
+</div>
+<!-- Stage 8 -->
+<div class="p-space-md rounded-xl bg-[#0A1928] border border-tertiary/20 shadow-sm flex flex-col relative group hover:border-tertiary/50 transition-colors">
+<div class="flex items-center justify-between text-outline">
+<span class="font-code-metric text-label-md text-tertiary font-bold">08</span>
+<span class="material-symbols-outlined text-[18px] text-tertiary">insights</span>
+</div>
+<h4 class="mt-2 font-headline-sm text-headline-sm text-on-surface font-semibold">Climatological Profiling</h4>
+<p class="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+            Meteorological translation: mapping unsupervised mathematical centroids back to physical rain regime identities.
+          </p>
+</div>
+</div>
+</section>
+<!-- PROJECT METRICS & VERIFICATION STRIP -->
+<section class="w-full px-space-md sm:px-space-lg lg:px-margin-desktop mb-space-xl">
+<div class="p-space-lg rounded-2xl bg-[#0A1928] border border-primary/30 shadow-lg grid grid-cols-2 md:grid-cols-5 gap-space-md text-center items-center">
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-primary font-code-metric">145,460</span>
+<span class="mt-1 font-label-sm text-label-sm text-on-surface-variant uppercase">Historical Records</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-on-surface font-code-metric">23</span>
+<span class="mt-1 font-label-sm text-label-sm text-on-surface-variant uppercase">Physical Variables</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-secondary font-code-metric">4 Regimes</span>
+<span class="mt-1 font-label-sm text-label-sm text-on-surface-variant uppercase">Centroids Discovered</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-tertiary font-code-metric">k = 4</span>
+<span class="mt-1 font-label-sm text-label-sm text-on-surface-variant uppercase">Optimal Silhouette Peak</span>
+</div>
+<div class="flex flex-col col-span-2 md:col-span-1">
+<div class="flex items-center justify-center gap-1.5 text-secondary">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span class="font-headline-sm text-headline-sm font-bold font-code-metric">0.00%</span>
+</div>
+<span class="mt-1 font-label-sm text-label-sm text-on-surface-variant uppercase">Synthetic Drift</span>
+</div>
+</div>
+</section>
+<!-- CONTEXTUAL SCIENTIFIC NOTICE & CALL TO ACTION BANNER -->
+<section class="w-full px-space-md sm:px-space-lg lg:px-margin-desktop mb-space-lg">
+<div class="p-space-lg rounded-2xl bg-gradient-to-r from-[#0e2236] via-[#0A1928] to-[#07111F] border border-primary/40 shadow-xl flex flex-col md:flex-row items-center justify-between gap-space-lg">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-primary/20 border border-primary/40 text-primary flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-[24px]">science</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-primary font-code-metric uppercase">SCIENTIFIC RIGOR &amp; OBSERVATION MODE</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Ready to test model sensitivity across custom stations?</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xl">
+              Compare Euclidean K-Means with Manhattan PAM Medoids or inspect 3D Principal Components projection coordinates in real-time.
+            </p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<a class="px-5 py-2.5 rounded-lg bg-[#0e2236] border border-primary/30 hover:border-primary text-on-surface font-label-md text-label-md transition-all shadow-sm" href="#pca-space">
+            View PCA Space
+          </a>
+<a class="px-5 py-2.5 rounded-lg bg-primary text-[#001f24] hover:bg-secondary font-label-md text-label-md font-semibold transition-all shadow-[0_0_16px_rgba(84,214,232,0.3)]" href="#regime-discovery">
+            Discover Regimes
+          </a>
+</div>
+</div>
+</section>
+</div></main><footer class="w-full bg-[#040b15] border-t border-primary/20 py-space-lg"><div class="w-full px-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md text-on-surface-variant font-label-sm text-label-sm"><div class="flex items-center gap-space-sm"><span class="font-semibold text-on-surface">RAINFALL ATLAS</span><span>·</span><span>Unsupervised Climate Regime Discovery Platform</span><span>·</span><span class="font-code-metric text-primary">v2.4-ML-PROD</span></div><div class="flex items-center gap-space-lg font-code-metric"><span>LAT: 10.0°S–44.0°S</span><span>LON: 112.0°E–154.0°E</span><span>PRECIP_RECORDS: 145,460</span></div></div></footer><!-- ACTIVE THREE.JS PIPELINE: 6 VIBRANT 3D SCIENTIFIC VISUALIZATIONS --><script>
+// =========================================================================
+// 1. HERO — ATMOSPHERIC EARTH & RAINFALL GLOBE (#hero-earth-container)
+// =========================================================================
+(function() {
+  const container = document.getElementById('hero-earth-container');
+  if (!container) return;
+  const w = container.clientWidth || 600;
+  const h = container.clientHeight || 580;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+  camera.position.set(0, 3, 14);
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setSize(w, h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  const globeGroup = new THREE.Group();
+  scene.add(globeGroup);
+
+  // Oceanic Core Sphere
+  const globeGeo = new THREE.SphereGeometry(4.2, 48, 48);
+  const globeMat = new THREE.MeshPhongMaterial({
+    color: 0x051324,
+    emissive: 0x030a14,
+    specular: 0x54D6E8,
+    shininess: 45,
+    wireframe: false
+  });
+  const oceanMesh = new THREE.Mesh(globeGeo, globeMat);
+  globeGroup.add(oceanMesh);
+
+  // Wireframe Latitude / Longitude Mesh
+  const wireGeo = new THREE.WireframeGeometry(new THREE.SphereGeometry(4.24, 32, 24));
+  const wireMat = new THREE.LineBasicMaterial({ color: 0x1c405c, transparent: true, opacity: 0.35 });
+  const wireMesh = new THREE.LineSegments(wireGeo, wireMat);
+  globeGroup.add(wireMesh);
+
+  // Australia / Continental Landmass Nodes on Sphere
+  const landGroup = new THREE.Group();
+  globeGroup.add(landGroup);
+
+  // Scatter landmass dot matrix on sphere surface with dense Australia focus
+  const latLonPoints = [];
+  // Australia focus: lat -10 to -40, lon 110 to 155
+  for (let lat = -10; lat >= -40; lat -= 2) {
+    for (let lon = 112; lon <= 154; lon += 2.5) {
+      if (Math.random() > 0.15) {
+        latLonPoints.push({ lat: lat * (Math.PI / 180), lon: lon * (Math.PI / 180), isAus: true });
+      }
+    }
+  }
+  // Global continents stylized dots
+  for (let i = 0; i < 900; i++) {
+    const lat = (Math.random() - 0.5) * Math.PI;
+    const lon = (Math.random() - 0.5) * Math.PI * 2;
+    // skip oceans somewhat
+    if (Math.random() > 0.45) {
+      latLonPoints.push({ lat, lon, isAus: false });
+    }
+  }
+
+  const dotGeo = new THREE.SphereGeometry(0.045, 6, 6);
+  const ausMat = new THREE.MeshBasicMaterial({ color: 0x54D6E8 });
+  const landMat = new THREE.MeshBasicMaterial({ color: 0x1b4c6b, transparent: true, opacity: 0.6 });
+
+  latLonPoints.forEach(pt => {
+    const r = 4.28;
+    const x = r * Math.cos(pt.lat) * Math.cos(pt.lon);
+    const y = r * Math.sin(pt.lat);
+    const z = r * Math.cos(pt.lat) * Math.sin(pt.lon);
+    const m = new THREE.Mesh(dotGeo, pt.isAus ? ausMat : landMat);
+    m.position.set(x, y, z);
+    landGroup.add(m);
+  });
+
+  // Glowing Cyan Atmospheric Ring Halo
+  const haloGeo = new THREE.RingGeometry(4.35, 4.75, 64);
+  const haloMat = new THREE.MeshBasicMaterial({ color: 0x54D6E8, side: THREE.DoubleSide, transparent: true, opacity: 0.28 });
+  const haloMesh = new THREE.Mesh(haloGeo, haloMat);
+  haloMesh.rotation.x = Math.PI / 2.3;
+  globeGroup.add(haloMesh);
+
+  // Outer Orbital Ring
+  const orbitGeo = new THREE.RingGeometry(5.2, 5.25, 80);
+  const orbitMat = new THREE.MeshBasicMaterial({ color: 0x3BBFAF, side: THREE.DoubleSide, transparent: true, opacity: 0.35 });
+  const orbitMesh = new THREE.Mesh(orbitGeo, orbitMat);
+  orbitMesh.rotation.x = Math.PI / 3;
+  orbitMesh.rotation.y = Math.PI / 8;
+  globeGroup.add(orbitMesh);
+
+  // Falling 3D Precipitation Particles Stream
+  const rainCount = 600;
+  const rainGeo = new THREE.BufferGeometry();
+  const rainPos = new Float32Array(rainCount * 3);
+  for (let i = 0; i < rainCount; i++) {
+    rainPos[i * 3] = (Math.random() - 0.5) * 12;
+    rainPos[i * 3 + 1] = Math.random() * 14 - 4;
+    rainPos[i * 3 + 2] = (Math.random() - 0.5) * 12;
+  }
+  rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPos, 3));
+  const rainMat = new THREE.PointsMaterial({ color: 0x54D6E8, size: 0.08, transparent: true, opacity: 0.75 });
+  const rainPoints = new THREE.Points(rainGeo, rainMat);
+  scene.add(rainPoints);
+
+  // Lighting
+  const sunLight = new THREE.DirectionalLight(0x54D6E8, 1.8);
+  sunLight.position.set(10, 8, 12);
+  scene.add(sunLight);
+  const ambientLight = new THREE.AmbientLight(0x0e2236, 1.6);
+  scene.add(ambientLight);
+  const rimLight = new THREE.PointLight(0x3BBFAF, 2.5, 30);
+  rimLight.position.set(-10, -5, -8);
+  scene.add(rimLight);
+
+  let mouseX = 0, mouseY = 0;
+  window.addEventListener('mousemove', (e) => {
+    const rect = container.getBoundingClientRect();
+    if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
+      mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 0.8;
+      mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 0.4;
+    }
+  });
+
+  const clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+    globeGroup.rotation.y = t * 0.12 + mouseX * 0.5;
+    globeGroup.rotation.x = 0.25 + mouseY * 0.3;
+    orbitMesh.rotation.z = t * 0.08;
+
+    // Precipitation fall simulation
+    const pArr = rainGeo.attributes.position.array;
+    for (let i = 1; i < rainCount * 3; i += 3) {
+      pArr[i] -= 0.06;
+      if (pArr[i] < -5) pArr[i] = 7;
+    }
+    rainGeo.attributes.position.needsUpdate = true;
+
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    const nw = container.clientWidth || 600;
+    const nh = container.clientHeight || 580;
+    camera.aspect = nw / nh;
+    camera.updateProjectionMatrix();
+    renderer.setSize(nw, nh);
+  });
+})();
+
+// =========================================================================
+// 2. SPATIAL WEATHER LANDSCAPE — 3D VOLUMETRIC SPACE (#threejs-container-DATA_FIELD)
+// =========================================================================
+(function() {
+  const container = document.getElementById('threejs-container-DATA_FIELD');
+  if (!container) return;
+  const w = container.clientWidth || 800;
+  const h = container.clientHeight || 500;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+  camera.position.set(0, 16, 26);
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setSize(w, h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  // Isometric Grid Wireframe
+  const gridHelper = new THREE.GridHelper(32, 24, 0x54D6E8, 0x16324c);
+  gridHelper.position.y = -2;
+  scene.add(gridHelper);
+
+  const stationGroup = new THREE.Group();
+  scene.add(stationGroup);
+
+  const boxGeo = new THREE.CylinderGeometry(0.12, 0.12, 1, 12);
+  const ringGeo = new THREE.RingGeometry(0.2, 0.28, 24);
+
+  const stations = [];
+  for (let i = 0; i < 49; i++) {
+    const angle = (i / 49) * Math.PI * 2;
+    const rad = 2.5 + Math.random() * 9.5;
+    const px = Math.cos(angle) * rad + (Math.random() - 0.5) * 2.2;
+    const pz = Math.sin(angle) * rad * 0.75 + (Math.random() - 0.5) * 2.2;
+    const height = 1.0 + Math.random() * 4.8;
+    const isRain = Math.random() > 0.6;
+    const color = isRain ? 0x54D6E8 : (Math.random() > 0.5 ? 0x3BBFAF : 0x91DCE8);
+
+    const mat = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.85 });
+    const colMesh = new THREE.Mesh(boxGeo, mat);
+    colMesh.scale.set(1, height, 1);
+    colMesh.position.set(px, -2 + height / 2, pz);
+    stationGroup.add(colMesh);
+
+    // Glowing top marker
+    const topSphere = new THREE.Mesh(new THREE.SphereGeometry(0.24, 12, 12), new THREE.MeshBasicMaterial({ color: color }));
+    topSphere.position.set(px, -2 + height, pz);
+    stationGroup.add(topSphere);
+
+    // Base pulsing ring
+    const ringMat = new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide, transparent: true, opacity: 0.45 });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = Math.PI / 2;
+    ring.position.set(px, -1.95, pz);
+    stationGroup.add(ring);
+
+    stations.push({ topSphere, ring, baseHeight: height, origY: -2 + height, speed: 1.5 + Math.random() });
+  }
+
+  // Floating Atmospheric Particles
+  const partCount = 450;
+  const pGeo = new THREE.BufferGeometry();
+  const pPos = new Float32Array(partCount * 3);
+  for (let i = 0; i < partCount; i++) {
+    pPos[i * 3] = (Math.random() - 0.5) * 32;
+    pPos[i * 3 + 1] = Math.random() * 10 - 1;
+    pPos[i * 3 + 2] = (Math.random() - 0.5) * 24;
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  const pMat = new THREE.PointsMaterial({ size: 0.12, color: 0x54D6E8, transparent: true, opacity: 0.65 });
+  const cloud = new THREE.Points(pGeo, pMat);
+  scene.add(cloud);
+
+  let mouseX = 0;
+  window.addEventListener('mousemove', (e) => {
+    const r = container.getBoundingClientRect();
+    if (e.clientY >= r.top && e.clientY <= r.bottom) {
+      mouseX = ((e.clientX - r.left) / r.width - 0.5) * 0.8;
+    }
+  });
+
+  const clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+    stationGroup.rotation.y = t * 0.05 + mouseX;
+    gridHelper.rotation.y = stationGroup.rotation.y;
+
+    stations.forEach((st, idx) => {
+      st.topSphere.position.y = st.origY + Math.sin(t * st.speed + idx) * 0.15;
+      const s = 1.0 + Math.sin(t * 2 + idx) * 0.3;
+      st.ring.scale.set(s, s, s);
+    });
+
+    const posArr = pGeo.attributes.position.array;
+    for (let i = 1; i < partCount * 3; i += 3) {
+      posArr[i] -= 0.025;
+      if (posArr[i] < -2) posArr[i] = 10;
+    }
+    pGeo.attributes.position.needsUpdate = true;
+
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    const newW = container.clientWidth || 800;
+    const newH = container.clientHeight || 500;
+    camera.aspect = newW / newH;
+    camera.updateProjectionMatrix();
+    renderer.setSize(newW, newH);
+  });
+})();
+
+// =========================================================================
+// 3. PARTICLE CLUSTERING ENGINE (Regime Discovery: #particle-cluster-container)
+// =========================================================================
+(function() {
+  const container = document.getElementById('particle-cluster-container');
+  if (!container) return;
+  const w = container.clientWidth || 900;
+  const h = container.clientHeight || 540;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+  camera.position.set(0, 8, 22);
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setSize(w, h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  const mainGroup = new THREE.Group();
+  scene.add(mainGroup);
+
+  // 4 Cluster Centroid definitions
+  const centroids = [
+    { x: -5.5, y: 3.5, z: 2.0, color: 0x54D6E8, name: 'Tropical' },
+    { x: 5.5, y: -2.0, z: -3.0, color: 0x3BBFAF, name: 'Arid' },
+    { x: -4.0, y: -4.0, z: -2.0, color: 0x91DCE8, name: 'Oceanic' },
+    { x: 4.5, y: 4.0, z: 3.5, color: 0x45c6a6, name: 'Convective' }
+  ];
+
+  // Centroid visual spheres & glowing beacon rings
+  const centroidMeshes = [];
+  centroids.forEach((c) => {
+    const sphere = new THREE.Mesh(
+      new THREE.SphereGeometry(0.55, 20, 20),
+      new THREE.MeshBasicMaterial({ color: c.color, transparent: true, opacity: 0.95 })
+    );
+    sphere.position.set(c.x, c.y, c.z);
+    mainGroup.add(sphere);
+
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(0.8, 0.95, 32),
+      new THREE.MeshBasicMaterial({ color: c.color, side: THREE.DoubleSide, transparent: true, opacity: 0.6 })
+    );
+    ring.rotation.x = Math.PI / 2;
+    ring.position.set(c.x, c.y, c.z);
+    mainGroup.add(ring);
+
+    centroidMeshes.push({ sphere, ring });
+  });
+
+  // 2,500 visible particles
+  const particleCount = 2500;
+  const positions = new Float32Array(particleCount * 3);
+  const colors = new Float32Array(particleCount * 3);
+  const targets = [];
+  const origins = [];
+
+  const colPalette = [
+    new THREE.Color(0x54D6E8), // Monsoonal Tropics (Electric Cyan)
+    new THREE.Color(0x3BBFAF), // Arid Outback (Turquoise)
+    new THREE.Color(0x91DCE8), // Oceanic Front (Glacier)
+    new THREE.Color(0x45c6a6)  // Subtropical Convective (Emerald)
+  ];
+
+  for (let i = 0; i < particleCount; i++) {
+    // Dispersion origin
+    const ox = (Math.random() - 0.5) * 22;
+    const oy = (Math.random() - 0.5) * 16;
+    const oz = (Math.random() - 0.5) * 20;
+    origins.push({ x: ox, y: oy, z: oz });
+
+    // Pick a cluster
+    const cIdx = i % 4;
+    const c = centroids[cIdx];
+    const spread = 2.0 + Math.random() * 1.5;
+    const tx = c.x + (Math.random() - 0.5) * spread;
+    const ty = c.y + (Math.random() - 0.5) * spread;
+    const tz = c.z + (Math.random() - 0.5) * spread;
+    targets.push({ x: tx, y: ty, z: tz, cIdx });
+
+    positions[i * 3] = ox;
+    positions[i * 3 + 1] = oy;
+    positions[i * 3 + 2] = oz;
+
+    const col = colPalette[cIdx];
+    colors[i * 3] = col.r;
+    colors[i * 3 + 1] = col.g;
+    colors[i * 3 + 2] = col.b;
+  }
+
+  const pGeo = new THREE.BufferGeometry();
+  pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  pGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+  const pMat = new THREE.PointsMaterial({
+    size: 0.15,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.85
+  });
+  const pSystem = new THREE.Points(pGeo, pMat);
+  mainGroup.add(pSystem);
+
+  // Axis grid helper
+  const gridHelper = new THREE.GridHelper(24, 16, 0x54D6E8, 0x16324c);
+  gridHelper.position.y = -6;
+  mainGroup.add(gridHelper);
+
+  let isPlaying = true;
+  let progress = 1.0; // 0 = dispersed, 1 = clustered
+  let direction = 0;  // 0: clustered hold, 1: dispersing, -1: clustering
+  let cycleTimer = 0;
+
+  document.getElementById('btn-cluster-play')?.addEventListener('click', () => {
+    isPlaying = true;
+    direction = -1;
+  });
+  document.getElementById('btn-cluster-pause')?.addEventListener('click', () => {
+    isPlaying = false;
+  });
+  document.getElementById('btn-cluster-reset')?.addEventListener('click', () => {
+    progress = 0;
+    isPlaying = true;
+    direction = 1;
+  });
+
+  let mouseX = 0, mouseY = 0;
+  window.addEventListener('mousemove', (e) => {
+    const r = container.getBoundingClientRect();
+    if (e.clientY >= r.top && e.clientY <= r.bottom) {
+      mouseX = ((e.clientX - r.left) / r.width - 0.5) * 1.0;
+      mouseY = ((e.clientY - r.top) / r.height - 0.5) * 0.5;
+    }
+  });
+
+  const clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+    const dt = clock.getDelta();
+    const t = clock.getElapsedTime();
+
+    if (isPlaying) {
+      cycleTimer += dt;
+      // Cycle between clustered and dispersed smoothly
+      const wave = Math.sin(cycleTimer * 0.6);
+      progress = 0.5 + 0.5 * wave; // smoothly moves 0 -> 1 -> 0
+    }
+
+    const pos = pGeo.attributes.position.array;
+    for (let i = 0; i < particleCount; i++) {
+      const orig = origins[i];
+      const targ = targets[i];
+      const curX = orig.x + (targ.x - orig.x) * progress + Math.sin(t * 2 + i) * 0.1;
+      const curY = orig.y + (targ.y - orig.y) * progress + Math.cos(t * 2 + i) * 0.1;
+      const curZ = orig.z + (targ.z - orig.z) * progress;
+
+      pos[i * 3] = curX;
+      pos[i * 3 + 1] = curY;
+      pos[i * 3 + 2] = curZ;
+    }
+    pGeo.attributes.position.needsUpdate = true;
+
+    // Centroid animations
+    centroidMeshes.forEach((cm, idx) => {
+      const scale = 1.0 + Math.sin(t * 3 + idx) * 0.15;
+      cm.sphere.scale.set(scale, scale, scale);
+      cm.ring.rotation.z = t * 1.5;
+    });
+
+    mainGroup.rotation.y = t * 0.08 + mouseX;
+    mainGroup.rotation.x = mouseY * 0.3;
+
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    const newW = container.clientWidth || 900;
+    const newH = container.clientHeight || 540;
+    camera.aspect = newW / newH;
+    camera.updateProjectionMatrix();
+    renderer.setSize(newW, newH);
+  });
+})();
+
+// =========================================================================
+// 4. 3D HIERARCHICAL CLUSTERING TREE (Ward Dendrogram: #tree-container)
+// =========================================================================
+(function() {
+  const container = document.getElementById('tree-container');
+  if (!container) return;
+  const w = container.clientWidth || 900;
+  const h = container.clientHeight || 520;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+  camera.position.set(0, 2, 22);
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setSize(w, h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  const treeGroup = new THREE.Group();
+  scene.add(treeGroup);
+
+  // Nodes & Lines hierarchy data
+  // Level 0: Root
+  const rootNode = { x: 0, y: 7, z: 0, color: 0x54D6E8, size: 0.65 };
+  // Level 1: 2 macro clusters (Tropical/Monsoon vs Continental/Front)
+  const l1Nodes = [
+    { x: -5.0, y: 3.5, z: 0, color: 0x54D6E8, size: 0.5 },
+    { x: 5.0, y: 3.5, z: 0, color: 0x3BBFAF, size: 0.5 }
+  ];
+  // Level 2: 4 regimes
+  const l2Nodes = [
+    { x: -7.5, y: -0.2, z: 1.5, color: 0x54D6E8, size: 0.42 }, // Tropical
+    { x: -2.5, y: -0.2, z: -1.5, color: 0x91DCE8, size: 0.42 }, // Oceanic
+    { x: 2.5, y: -0.2, z: -1.5, color: 0x3BBFAF, size: 0.42 }, // Arid
+    { x: 7.5, y: -0.2, z: 1.5, color: 0x45c6a6, size: 0.42 }  // Convective
+  ];
+  // Level 3: 48 leaves (12 per regime)
+  const leafNodes = [];
+  const leafBranches = [];
+
+  l2Nodes.forEach((parent, pIdx) => {
+    for (let k = 0; k < 12; k++) {
+      const spreadX = (k - 5.5) * 0.42;
+      const spreadZ = (Math.random() - 0.5) * 3.5;
+      const lx = parent.x + spreadX;
+      const ly = -5.0 + (Math.random() - 0.5) * 0.6;
+      const lz = parent.z + spreadZ;
+      leafNodes.push({ x: lx, y: ly, z: lz, color: parent.color, size: 0.18 });
+      leafBranches.push({ from: parent, to: { x: lx, y: ly, z: lz }, color: parent.color });
+    }
+  });
+
+  // Render Root Node
+  const sphereGeo = new THREE.SphereGeometry(1, 16, 16);
+  function createNode(n) {
+    const mat = new THREE.MeshBasicMaterial({ color: n.color });
+    const mesh = new THREE.Mesh(sphereGeo, mat);
+    mesh.scale.set(n.size, n.size, n.size);
+    mesh.position.set(n.x, n.y, n.z);
+    treeGroup.add(mesh);
+    return mesh;
+  }
+
+  const allNodeMeshes = [];
+  allNodeMeshes.push(createNode(rootNode));
+  l1Nodes.forEach(n => allNodeMeshes.push(createNode(n)));
+  l2Nodes.forEach(n => allNodeMeshes.push(createNode(n)));
+  leafNodes.forEach(n => allNodeMeshes.push(createNode(n)));
+
+  // Connect branches with curved/stepped glowing lines
+  function drawBranch(p1, p2, col) {
+    const curve = new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(p1.x, p1.y, p1.z),
+      new THREE.Vector3((p1.x + p2.x) / 2, (p1.y + p2.y) / 2 + 0.5, (p1.z + p2.z) / 2),
+      new THREE.Vector3(p2.x, p2.y, p2.z)
+    );
+    const pts = curve.getPoints(20);
+    const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
+    const lineMat = new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.65 });
+    const line = new THREE.Line(lineGeo, lineMat);
+    treeGroup.add(line);
+  }
+
+  // Root -> L1
+  drawBranch(rootNode, l1Nodes[0], 0x54D6E8);
+  drawBranch(rootNode, l1Nodes[1], 0x3BBFAF);
+  // L1 -> L2
+  drawBranch(l1Nodes[0], l2Nodes[0], 0x54D6E8);
+  drawBranch(l1Nodes[0], l2Nodes[1], 0x91DCE8);
+  drawBranch(l1Nodes[1], l2Nodes[2], 0x3BBFAF);
+  drawBranch(l1Nodes[1], l2Nodes[3], 0x45c6a6);
+  // L2 -> Leaves
+  leafBranches.forEach(b => drawBranch(b.from, b.to, b.color));
+
+  // Circular base ring underneath leaves
+  const baseGrid = new THREE.GridHelper(22, 18, 0x54D6E8, 0x16324c);
+  baseGrid.position.y = -5.8;
+  treeGroup.add(baseGrid);
+
+  let isPlaying = true;
+  document.getElementById('btn-tree-growth')?.addEventListener('click', () => { isPlaying = true; });
+  document.getElementById('btn-tree-pause')?.addEventListener('click', () => { isPlaying = false; });
+  document.getElementById('btn-tree-reset')?.addEventListener('click', () => {
+    treeGroup.rotation.y = 0;
+    isPlaying = true;
+  });
+
+  let mouseX = 0, mouseY = 0;
+  window.addEventListener('mousemove', (e) => {
+    const r = container.getBoundingClientRect();
+    if (e.clientY >= r.top && e.clientY <= r.bottom) {
+      mouseX = ((e.clientX - r.left) / r.width - 0.5) * 0.9;
+      mouseY = ((e.clientY - r.top) / r.height - 0.5) * 0.4;
+    }
+  });
+
+  const clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+
+    if (isPlaying) {
+      treeGroup.rotation.y = Math.sin(t * 0.25) * 0.45 + mouseX;
+      treeGroup.rotation.x = mouseY * 0.25;
+    }
+
+    // Breathing node pulse
+    allNodeMeshes.forEach((mesh, idx) => {
+      const s = 1.0 + Math.sin(t * 3 + idx * 0.3) * 0.12;
+      mesh.scale.multiplyScalar(s / mesh.scale.x);
+    });
+
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    const newW = container.clientWidth || 900;
+    const newH = container.clientHeight || 520;
+    camera.aspect = newW / newH;
+    camera.updateProjectionMatrix();
+    renderer.setSize(newW, newH);
+  });
+})();
+
+// =========================================================================
+// 5. PCA 3D LATENT SPACE (Eigenvector Scatter: #pca-3d-container)
+// =========================================================================
+(function() {
+  const container = document.getElementById('pca-3d-container');
+  if (!container) return;
+  const w = container.clientWidth || 900;
+  const h = container.clientHeight || 520;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+  camera.position.set(16, 12, 18);
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setSize(w, h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  const pcaGroup = new THREE.Group();
+  scene.add(pcaGroup);
+
+  // 3D Bounding coordinate box
+  const boxGeo = new THREE.BoxGeometry(16, 14, 16);
+  const wireGeo = new THREE.WireframeGeometry(boxGeo);
+  const wireMat = new THREE.LineBasicMaterial({ color: 0x1c405c, transparent: true, opacity: 0.45 });
+  const boundingBox = new THREE.LineSegments(wireGeo, wireMat);
+  pcaGroup.add(boundingBox);
+
+  // Orthogonal Axes (PC1, PC2, PC3)
+  const axesGroup = new THREE.Group();
+  pcaGroup.add(axesGroup);
+
+  function createAxisLine(p1, p2, col) {
+    const geo = new THREE.BufferGeometry().setFromPoints([p1, p2]);
+    const mat = new THREE.LineBasicMaterial({ color: col, linewidth: 2 });
+    return new THREE.Line(geo, mat);
+  }
+  // PC1 (X - Thermal)
+  axesGroup.add(createAxisLine(new THREE.Vector3(-8, 0, 0), new THREE.Vector3(8, 0, 0), 0x54D6E8));
+  // PC2 (Y - Moisture)
+  axesGroup.add(createAxisLine(new THREE.Vector3(0, -7, 0), new THREE.Vector3(0, 7, 0), 0x3BBFAF));
+  // PC3 (Z - Pressure)
+  axesGroup.add(createAxisLine(new THREE.Vector3(0, 0, -8), new THREE.Vector3(0, 0, 8), 0x91DCE8));
+
+  // Eigenvector Vector Arrows
+  const eigenGroup = new THREE.Group();
+  pcaGroup.add(eigenGroup);
+
+  const arrows = [
+    { dir: new THREE.Vector3(0.8, 0.4, 0.2).normalize(), len: 7, col: 0x54D6E8 },
+    { dir: new THREE.Vector3(-0.3, 0.9, -0.1).normalize(), len: 6, col: 0x3BBFAF },
+    { dir: new THREE.Vector3(0.1, -0.2, 0.9).normalize(), len: 6.5, col: 0x91DCE8 }
+  ];
+  arrows.forEach(a => {
+    const arrow = new THREE.ArrowHelper(a.dir, new THREE.Vector3(0, 0, 0), a.len, a.col, 0.8, 0.4);
+    eigenGroup.add(arrow);
+  });
+
+  // 1,800 Scatter Observations
+  const ptCount = 1800;
+  const positions = new Float32Array(ptCount * 3);
+  const colors = new Float32Array(ptCount * 3);
+
+  const clusters = [
+    { center: [-4.2, 3.2, 2.5], col: new THREE.Color(0x54D6E8), spread: [1.8, 1.4, 1.6] }, // Tropical
+    { center: [4.5, -2.8, -2.2], col: new THREE.Color(0x3BBFAF), spread: [1.9, 1.2, 1.5] }, // Arid
+    { center: [-2.8, -3.2, -1.8], col: new THREE.Color(0x91DCE8), spread: [1.5, 1.6, 1.3] }, // Oceanic
+    { center: [3.2, 3.0, 2.8], col: new THREE.Color(0x45c6a6), spread: [1.4, 1.5, 1.7] }   // Convective
+  ];
+
+  for (let i = 0; i < ptCount; i++) {
+    const c = clusters[i % 4];
+    positions[i * 3] = c.center[0] + (Math.random() - 0.5) * c.spread[0] * 2.4;
+    positions[i * 3 + 1] = c.center[1] + (Math.random() - 0.5) * c.spread[1] * 2.4;
+    positions[i * 3 + 2] = c.center[2] + (Math.random() - 0.5) * c.spread[2] * 2.4;
+
+    colors[i * 3] = c.col.r;
+    colors[i * 3 + 1] = c.col.g;
+    colors[i * 3 + 2] = c.col.b;
+  }
+
+  const pGeo = new THREE.BufferGeometry();
+  pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  pGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+  const pMat = new THREE.PointsMaterial({
+    size: 0.16,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.8
+  });
+  const scatterPoints = new THREE.Points(pGeo, pMat);
+  pcaGroup.add(scatterPoints);
+
+  // 4 Cluster Cores
+  clusters.forEach(c => {
+    const core = new THREE.Mesh(
+      new THREE.SphereGeometry(0.4, 16, 16),
+      new THREE.MeshBasicMaterial({ color: c.col })
+    );
+    core.position.set(c.center[0], c.center[1], c.center[2]);
+    pcaGroup.add(core);
+  });
+
+  let autoOrbit = true;
+  document.getElementById('btn-pca-orbit')?.addEventListener('click', (e) => {
+    autoOrbit = !autoOrbit;
+    e.currentTarget.innerHTML = `<span class="material-symbols-outlined text-[15px]">rotate_right</span> Orbit: ${autoOrbit ? 'Auto' : 'Off'}`;
+  });
+  document.getElementById('btn-pca-axes')?.addEventListener('click', (e) => {
+    axesGroup.visible = !axesGroup.visible;
+    e.currentTarget.innerText = `Axes: ${axesGroup.visible ? 'On' : 'Off'}`;
+  });
+  document.getElementById('btn-pca-eigen')?.addEventListener('click', (e) => {
+    eigenGroup.visible = !eigenGroup.visible;
+    e.currentTarget.innerText = `Eigenvectors: ${eigenGroup.visible ? 'On' : 'Off'}`;
+  });
+
+  let isDragging = false;
+  let prevMouseX = 0, prevMouseY = 0;
+
+  container.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    prevMouseX = e.clientX;
+    prevMouseY = e.clientY;
+  });
+  window.addEventListener('mouseup', () => { isDragging = false; });
+  window.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      const dx = e.clientX - prevMouseX;
+      const dy = e.clientY - prevMouseY;
+      pcaGroup.rotation.y += dx * 0.01;
+      pcaGroup.rotation.x += dy * 0.01;
+      prevMouseX = e.clientX;
+      prevMouseY = e.clientY;
+    }
+  });
+
+  const clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+    const dt = clock.getDelta();
+    if (autoOrbit && !isDragging) {
+      pcaGroup.rotation.y += dt * 0.25;
+    }
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    const newW = container.clientWidth || 900;
+    const newH = container.clientHeight || 520;
+    camera.aspect = newW / newH;
+    camera.updateProjectionMatrix();
+    renderer.setSize(newW, newH);
+  });
+})();
+
+// =========================================================================
+// 6. AUSTRALIA 3D TOPOGRAPHIC TERRAIN & ISOHYET CONTOURS (#threejs-container-AU_GEO)
+// =========================================================================
+(function() {
+  const container = document.getElementById('threejs-container-AU_GEO');
+  if (!container) return;
+  const w = container.clientWidth || 700;
+  const h = container.clientHeight || 460;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 1000);
+  camera.position.set(0, 14, 18);
+
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setSize(w, h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  const mapGroup = new THREE.Group();
+  scene.add(mapGroup);
+
+  // Continental Australia Polygon Simulation Wireframe Base
+  const auShape = new THREE.Shape();
+  auShape.moveTo(-5.5, 0.5);
+  auShape.lineTo(-5.2, 1.8);
+  auShape.lineTo(-3.8, 2.8); // Kimberley
+  auShape.lineTo(-2.2, 2.2); // Top End west
+  auShape.lineTo(-1.0, 3.4); // Darwin / Arnhem
+  auShape.lineTo(0.5, 2.4);  // Gulf of Carpentaria west
+  auShape.lineTo(1.8, 3.8);  // Cape York
+  auShape.lineTo(3.2, 2.2);  // Cairns
+  auShape.lineTo(5.0, 0.5);  // Mackay
+  auShape.lineTo(5.4, -1.2); // Brisbane
+  auShape.lineTo(4.6, -3.2); // Sydney / NSW coast
+  auShape.lineTo(3.4, -4.2); // Victoria / Melbourne
+  auShape.lineTo(1.5, -4.0); // Adelaide / SA gulf
+  auShape.lineTo(-0.8, -3.4); // Great Aus Bight
+  auShape.lineTo(-3.2, -3.8); // Esperance
+  auShape.lineTo(-5.4, -3.2); // Albany / SW
+  auShape.lineTo(-5.8, -1.5); // Perth / Geraldton
+  auShape.lineTo(-5.5, 0.5);
+
+  const extrudeSettings = { depth: 0.65, bevelEnabled: true, bevelSegments: 3, steps: 1, bevelSize: 0.15, bevelThickness: 0.15 };
+  const geo = new THREE.ExtrudeGeometry(auShape, extrudeSettings);
+  geo.rotateX(-Math.PI / 2);
+
+  const mat = new THREE.MeshPhongMaterial({
+    color: 0x0A1928,
+    emissive: 0x061422,
+    specular: 0x54D6E8,
+    shininess: 35
+  });
+  const continent = new THREE.Mesh(geo, mat);
+  continent.position.set(0, -0.6, 0);
+  mapGroup.add(continent);
+
+  // Great Dividing Range Topographic Ridge
+  const ridgeCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(2.5, 0.2, -2.2), // North Queensland
+    new THREE.Vector3(3.8, 0.45, -0.5),
+    new THREE.Vector3(4.5, 0.55, 1.2),  // NSW Blue Mountains
+    new THREE.Vector3(3.6, 0.5, 3.2),   // Snowy Mountains
+    new THREE.Vector3(2.8, 0.35, 4.0)   // Victoria
+  ]);
+  const ridgeGeo = new THREE.TubeGeometry(ridgeCurve, 32, 0.22, 8, false);
+  const ridgeMat = new THREE.MeshBasicMaterial({ color: 0x54D6E8, transparent: true, opacity: 0.6 });
+  const ridgeMesh = new THREE.Mesh(ridgeGeo, ridgeMat);
+  mapGroup.add(ridgeMesh);
+
+  // Wireframe outline for technical precision aesthetic
+  const wireGeo = new THREE.WireframeGeometry(geo);
+  const wireMat = new THREE.LineBasicMaterial({ color: 0x54D6E8, transparent: true, opacity: 0.3 });
+  const wireMesh = new THREE.LineSegments(wireGeo, wireMat);
+  wireMesh.position.copy(continent.position);
+  mapGroup.add(wireMesh);
+
+  // Synoptic Cities Markers & Precipitation Spikes
+  const cities = [
+    { name: 'Darwin', pos: [-1.0, 0.1, -3.2], rain: 3.2, col: 0x54D6E8 },
+    { name: 'Cairns', pos: [2.5, 0.1, -2.4], rain: 2.8, col: 0x54D6E8 },
+    { name: 'Brisbane', pos: [4.6, 0.1, 1.2], rain: 2.1, col: 0x45c6a6 },
+    { name: 'Sydney', pos: [4.2, 0.1, 2.9], rain: 1.8, col: 0x45c6a6 },
+    { name: 'Melbourne', pos: [3.2, 0.1, 4.0], rain: 1.4, col: 0x91DCE8 },
+    { name: 'Hobart', pos: [3.4, 0.1, 5.4], rain: 1.7, col: 0x91DCE8 },
+    { name: 'Adelaide', pos: [1.4, 0.1, 3.6], rain: 1.0, col: 0x91DCE8 },
+    { name: 'Alice Springs', pos: [-0.2, 0.1, 0.2], rain: 0.35, col: 0x3BBFAF },
+    { name: 'Perth', pos: [-4.9, 0.1, 2.2], rain: 1.5, col: 0x91DCE8 }
+  ];
+
+  cities.forEach(c => {
+    // Vertical rainfall column
+    const cyl = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.12, 0.12, c.rain, 12),
+      new THREE.MeshBasicMaterial({ color: c.col, transparent: true, opacity: 0.85 })
+    );
+    cyl.position.set(c.pos[0], c.pos[1] + c.rain / 2, c.pos[2]);
+    mapGroup.add(cyl);
+
+    // Glowing emitter head
+    const head = new THREE.Mesh(
+      new THREE.SphereGeometry(0.24, 12, 12),
+      new THREE.MeshBasicMaterial({ color: c.col })
+    );
+    head.position.set(c.pos[0], c.pos[1] + c.rain, c.pos[2]);
+    mapGroup.add(head);
+
+    // Concentric Isohyet Ripple Ring
+    const isoRing = new THREE.Mesh(
+      new THREE.RingGeometry(0.3, 0.42, 24),
+      new THREE.MeshBasicMaterial({ color: c.col, side: THREE.DoubleSide, transparent: true, opacity: 0.5 })
+    );
+    isoRing.rotation.x = Math.PI / 2;
+    isoRing.position.set(c.pos[0], 0.05, c.pos[2]);
+    mapGroup.add(isoRing);
+  });
+
+  // Rotating Orographic Cloud Layer
+  const cloudPartCount = 180;
+  const cloudGeo = new THREE.BufferGeometry();
+  const cloudPos = new Float32Array(cloudPartCount * 3);
+  for (let i = 0; i < cloudPartCount; i++) {
+    cloudPos[i * 3] = (Math.random() - 0.5) * 11;
+    cloudPos[i * 3 + 1] = 1.2 + Math.random() * 1.5;
+    cloudPos[i * 3 + 2] = (Math.random() - 0.5) * 10;
+  }
+  cloudGeo.setAttribute('position', new THREE.BufferAttribute(cloudPos, 3));
+  const cloudMat = new THREE.PointsMaterial({ size: 0.28, color: 0x54D6E8, transparent: true, opacity: 0.35 });
+  const clouds = new THREE.Points(cloudGeo, cloudMat);
+  mapGroup.add(clouds);
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0x0e2236, 3.2));
+  const pLight = new THREE.PointLight(0x54D6E8, 2.5, 40);
+  pLight.position.set(5, 12, 8);
+  scene.add(pLight);
+
+  const clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+    mapGroup.rotation.y = Math.sin(t * 0.15) * 0.25;
+    clouds.rotation.y = t * 0.03;
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    const newW = container.clientWidth || 700;
+    const newH = container.clientHeight || 460;
+    camera.aspect = newW / newH;
+    camera.updateProjectionMatrix();
+    renderer.setSize(newW, newH);
+  });
+})();
+</script></body></html>

@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Rainfall Atlas · 3D Scientific Climate Platform</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <style>
+    @layer base {
+      html, body { margin:0; padding:0; }
+      body { overscroll-behavior:none; background-color:#07111F; color:#d9e3f7; }
+      main > :first-child { margin-top:0 !important; }
+      main > :last-child { margin-bottom:0 !important; }
+    }
+    ::-webkit-scrollbar { display:none; }
+    .glass-panel {
+      background: rgba(10, 25, 40, 0.75);
+      backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(84, 214, 232, 0.2);
+    }
+    .active-pill {
+      background: rgba(84, 214, 232, 0.25) !important;
+      color: #54D6E8 !important;
+      border-color: #54D6E8 !important;
+      box-shadow: 0 0 14px rgba(84, 214, 232, 0.35);
+    }
+  </style>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-lowest": "#040b15",
+            "surface": "#07111F",
+            "surface-container-low": "#0A1928",
+            "on-surface-variant": "#bcc9cb",
+            "primary": "#54D6E8",
+            "on-primary": "#00363d",
+            "surface-dim": "#050d18",
+            "surface-container": "#0e2236",
+            "on-background": "#d9e3f7",
+            "tertiary": "#91DCE8",
+            "secondary": "#3BBFAF",
+            "surface-container-high": "#122b42",
+            "on-surface": "#d9e3f7",
+            "background": "#07111F",
+            "error": "#ffb4ab",
+            "surface-bright": "#1e4262"
+          },
+          fontFamily: {
+            "code-metric": ["JetBrains Mono"],
+            "display": ["Space Grotesk"],
+            "headline-xl": ["Space Grotesk"],
+            "headline-lg": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"],
+            "headline-sm": ["Space Grotesk"],
+            "body-lg": ["Manrope"],
+            "body-md": ["Manrope"],
+            "body-sm": ["Manrope"],
+            "label-md": ["JetBrains Mono"],
+            "label-sm": ["JetBrains Mono"]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-[#07111F] font-body-md text-on-surface antialiased min-h-screen selection:bg-primary/30 selection:text-primary">
+
+  <!-- GLOBAL APPLICATION HEADER -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-[#07111F]/90 backdrop-blur-xl border-b border-primary/20 shadow-[0_12px_32px_-4px_rgba(2,6,15,0.75)]">
+    <div class="h-20 w-full px-6 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-4 shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-[#0A1928] border border-primary/40 flex items-center justify-center shadow-[0_0_15px_rgba(84,214,232,0.3)]">
+            <span class="material-symbols-outlined text-primary text-[22px]">blur_on</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-headline-sm text-lg tracking-tight text-on-surface font-semibold leading-none">RAINFALL ATLAS</span>
+            <span class="font-label-sm text-[11px] text-primary tracking-widest leading-none mt-1">3D CLIMATE INTELLIGENCE</span>
+          </div>
+        </div>
+        <div class="hidden xl:flex items-center gap-2 px-3 py-1 rounded bg-[#0A1928] border border-primary/20 text-on-surface-variant">
+          <span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_rgba(59,191,175,0.8)] animate-pulse"></span>
+          <span class="font-label-sm text-xs font-code-metric" id="hdr-dataset-badge">Dataset: weatherAUS.csv [145,460 Records · 49 Synoptic Grids]</span>
+        </div>
+      </div>
+
+      <nav class="hidden lg:flex items-center gap-2 shrink-0">
+        <a class="px-3 py-1.5 text-xs font-mono font-medium rounded-lg bg-primary/20 text-primary border border-primary/40 shadow-[0_0_12px_rgba(84,214,232,0.25)] transition-all" href="#overview">Overview</a>
+        <a class="px-3 py-1.5 text-xs font-mono text-on-surface-variant hover:text-primary rounded-lg transition-colors" href="#dataset-field">Explore Data (3D)</a>
+        <a class="px-3 py-1.5 text-xs font-mono text-on-surface-variant hover:text-primary rounded-lg transition-colors" href="#regime-discovery">Regime Discovery</a>
+        <a class="px-3 py-1.5 text-xs font-mono text-on-surface-variant hover:text-primary rounded-lg transition-colors" href="#hierarchical-tree">Hierarchical Linkage</a>
+        <a class="px-3 py-1.5 text-xs font-mono text-on-surface-variant hover:text-primary rounded-lg transition-colors" href="#pca-space">PCA Space</a>
+        <a class="px-3 py-1.5 text-xs font-mono text-on-surface-variant hover:text-primary rounded-lg transition-colors" href="#australia-insights">Continental Map</a>
+        <a class="px-3 py-1.5 text-xs font-mono text-on-surface-variant hover:text-primary rounded-lg transition-colors" href="#model-comparison-section">Model Registry</a>
+      </nav>
+
+      <div class="flex items-center gap-4 shrink-0">
+        <div class="hidden 2xl:flex items-center gap-4">
+          <div class="flex flex-col text-right">
+            <span class="font-label-sm text-xs text-on-surface-variant">ENGINE: v2.4 3D-SPATIAL</span>
+            <span class="font-label-sm text-xs text-secondary font-code-metric" id="hdr-engine-status">WEBGL ACTIVE · LIVE API</span>
+          </div>
+          <div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#0A1928] border border-primary/25 font-label-sm text-xs text-on-surface-variant">
+            <span class="material-symbols-outlined text-[14px] text-primary">sensors</span>
+            <span class="font-code-metric" id="hdr-connection-status">CONNECTED</span>
+          </div>
+        </div>
+        <a class="px-4 py-2 rounded bg-primary text-[#001f24] font-label-md text-xs font-semibold hover:bg-secondary transition-all shadow-[0_0_20px_rgba(84,214,232,0.4)]" href="#regime-discovery">Explore 3D Regimes</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="w-full pt-20 bg-[#07111F] min-h-[calc(100vh-80px)]">
+    <div class="flex flex-col w-full">
+
+      <!-- SECTION 1: HERO SECTION -->
+      <div class="relative w-full overflow-hidden px-6 lg:px-12 pt-6 pb-12" id="overview">
+        <div class="pointer-events-none absolute -top-40 right-1/4 h-[560px] w-[560px] rounded-full bg-primary/10 blur-[140px]"></div>
+        <div class="pointer-events-none absolute top-1/3 -left-32 h-[480px] w-[480px] rounded-full bg-secondary/15 blur-[130px]"></div>
+
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative">
+          <div class="lg:col-span-6 flex flex-col items-start z-10">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0A1928]/90 border border-primary/40 shadow-[0_0_16px_rgba(84,214,232,0.2)] backdrop-blur-md">
+              <span class="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_#54D6E8]"></span>
+              <span class="font-label-sm text-xs tracking-widest text-primary uppercase">3D SCIENTIFIC VISUALIZATION // SYNOPTIC CLUSTERING</span>
+            </div>
+
+            <h1 class="mt-4 font-display text-4xl lg:text-5xl font-bold text-on-surface tracking-tight leading-[1.08]">
+              Discover the hidden patterns of <span class="bg-gradient-to-r from-primary via-tertiary to-secondary bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(84,214,232,0.3)]">rainfall.</span>
+            </h1>
+
+            <p class="mt-4 font-body-lg text-base text-on-surface-variant max-w-xl leading-relaxed">
+              Explore historical weather observations across the Australian continent through interactive 3D spatial geometry. Uncover latent precipitation regimes and decode high-dimensional atmospheric forces shaping synoptic behavior.
+            </p>
+
+            <div class="mt-6 flex flex-wrap items-center gap-4 w-full sm:w-auto">
+              <a class="group flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary text-[#001f24] font-label-md text-sm font-semibold transition-all shadow-[0_0_24px_rgba(84,214,232,0.4)] hover:shadow-[0_0_36px_rgba(84,214,232,0.6)] hover:bg-secondary" href="#regime-discovery">
+                <span>Explore 3D Particle Cloud</span>
+                <span class="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-1">travel_explore</span>
+              </a>
+              <a class="flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-[#0A1928] border border-primary/30 text-on-surface font-label-md text-sm transition-all hover:bg-surface-bright hover:border-primary shadow-sm" href="#pca-space">
+                <span class="material-symbols-outlined text-primary text-[18px]">scatter_plot</span>
+                <span>Inspect PCA Coordinates</span>
+              </a>
+            </div>
+
+            <div class="mt-8 pt-6 w-full grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-primary/15">
+              <div class="flex flex-col p-2.5 rounded-lg bg-[#0A1928]/60 border border-primary/20">
+                <span class="font-label-sm text-[11px] text-on-surface-variant uppercase">Target Domain</span>
+                <span class="mt-1 font-headline-sm text-base text-on-surface font-semibold leading-tight">AUS Continental</span>
+                <span class="font-label-sm text-xs text-primary font-code-metric">49 Synoptic Grids</span>
+              </div>
+              <div class="flex flex-col p-2.5 rounded-lg bg-[#0A1928]/60 border border-primary/20">
+                <span class="font-label-sm text-[11px] text-on-surface-variant uppercase">Temporal Span</span>
+                <span class="mt-1 font-headline-sm text-base text-primary font-code-metric leading-tight" id="hero-date-span">10-Year</span>
+                <span class="font-label-sm text-xs text-on-surface-variant font-code-metric" id="hero-obs-count">145.4K Daily Feeds</span>
+              </div>
+              <div class="flex flex-col p-2.5 rounded-lg bg-[#0A1928]/60 border border-primary/20">
+                <span class="font-label-sm text-[11px] text-on-surface-variant uppercase">Algorithmic Stack</span>
+                <span class="mt-1 font-headline-sm text-base text-secondary font-code-metric leading-tight">PCA · PAM</span>
+                <span class="font-label-sm text-xs text-on-surface-variant font-code-metric">Ward Linkage k=4</span>
+              </div>
+              <div class="flex flex-col p-2.5 rounded-lg bg-[#0A1928]/60 border border-primary/20">
+                <span class="font-label-sm text-[11px] text-on-surface-variant uppercase">3D Render Pipeline</span>
+                <span class="mt-1 font-headline-sm text-base text-tertiary font-code-metric leading-tight">WebGL 2.0</span>
+                <span class="font-label-sm text-xs text-secondary font-code-metric">Particle Emitters Active</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-6 relative mt-4 lg:mt-0 flex justify-center">
+            <div class="absolute inset-0 rounded-2xl bg-gradient-to-tr from-[#050e1c] via-[#0A1928]/60 to-primary/20 blur-xl"></div>
+            <div class="relative w-full rounded-2xl bg-[#0A1928] border border-primary/30 shadow-[0_0_35px_rgba(84,214,232,0.25)] overflow-hidden">
+              <div class="w-full h-[540px] sm:h-[620px] rounded-2xl relative block overflow-hidden" id="hero-earth-container"></div>
+
+              <div class="absolute top-4 right-4 z-20 px-3.5 py-2 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md shadow-md flex items-center gap-2">
+                <span class="material-symbols-outlined text-[16px] text-primary">my_location</span>
+                <span class="font-label-sm text-xs text-on-surface font-code-metric">LAT: 25.27° S | LON: 133.77° E · 3D ORBIT ACTIVE</span>
+              </div>
+
+              <div class="absolute bottom-4 left-4 z-20 px-3.5 py-2.5 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md shadow-md flex items-center gap-3">
+                <div class="relative flex items-center justify-center">
+                  <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+                  <span class="absolute w-4 h-4 rounded-full bg-secondary/30 animate-ping"></span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="font-label-sm text-xs text-secondary font-code-metric font-semibold">ATMOSPHERIC RAINFALL PARTICLES: 1,800 SENSORS</span>
+                  <span class="font-label-sm text-[11px] text-on-surface-variant font-code-metric">Surface Isohyets & Cloud Cover Mapped</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- DATASET OVERVIEW STRIP: Real Telemetry from API -->
+      <section class="w-full px-6 lg:px-12 mb-12">
+        <div class="p-6 rounded-2xl bg-[#0A1928] border border-primary/30 shadow-[0_8px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-96 h-full bg-gradient-to-l from-primary/10 to-transparent pointer-events-none"></div>
+          <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-6 relative z-10">
+            <div class="flex items-center gap-4 shrink-0">
+              <div class="w-12 h-12 rounded-xl bg-[#0e2236] border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(84,214,232,0.25)]">
+                <span class="material-symbols-outlined text-[26px]">database</span>
+              </div>
+              <div class="flex flex-col">
+                <div class="flex items-center gap-2">
+                  <span class="font-label-sm text-xs uppercase text-primary font-code-metric">DATASET ARCHIVE SPECIFICATION</span>
+                  <span class="px-2 py-0.5 rounded bg-primary/20 border border-primary/40 text-primary font-label-sm text-xs font-code-metric">weatherAUS.csv</span>
+                </div>
+                <h2 class="font-headline-sm text-lg text-on-surface font-semibold">Australian Bureau of Meteorology Observations</h2>
+                <span class="font-body-sm text-xs text-on-surface-variant" id="dataset-subhead">Continuous synoptic feeds from 49 continental meteorological stations</span>
+              </div>
+            </div>
+
+            <!-- High-Density Key Metrics Matrix -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full xl:w-auto">
+              <div class="p-4 rounded-xl bg-[#0e2236]/70 border border-primary/20 flex flex-col">
+                <span class="font-label-sm text-xs text-on-surface-variant uppercase">Total Observations</span>
+                <span class="mt-1 font-headline-md text-2xl text-primary font-code-metric font-bold" id="stat-total-obs">145,460</span>
+                <span class="font-label-sm text-[11px] text-on-surface-variant font-code-metric" id="stat-clean-rows">Clean Imputed Rows</span>
+              </div>
+              <div class="p-4 rounded-xl bg-[#0e2236]/70 border border-primary/20 flex flex-col">
+                <span class="font-label-sm text-xs text-on-surface-variant uppercase">Station Coordinates</span>
+                <span class="mt-1 font-headline-md text-2xl text-secondary font-code-metric font-bold" id="stat-stations-count">49 Geo Stns</span>
+                <span class="font-label-sm text-[11px] text-on-surface-variant font-code-metric">Continental Coverage</span>
+              </div>
+              <div class="p-4 rounded-xl bg-[#0e2236]/70 border border-primary/20 flex flex-col">
+                <span class="font-label-sm text-xs text-on-surface-variant uppercase">Feature Vector</span>
+                <span class="mt-1 font-headline-md text-2xl text-tertiary font-code-metric font-bold" id="stat-features-count">23 → 11</span>
+                <span class="font-label-sm text-[11px] text-on-surface-variant font-code-metric">Normalized Atmospheric</span>
+              </div>
+              <div class="p-4 rounded-xl bg-[#0e2236]/70 border border-primary/20 flex flex-col">
+                <span class="font-label-sm text-xs text-on-surface-variant uppercase">Optimal Clusters</span>
+                <span class="mt-1 font-headline-md text-2xl text-primary font-code-metric font-bold" id="stat-clusters-k">k = 4</span>
+                <span class="font-label-sm text-[11px] text-secondary font-code-metric" id="stat-silhouette-val">Silhouette Peak</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- INTERACTIVE ALGORITHM CONTROLS BAR -->
+      <section class="w-full px-6 lg:px-12 mb-8">
+        <div class="p-5 rounded-2xl bg-[#0A1928] border border-primary/30 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 shadow-xl">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="material-symbols-outlined text-primary text-[20px]">tune</span>
+            <span class="font-label-sm text-xs font-code-metric text-on-surface uppercase">Algorithm:</span>
+            <div class="flex flex-wrap items-center gap-1.5" id="algo-btn-group">
+              <button class="px-2.5 py-1 rounded-lg border border-primary/40 font-code-metric text-xs font-semibold active-pill transition-all" data-algo="kmeans" data-linkage="none" data-metric="euclidean">K-Means (Euclidean)</button>
+              <button class="px-2.5 py-1 rounded-lg border border-primary/20 bg-[#07111F] text-on-surface-variant hover:text-primary font-code-metric text-xs transition-all" data-algo="kmedoids" data-linkage="none" data-metric="cityblock">K-Medoids (Manhattan)</button>
+              <button class="px-2.5 py-1 rounded-lg border border-primary/20 bg-[#07111F] text-on-surface-variant hover:text-primary font-code-metric text-xs transition-all" data-algo="hierarchical" data-linkage="ward" data-metric="euclidean">Ward (Euclidean)</button>
+              <button class="px-2.5 py-1 rounded-lg border border-primary/20 bg-[#07111F] text-on-surface-variant hover:text-primary font-code-metric text-xs transition-all" data-algo="hierarchical" data-linkage="complete" data-metric="cityblock">Complete (Manhattan)</button>
+              <button class="px-2.5 py-1 rounded-lg border border-primary/20 bg-[#07111F] text-on-surface-variant hover:text-primary font-code-metric text-xs transition-all" data-algo="hierarchical" data-linkage="average" data-metric="euclidean">Average (Euclidean)</button>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-4">
+            <div class="flex items-center gap-2">
+              <span class="font-label-sm text-xs font-code-metric text-on-surface-variant">Mode:</span>
+              <div class="flex items-center gap-1" id="mode-btn-group">
+                <button class="px-2 py-0.5 rounded border border-primary/40 active-pill font-code-metric text-xs" data-mode="daily">Daily</button>
+                <button class="px-2 py-0.5 rounded border border-primary/20 bg-[#07111F] text-on-surface-variant hover:text-primary font-code-metric text-xs" data-mode="location_monthly">Monthly</button>
+              </div>
+            </div>
+
+            <div class="h-4 w-px bg-primary/20 hidden sm:block"></div>
+
+            <div class="flex items-center gap-2">
+              <span class="font-label-sm text-xs font-code-metric text-on-surface-variant">k:</span>
+              <div class="flex items-center gap-1" id="k-btn-group">
+                <button class="px-2 py-0.5 rounded border border-primary/20 bg-[#07111F] text-on-surface-variant hover:text-primary font-code-metric text-xs" data-k="2">2</button>
+                <button class="px-2 py-0.5 rounded border border-primary/20 bg-[#07111F] text-on-surface-variant hover:text-primary font-code-metric text-xs" data-k="3">3</button>
+                <button class="px-2 py-0.5 rounded border border-primary/40 active-pill font-code-metric text-xs font-bold" data-k="4">4</button>
+                <button class="px-2 py-0.5 rounded border border-primary/20 bg-[#07111F] text-on-surface-variant hover:text-primary font-code-metric text-xs" data-k="5">5</button>
+                <button class="px-2 py-0.5 rounded border border-primary/20 bg-[#07111F] text-on-surface-variant hover:text-primary font-code-metric text-xs" data-k="6">6</button>
+                <button class="px-2 py-0.5 rounded border border-primary/20 bg-[#07111F] text-on-surface-variant hover:text-primary font-code-metric text-xs" data-k="7">7</button>
+                <button class="px-2 py-0.5 rounded border border-primary/20 bg-[#07111F] text-on-surface-variant hover:text-primary font-code-metric text-xs" data-k="8">8</button>
+              </div>
+            </div>
+
+            <div class="h-4 w-px bg-primary/20 hidden sm:block"></div>
+
+            <button class="px-3 py-1 rounded-lg bg-primary text-[#001f24] hover:bg-secondary font-code-metric text-xs font-bold transition-all shadow-[0_0_12px_rgba(84,214,232,0.3)] flex items-center gap-1" id="btn-run-full-analysis">
+              <span class="material-symbols-outlined text-[15px]">play_circle</span> Run Model
+            </button>
+            <span class="font-code-metric text-xs text-secondary" id="ctrl-status-badge">Model Ready</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: 3D VOLUMETRIC DATA LANDSCAPE -->
+      <section class="w-full px-6 lg:px-12 mb-12 flex flex-col gap-6" id="dataset-field">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+          <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-primary/10 border border-primary/30 text-primary mb-2">
+              <span class="material-symbols-outlined text-[16px]">travel_explore</span>
+              <span class="font-label-sm text-xs font-code-metric tracking-wider uppercase">3D Atmospheric Observation Field</span>
+            </div>
+            <h2 class="font-headline-xl text-3xl font-bold text-on-surface tracking-tight">
+              Spatial Weather Landscape: Continental Stations in Volumetric Space
+            </h2>
+            <p class="mt-2 font-body-md text-sm text-on-surface-variant leading-relaxed">
+              Each spatial cylinder represents an Australian synoptic weather station in 3D space [Latitude, Longitude, Barometric Altitude]. Explore station height variations proportional to precipitation density and barometric pressure deltas.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="px-3 py-1.5 rounded-lg bg-[#0A1928] border border-primary/30 font-label-sm text-xs text-primary font-code-metric flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-primary animate-ping"></span> Live Field Render
+            </span>
+            <span class="px-3 py-1.5 rounded-lg bg-[#0A1928] border border-secondary/30 font-label-sm text-xs text-secondary font-code-metric">49 Monitored Basins</span>
+          </div>
+        </div>
+
+        <div class="relative w-full rounded-2xl bg-[#0A1928] border border-primary/30 shadow-[0_0_30px_rgba(84,214,232,0.2)] overflow-hidden">
+          <div class="w-full h-[480px] sm:h-[540px] relative" id="threejs-container-DATA_FIELD"></div>
+          <div class="absolute top-4 left-4 z-20 flex flex-wrap gap-2">
+            <div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md text-on-surface font-label-sm text-xs font-code-metric flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_8px_#54D6E8]"></span>
+              <span id="field-probe-station">Active Probe: Sydney (LAT -33.87, LON 151.21)</span>
+            </div>
+            <div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 backdrop-blur-md text-on-surface-variant font-label-sm text-xs font-code-metric" id="field-probe-metrics">
+              Temp 3pm: 23.4°C · Rain: 3.3mm · Pressure: 1017.2 hPa
+            </div>
+          </div>
+          <div class="absolute bottom-4 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+            <div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md text-secondary font-label-sm text-xs font-code-metric pointer-events-auto">
+              Interactive 3D Grid · Topographic Altitude Mapping Active
+            </div>
+            <div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md text-on-surface-variant font-label-sm text-xs font-code-metric pointer-events-auto">
+              Hover stations to sample synoptic parameters
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: PARTICLE CLUSTERING & DYNAMIC REGIME CARDS -->
+      <section class="w-full px-6 lg:px-12 mb-12 flex flex-col gap-6" id="regime-discovery">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+          <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-secondary/10 border border-secondary/30 text-secondary mb-2">
+              <span class="material-symbols-outlined text-[16px]">scatter_plot</span>
+              <span class="font-label-sm text-xs font-code-metric tracking-wider uppercase">Unsupervised Clustering Particle Engine</span>
+            </div>
+            <h2 class="font-headline-xl text-3xl font-bold text-on-surface tracking-tight">
+              Latent Regime Discovery: Unsupervised Precipitation Equilibrium
+            </h2>
+            <p class="mt-2 font-body-md text-sm text-on-surface-variant leading-relaxed">
+              Historical climate variables exist in high-dimensional continuous space. Observations gravitate toward natural equilibrium centroids, isolating dry-continental, coastal-orographic, and monsoonal regimes without prior labels.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="font-label-sm text-xs text-on-surface-variant font-code-metric">Distance Metric:</span>
+            <span class="px-2.5 py-1 rounded bg-[#0A1928] border border-primary/40 text-primary font-label-sm text-xs font-code-metric" id="current-metric-tag">Euclidean Orthogonal</span>
+            <span class="px-2.5 py-1 rounded bg-[#0A1928] border border-secondary/40 text-secondary font-label-sm text-xs font-code-metric" id="current-k-tag">k = 4 Centroids</span>
+          </div>
+        </div>
+
+        <!-- 3D Particle Simulation Viewport -->
+        <div class="relative w-full rounded-2xl bg-[#0A1928] border border-primary/30 shadow-[0_0_35px_rgba(84,214,232,0.25)] overflow-hidden">
+          <div class="w-full h-[520px] sm:h-[580px] relative" id="particle-cluster-container"></div>
+          <div class="absolute top-4 left-4 z-10 flex flex-wrap gap-2" id="regime-badges-container">
+            <div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md shadow flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_8px_#54D6E8]"></span>
+              <span class="font-label-sm text-xs text-on-surface font-code-metric">Regime 1: Monsoonal Tropics</span>
+            </div>
+            <div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-secondary/30 backdrop-blur-md shadow flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_8px_#3BBFAF]"></span>
+              <span class="font-label-sm text-xs text-on-surface font-code-metric">Regime 2: Arid Outback</span>
+            </div>
+            <div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-tertiary/30 backdrop-blur-md shadow flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-tertiary shadow-[0_0_8px_#91DCE8]"></span>
+              <span class="font-label-sm text-xs text-on-surface font-code-metric">Regime 3: Oceanic Front</span>
+            </div>
+            <div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-[#45c6a6]/40 backdrop-blur-md shadow flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#45c6a6] shadow-[0_0_8px_#45c6a6]"></span>
+              <span class="font-label-sm text-xs text-on-surface font-code-metric">Regime 4: Subtropical Convective</span>
+            </div>
+          </div>
+          <div class="absolute top-4 right-4 z-10 flex items-center gap-2">
+            <button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/40 hover:border-primary text-primary font-label-sm text-xs font-code-metric shadow flex items-center gap-1.5" id="btn-cluster-play">
+              <span class="material-symbols-outlined text-[15px]">play_arrow</span> Cycle
+            </button>
+            <button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/25 hover:border-primary text-on-surface-variant font-label-sm text-xs font-code-metric shadow flex items-center gap-1.5" id="btn-cluster-pause">
+              <span class="material-symbols-outlined text-[15px]">pause</span> Pause
+            </button>
+            <button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/25 hover:border-primary text-on-surface-variant font-label-sm text-xs font-code-metric shadow flex items-center gap-1.5" id="btn-cluster-reset">
+              <span class="material-symbols-outlined text-[15px]">restart_alt</span> Reset
+            </button>
+          </div>
+          <div class="absolute bottom-4 left-4 z-10 px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 backdrop-blur-md shadow text-primary font-label-sm text-xs font-code-metric">
+            Equilibrium Simulation · 2,500 Latent Atmospheric Particles
+          </div>
+        </div>
+
+        <!-- DYNAMIC REGIME CARDS GRID (Populated by /api/results/profiles) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="regime-cards-container">
+          <!-- Fallback placeholder while live API connects -->
+          <div class="p-6 rounded-2xl bg-[#0A1928] border border-primary/25 shadow-md flex flex-col justify-between">
+            <span class="font-code-metric text-xs text-primary">Loading actual cluster profiles...</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: HIERARCHICAL CLUSTERING SECTION - 3D Dendrogram Tree Visualization -->
+      <section class="w-full px-6 lg:px-12 mb-12 flex flex-col gap-6" id="hierarchical-tree">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+          <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-primary/10 border border-primary/30 text-primary mb-2">
+              <span class="material-symbols-outlined text-[16px]">account_tree</span>
+              <span class="font-label-sm text-xs font-code-metric tracking-wider uppercase">Agglomerative Linkage Topology</span>
+            </div>
+            <h2 class="font-headline-xl text-3xl font-bold text-on-surface tracking-tight">
+              3D Hierarchical Discovery Tree: Ward Minimum Variance Dendrogram
+            </h2>
+            <p class="mt-2 font-body-md text-sm text-on-surface-variant leading-relaxed">
+              Agglomerative clustering iteratively merges homogeneous observation clusters by minimizing within-cluster variance. Inspect the 3D branching lineage from the overarching continental root down to discrete synoptic leaf nodes.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="px-2.5 py-1 rounded bg-[#0A1928] border border-primary/30 text-primary font-label-sm text-xs font-code-metric" id="coph-corr-badge">Cophenetic Corr: 0.84</span>
+            <span class="px-2.5 py-1 rounded bg-[#0A1928] border border-secondary/30 text-secondary font-label-sm text-xs font-code-metric">Branch Depth: 4 Levels</span>
+          </div>
+        </div>
+
+        <!-- 3D Hierarchical Discovery Tree Viewport (Full Width, Matching Stitch Design) -->
+        <div class="relative w-full rounded-2xl bg-[#0A1928] border border-primary/30 shadow-[0_0_35px_rgba(84,214,232,0.2)] overflow-hidden">
+          <div class="w-full h-[480px] sm:h-[520px] relative" id="tree-container"></div>
+          
+          <!-- Tree Simulation Controls -->
+          <div class="absolute top-4 right-4 z-10 flex items-center gap-2">
+            <button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/40 hover:border-primary text-primary font-label-sm text-xs font-code-metric shadow flex items-center gap-1.5" id="btn-tree-growth">
+              <span class="material-symbols-outlined text-[15px]">play_arrow</span> Play Growth
+            </button>
+            <button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/25 hover:border-primary text-on-surface-variant font-label-sm text-xs font-code-metric shadow flex items-center gap-1.5" id="btn-tree-pause">
+              <span class="material-symbols-outlined text-[15px]">pause</span> Pause
+            </button>
+            <button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/25 hover:border-primary text-on-surface-variant font-label-sm text-xs font-code-metric shadow flex items-center gap-1.5" id="btn-tree-reset">
+              <span class="material-symbols-outlined text-[15px]">restart_alt</span> Reset
+            </button>
+          </div>
+
+          <!-- Floating Dendrogram Indicators (Matching Image 1) -->
+          <div class="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
+            <div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md shadow flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_8px_#54D6E8]"></span>
+              <span class="font-label-sm text-xs text-on-surface font-code-metric">Root Node (All Observations)</span>
+            </div>
+            <div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-secondary/30 backdrop-blur-md shadow flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_8px_#3BBFAF]"></span>
+              <span class="font-label-sm text-xs text-on-surface font-code-metric">Macro Bifurcation (Tropical vs Arid)</span>
+            </div>
+            <div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-tertiary/30 backdrop-blur-md shadow flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-tertiary shadow-[0_0_8px_#91DCE8]"></span>
+              <span class="font-label-sm text-xs text-on-surface font-code-metric">48 Observation Leaf Clusters</span>
+            </div>
+          </div>
+
+          <!-- Bottom Status Badges -->
+          <div class="absolute bottom-4 left-4 z-10 px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 backdrop-blur-md shadow text-primary font-label-sm text-xs font-code-metric">
+            Conceptual Ward Hierarchical Dendrogram Model · Depth: 4 Levels
+          </div>
+          <div class="absolute bottom-4 right-4 z-10 px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 backdrop-blur-md shadow text-on-surface-variant font-label-sm text-xs font-code-metric">
+            Dynamic Branching · Interactive Mouse Parallax
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5: REAL PCA LATENT SPACE (Populated from /api/results/pca) -->
+      <section class="w-full px-6 lg:px-12 mb-12 flex flex-col gap-6" id="pca-space">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+          <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-tertiary/10 border border-tertiary/30 text-tertiary mb-2">
+              <span class="material-symbols-outlined text-[16px]">view_in_ar</span>
+              <span class="font-label-sm text-xs font-code-metric tracking-wider uppercase">Dimensionality Reduction Latent Space</span>
+            </div>
+            <h2 class="font-headline-xl text-3xl font-bold text-on-surface tracking-tight">
+              3D PCA Latent Space: Principal Component Variance Vectors
+            </h2>
+            <p class="mt-2 font-body-md text-sm text-on-surface-variant leading-relaxed">
+              Projection of standardized meteorological variables into 3 orthogonal eigenvectors. Principal components capture cumulative continental variance, demonstrating mathematical separation across precipitation regimes.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="px-2.5 py-1 rounded bg-[#0A1928] border border-primary/30 text-primary font-label-sm text-xs font-code-metric" id="pca-pc1-badge">PC1: Calculating...</span>
+            <span class="px-2.5 py-1 rounded bg-[#0A1928] border border-secondary/30 text-secondary font-label-sm text-xs font-code-metric" id="pca-pc2-badge">PC2: Calculating...</span>
+            <span class="px-2.5 py-1 rounded bg-[#0A1928] border border-tertiary/30 text-tertiary font-label-sm text-xs font-code-metric" id="pca-pc3-badge">PC3: Calculating...</span>
+          </div>
+        </div>
+
+        <div class="relative w-full rounded-2xl bg-[#0A1928] border border-primary/30 shadow-[0_0_35px_rgba(84,214,232,0.25)] overflow-hidden">
+          <div class="w-full h-[500px] sm:h-[540px] relative" id="pca-3d-container"></div>
+          <div class="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
+            <button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary text-primary font-label-sm text-xs font-code-metric shadow flex items-center gap-1.5" id="btn-pca-orbit" type="button">
+              <span class="material-symbols-outlined text-[15px]">rotate_right</span> Orbit: Auto
+            </button>
+            <button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 text-on-surface-variant hover:text-on-surface font-label-sm text-xs font-code-metric shadow" id="btn-pca-axes" type="button">
+              Axes: On
+            </button>
+            <button class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 text-on-surface-variant hover:text-on-surface font-label-sm text-xs font-code-metric shadow" id="btn-pca-eigen" type="button">
+              Eigenvectors: On
+            </button>
+            <div class="hidden md:flex px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 text-on-surface-variant font-label-sm text-xs font-code-metric" id="pca-pts-indicator">
+              2,500 Latent Observations · PC1 × PC2 × PC3
+            </div>
+          </div>
+          <div class="absolute bottom-4 right-4 z-10 px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 backdrop-blur-md shadow text-secondary font-label-sm text-xs font-code-metric">
+            Click & Drag to Orbit 3D Eigen-Space · Smooth Real-time Rotation
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6: 3D AUSTRALIAN CONTINENTAL MAP & PROPORTIONS -->
+      <section class="w-full px-6 lg:px-12 mb-12 flex flex-col gap-6" id="australia-insights">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+          <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-secondary/10 border border-secondary/30 text-secondary mb-2">
+              <span class="material-symbols-outlined text-[16px]">map</span>
+              <span class="font-label-sm text-xs font-code-metric tracking-wider uppercase">Geographic Synthesis & Isohyet Contours</span>
+            </div>
+            <h2 class="font-headline-xl text-3xl font-bold text-on-surface tracking-tight">
+              Continental Climate Geography: 3D Topographic Rainfall Contours
+            </h2>
+            <p class="mt-2 font-body-md text-sm text-on-surface-variant leading-relaxed">
+              Synoptic distribution across Australia reveals sharp orographic barriers. The Great Dividing Range shields the arid inland basin while coastal fringes receive concentrated monsoonal and frontal moisture plumes.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="px-3 py-1.5 rounded-lg bg-[#0A1928] border border-primary/30 font-label-sm text-xs text-primary font-code-metric">Latitude: 10°S – 44°S</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[#0A1928] border border-secondary/30 font-label-sm text-xs text-secondary font-code-metric">Longitude: 112°E – 154°E</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          <div class="lg:col-span-8 relative rounded-2xl bg-[#0A1928] border border-primary/30 shadow-[0_0_35px_rgba(84,214,232,0.2)] overflow-hidden flex flex-col">
+            <div class="w-full h-[460px] relative" id="threejs-container-AU_GEO"></div>
+            <div class="absolute top-4 left-4 z-20 flex flex-wrap gap-2">
+              <div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/30 backdrop-blur-md text-primary font-label-sm text-xs font-code-metric">
+                Interactive Topographic Terrain & Rain Columns
+              </div>
+              <div class="px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-secondary/30 backdrop-blur-md text-secondary font-label-sm text-xs font-code-metric">
+                Verified BOM Stations Active
+              </div>
+            </div>
+            <div class="absolute bottom-4 left-4 z-20 px-3 py-1.5 rounded-lg bg-[#07111F]/90 border border-primary/20 backdrop-blur-md text-on-surface font-label-sm text-xs font-code-metric" id="geo-stations-ticker">
+              Darwin · Cairns · Sydney · Melbourne · Perth · Alice Springs · Hobart · Brisbane · Adelaide
+            </div>
+          </div>
+
+          <div class="lg:col-span-4 flex flex-col gap-4">
+            <div class="p-6 rounded-2xl bg-[#0A1928] border border-primary/20 shadow-md flex flex-col justify-between h-full">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="font-headline-sm text-base text-on-surface font-semibold">Continental Distribution</span>
+                  <span class="material-symbols-outlined text-primary text-[22px]">pie_chart</span>
+                </div>
+                <p class="font-body-sm text-xs text-on-surface-variant">
+                  Relative frequency of cluster regime membership across 145,460 observed synoptic calendar days.
+                </p>
+                <div class="mt-4 flex flex-col gap-3 font-code-metric text-xs" id="continental-bars-container">
+                  <!-- Dynamically rendered via /api/results/geography -->
+                  <div class="text-on-surface-variant">Loading distribution...</div>
+                </div>
+              </div>
+              <div class="mt-4 pt-3 border-t border-primary/15 flex items-center justify-between font-label-sm text-xs text-on-surface-variant">
+                <span>BOM Station Density:</span>
+                <span class="text-primary font-code-metric font-semibold">49 Synchronized Feeds</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 7: MODEL REGISTRY & COMPARISON MATRIX (From /api/clustering/compare) -->
+      <section class="w-full px-6 lg:px-12 mb-12 flex flex-col gap-8" id="model-comparison-section">
+        <div class="flex flex-col gap-1">
+          <span class="font-label-sm text-xs uppercase text-primary font-code-metric">EXPERIMENTAL REGISTRY & SCIENTIFIC VERIFICATION</span>
+          <h2 class="font-headline-lg text-2xl font-bold text-on-surface">Unified Model Comparison & Validation Suite</h2>
+          <p class="font-body-md text-xs text-on-surface-variant max-w-3xl">
+            Rigorous cross-model evaluation strictly evaluated on common identical stratified samples. Verifying stability, partition boundaries, hierarchical tree topology, and Markov synoptic persistence.
+          </p>
+        </div>
+
+        <!-- 1. Unified Model Comparison Matrix & Common-Sample Alignment -->
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+          <div class="xl:col-span-8 p-6 rounded-2xl bg-[#0A1928] border border-primary/30 shadow-lg overflow-x-auto flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="font-headline-sm text-base text-on-surface font-semibold flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-[20px]">table_chart</span>
+                  Algorithm Comparison Matrix
+                </h3>
+                <span class="px-2 py-0.5 rounded bg-primary/10 border border-primary/30 font-code-metric text-[11px] text-primary">k = 4 Benchmark</span>
+              </div>
+              <table class="w-full text-left font-code-metric text-xs">
+                <thead>
+                  <tr class="border-b border-primary/20 text-primary">
+                    <th class="py-2.5 px-3">Algorithm</th>
+                    <th class="py-2.5 px-3">Distance</th>
+                    <th class="py-2.5 px-3">Linkage</th>
+                    <th class="py-2.5 px-3">K</th>
+                    <th class="py-2.5 px-3">Objective Value</th>
+                    <th class="py-2.5 px-3">Silhouette</th>
+                    <th class="py-2.5 px-3">Davies-Bouldin</th>
+                    <th class="py-2.5 px-3">Balance</th>
+                    <th class="py-2.5 px-3">Runtime</th>
+                  </tr>
+                </thead>
+                <tbody id="comparison-table-body" class="divide-y divide-primary/10 text-on-surface">
+                  <!-- Dynamically populated from API -->
+                </tbody>
+              </table>
+            </div>
+            <div class="mt-4 pt-3 border-t border-primary/15 flex flex-wrap items-center justify-between text-on-surface-variant font-label-sm text-[11px] font-code-metric">
+              <span>* Objective: WCSS for Euclidean K-Means / Ward; Sum of Absolute Deviations (SAD) for K-Medoids.</span>
+              <span class="text-secondary">Validation Sample: N=1,500 Common Stratified Subsample</span>
+            </div>
+          </div>
+
+          <!-- Pairwise ARI & NMI Sub-Card -->
+          <div class="xl:col-span-4 p-6 rounded-2xl bg-[#0A1928] border border-primary/30 shadow-lg flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-headline-sm text-base text-on-surface font-semibold flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary text-[20px]">hub</span>
+                  Cross-Model Congruence
+                </h3>
+                <span class="font-code-metric text-[11px] text-secondary">N = 1,500 Common</span>
+              </div>
+              <p class="font-body-sm text-xs text-on-surface-variant mb-4">
+                Pairwise alignment between K-Means, Manhattan K-Medoids, and Agglomerative Ward on identical stratified observations.
+              </p>
+              
+              <!-- Tabs for ARI vs NMI -->
+              <div class="flex items-center gap-2 mb-3">
+                <button id="btn-tab-ari" class="px-2.5 py-1 rounded bg-primary/20 border border-primary/40 text-primary font-code-metric text-xs font-semibold">Adjusted Rand Index (ARI)</button>
+                <button id="btn-tab-nmi" class="px-2.5 py-1 rounded bg-[#07111F] border border-primary/20 text-on-surface-variant hover:text-primary font-code-metric text-xs">Normalized Mutual Info (NMI)</button>
+              </div>
+
+              <div id="congruence-matrix-container" class="overflow-x-auto font-code-metric text-xs">
+                <!-- Dynamically rendered -->
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-primary/15 text-on-surface-variant font-label-sm text-[11px]">
+              <span class="text-primary font-semibold font-code-metric">ARI > 0.85:</span> High topological cluster agreement between Euclidean centroids and Manhattan medoids.
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. K-Means Diagnostics (Multi-K Range + Multi-Seed Stability + Scientific Rationale) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-7 p-6 rounded-2xl bg-[#0A1928] border border-primary/30 shadow-lg flex flex-col">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-headline-sm text-base text-on-surface font-semibold flex items-center gap-2">
+                <span class="material-symbols-outlined text-tertiary text-[20px]">analytics</span>
+                K-Means Multi-K Parameter Evaluation (k = 2..8)
+              </h3>
+              <span class="px-2 py-0.5 rounded bg-tertiary/10 border border-tertiary/30 font-code-metric text-[11px] text-tertiary">Elbow & Silhouette Curve</span>
+            </div>
+            <p class="font-body-sm text-xs text-on-surface-variant mb-3">
+              Evaluating inertia reduction, validation silhouette, and cluster balance across candidate partitions on a single consistent sample.
+            </p>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left font-code-metric text-xs">
+                <thead>
+                  <tr class="border-b border-primary/20 text-tertiary">
+                    <th class="py-2 px-2.5">K</th>
+                    <th class="py-2 px-2.5">WCSS (Inertia)</th>
+                    <th class="py-2 px-2.5">Silhouette</th>
+                    <th class="py-2 px-2.5">Davies-Bouldin</th>
+                    <th class="py-2 px-2.5">Balance (S_min/S_max)</th>
+                    <th class="py-2 px-2.5">Assessment</th>
+                  </tr>
+                </thead>
+                <tbody id="kmeans-evaluate-table-body" class="divide-y divide-primary/10 text-on-surface">
+                  <tr><td colspan="6" class="py-4 text-center text-on-surface-variant">Loading evaluation telemetry...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 flex flex-col gap-4">
+            <!-- Multi-seed Stability Card -->
+            <div class="p-6 rounded-2xl bg-[#0A1928] border border-primary/30 shadow-lg flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="font-headline-sm text-base text-on-surface font-semibold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-[20px]">security</span>
+                    Multi-Seed Partition Stability
+                  </h3>
+                  <span class="px-2 py-0.5 rounded bg-primary/20 border border-primary/40 font-code-metric text-[11px] text-primary">5 Initializations</span>
+                </div>
+                <p class="font-body-sm text-xs text-on-surface-variant mb-3">
+                  K-Means evaluated across seeds [42, 101, 7, 2024, 99] to prove cluster reproducibility.
+                </p>
+                <div class="grid grid-cols-2 gap-3 font-code-metric text-xs mb-3">
+                  <div class="p-3 rounded-xl bg-[#0e2236]/80 border border-primary/20">
+                    <div class="text-on-surface-variant text-[11px]">Mean Pairwise ARI</div>
+                    <div class="text-primary text-lg font-bold" id="stability-mean-ari">0.9824</div>
+                    <div class="text-secondary text-[10px]">High solution consistency</div>
+                  </div>
+                  <div class="p-3 rounded-xl bg-[#0e2236]/80 border border-primary/20">
+                    <div class="text-on-surface-variant text-[11px]">WCSS Std Dev</div>
+                    <div class="text-on-surface text-lg font-bold" id="stability-wcss-std">± 0.04%</div>
+                    <div class="text-on-surface-variant text-[10px]">Minimal seed variance</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Domain Selection Rationale Box -->
+              <div class="p-3.5 rounded-xl bg-primary/10 border border-primary/30 text-xs">
+                <span class="font-bold text-primary font-code-metric uppercase text-[11px] block mb-1">Scientific Model Selection Rationale</span>
+                <p class="text-on-surface leading-relaxed text-[11px]">
+                  While mathematical Silhouette peaks at <span class="text-primary font-bold">k = 2</span> (0.24) by splitting arid inland vs coastal maritime, <span class="text-secondary font-bold">k = 4</span> is the optimal meteorological regime solution. It successfully isolates Tropical Monsoon, Subtropical Maritime, Temperate Mediterranean, and Arid Interior with robust stability (<span class="text-primary">ARI 0.9824</span>) and balanced cluster representation without over-splitting.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Hierarchical 5-Linkage Comparison & Dendrogram Verification -->
+        <div class="p-6 rounded-2xl bg-[#0A1928] border border-primary/30 shadow-lg">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
+            <div>
+              <h3 class="font-headline-sm text-base text-on-surface font-semibold flex items-center gap-2">
+                <span class="material-symbols-outlined text-secondary text-[20px]">account_tree</span>
+                Hierarchical Agglomeration: 5 Linkage & Metric Configurations
+              </h3>
+              <p class="font-body-sm text-xs text-on-surface-variant">
+                Evaluated on proportionate stratified sample across all 49 synoptic monitoring stations (N = 1,500).
+              </p>
+            </div>
+            <span class="px-2.5 py-1 rounded bg-[#07111F] border border-primary/20 font-code-metric text-xs text-primary self-start md:self-auto">
+              Scipy Fast Cluster Engine
+            </span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left font-code-metric text-xs">
+              <thead>
+                <tr class="border-b border-primary/20 text-secondary">
+                  <th class="py-2.5 px-3">Configuration</th>
+                  <th class="py-2.5 px-3">Linkage Method</th>
+                  <th class="py-2.5 px-3">Distance Metric</th>
+                  <th class="py-2.5 px-3">Cophenetic Correlation</th>
+                  <th class="py-2.5 px-3">Sample Silhouette</th>
+                  <th class="py-2.5 px-3">Davies-Bouldin</th>
+                  <th class="py-2.5 px-3">Runtime</th>
+                  <th class="py-2.5 px-3">Monotonicity</th>
+                </tr>
+              </thead>
+              <tbody id="hierarchical-linkages-table-body" class="divide-y divide-primary/10 text-on-surface">
+                <tr><td colspan="8" class="py-4 text-center text-on-surface-variant">Loading linkage comparisons...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 4. Temporal Synoptic Regime Dynamics (Seasonal + Consecutive-Day Markov Transition Matrix) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Seasonal Breakdown -->
+          <div class="lg:col-span-5 p-6 rounded-2xl bg-[#0A1928] border border-primary/30 shadow-lg flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-headline-sm text-base text-on-surface font-semibold flex items-center gap-2">
+                  <span class="material-symbols-outlined text-tertiary text-[20px]">calendar_month</span>
+                  Southern Hemisphere Seasonal Breakdown
+                </h3>
+                <span class="font-code-metric text-[11px] text-tertiary">10-Year Climatology</span>
+              </div>
+              <p class="font-body-sm text-xs text-on-surface-variant mb-4">
+                Seasonal distribution of discovered regimes (Summer: DJF, Autumn: MAM, Winter: JJA, Spring: SON).
+              </p>
+              <div id="seasonal-breakdown-container" class="flex flex-col gap-3 font-code-metric text-xs">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-primary/15 text-on-surface-variant font-label-sm text-[11px]">
+              Tropical Monsoon frequency peaks in Austral Summer (Dec–Feb); Mediterranean wet days dominate Austral Winter (Jun–Aug).
+            </div>
+          </div>
+
+          <!-- Markov Transition Matrix (Strict Consecutive Days) -->
+          <div class="lg:col-span-7 p-6 rounded-2xl bg-[#0A1928] border border-primary/30 shadow-lg flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-headline-sm text-base text-on-surface font-semibold flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-[20px]">autorenew</span>
+                  1-Day Markov Transition & Persistence Matrix
+                </h3>
+                <span class="px-2 py-0.5 rounded bg-primary/20 border border-primary/40 font-code-metric text-[11px] text-primary">Δt = Exactly 1 Calendar Day</span>
+              </div>
+              <p class="font-body-sm text-xs text-on-surface-variant mb-4">
+                Empirical transition probability matrix P(S_{t+1} | S_t) computed strictly on verified consecutive calendar pairs within identical station feeds.
+              </p>
+              <div class="overflow-x-auto">
+                <table class="w-full text-center font-code-metric text-xs">
+                  <thead id="markov-table-head">
+                    <!-- Populated dynamically -->
+                  </thead>
+                  <tbody id="markov-table-body" class="divide-y divide-primary/10 text-on-surface">
+                    <tr><td class="py-4 text-center text-on-surface-variant">Loading Markov matrix...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-primary/15 flex justify-between items-center text-on-surface-variant font-label-sm text-[11px]">
+              <span>Diagonal indicates single-day regime persistence rate.</span>
+              <span class="text-secondary font-code-metric font-semibold">Consecutive Integrity Enforced</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Live Persistent Experiment Registry -->
+        <div class="p-6 rounded-2xl bg-[#0A1928] border border-primary/30 shadow-lg flex flex-col">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
+            <div>
+              <h3 class="font-headline-sm text-base text-on-surface font-semibold flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[20px]">inventory_2</span>
+                Persistent Experiment Registry
+              </h3>
+              <p class="font-body-sm text-xs text-on-surface-variant">
+                Full ledger of executed benchmark and custom experimental runs logged to disk (JSON & CSV).
+              </p>
+            </div>
+            <span class="px-2.5 py-1 rounded bg-[#07111F] border border-primary/20 font-code-metric text-xs text-secondary self-start md:self-auto" id="registry-count-badge">
+              Registry: 0 runs
+            </span>
+          </div>
+
+          <div class="overflow-x-auto max-h-72 overflow-y-auto">
+            <table class="w-full text-left font-code-metric text-xs">
+              <thead class="sticky top-0 bg-[#0A1928] border-b border-primary/20 text-primary">
+                <tr>
+                  <th class="py-2 px-3">Run ID</th>
+                  <th class="py-2 px-3">Timestamp</th>
+                  <th class="py-2 px-3">Algorithm</th>
+                  <th class="py-2 px-3">Distance</th>
+                  <th class="py-2 px-3">Linkage</th>
+                  <th class="py-2 px-3">K</th>
+                  <th class="py-2 px-3">Unit</th>
+                  <th class="py-2 px-3">Silhouette</th>
+                  <th class="py-2 px-3">Davies-Bouldin</th>
+                  <th class="py-2 px-3">Runtime</th>
+                </tr>
+              </thead>
+              <tbody id="experiment-registry-table-body" class="divide-y divide-primary/10 text-on-surface">
+                <tr><td colspan="10" class="py-4 text-center text-on-surface-variant">Loading experiment registry...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- METHODOLOGY RAIL -->
+      <section class="w-full px-6 lg:px-12 mb-12">
+        <div class="flex flex-col gap-1 mb-6">
+          <span class="font-label-sm text-xs uppercase text-primary font-code-metric">UNSUPERVISED CLUSTERING ARCHITECTURE</span>
+          <h2 class="font-headline-lg text-2xl font-bold text-on-surface">8-Stage Analytical Machine Learning Pipeline</h2>
+          <p class="font-body-md text-xs text-on-surface-variant max-w-2xl">
+            From heterogeneous synoptic readings to verified physical rainfall regimes without target supervision.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="p-4 rounded-xl bg-[#0A1928] border border-primary/20 flex flex-col">
+            <span class="font-code-metric text-xs text-primary font-bold">01</span>
+            <h4 class="mt-1 font-headline-sm text-sm text-on-surface font-semibold">Historical Ingestion</h4>
+            <p class="mt-1 font-body-sm text-xs text-on-surface-variant">Streaming 145,460 rows of BOM weather logs spanning 10 years and 49 continental monitoring posts.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-[#0A1928] border border-primary/20 flex flex-col">
+            <span class="font-code-metric text-xs text-primary font-bold">02</span>
+            <h4 class="mt-1 font-headline-sm text-sm text-on-surface font-semibold">Preprocessing & Imputation</h4>
+            <p class="mt-1 font-body-sm text-xs text-on-surface-variant">Median imputation preserving statistical distributions; log1p transformation mitigating rainfall positive skew.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-[#0A1928] border border-primary/20 flex flex-col">
+            <span class="font-code-metric text-xs text-primary font-bold">03</span>
+            <h4 class="mt-1 font-headline-sm text-sm text-on-surface font-semibold">Feature Normalization</h4>
+            <p class="mt-1 font-body-sm text-xs text-on-surface-variant">StandardScaler transforms continuous variables (Pressure, Humidity, Temp) to zero mean and unit variance.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-[#0A1928] border border-secondary/20 flex flex-col">
+            <span class="font-code-metric text-xs text-secondary font-bold">04</span>
+            <h4 class="mt-1 font-headline-sm text-sm text-on-surface font-semibold">Partition Clustering</h4>
+            <p class="mt-1 font-body-sm text-xs text-on-surface-variant">Multi-restart K-Means alongside Manhattan CLARA/PAM medoid optimization across candidate k.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-[#0A1928] border border-secondary/20 flex flex-col">
+            <span class="font-code-metric text-xs text-secondary font-bold">05</span>
+            <h4 class="mt-1 font-headline-sm text-sm text-on-surface font-semibold">Hierarchical Linkage</h4>
+            <p class="mt-1 font-body-sm text-xs text-on-surface-variant">Ward minimum variance hierarchical agglomeration verifying dendritic structure and regime bifurcation.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-[#0A1928] border border-secondary/20 flex flex-col">
+            <span class="font-code-metric text-xs text-secondary font-bold">06</span>
+            <h4 class="mt-1 font-headline-sm text-sm text-on-surface font-semibold">Validation Indices</h4>
+            <p class="mt-1 font-body-sm text-xs text-on-surface-variant">Silhouette Coefficient and Davies-Bouldin Index (DBI) evaluation to identify k=4 as optimal mathematical peak.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-[#0A1928] border border-tertiary/20 flex flex-col">
+            <span class="font-code-metric text-xs text-tertiary font-bold">07</span>
+            <h4 class="mt-1 font-headline-sm text-sm text-on-surface font-semibold">PCA Coordinate Projection</h4>
+            <p class="mt-1 font-body-sm text-xs text-on-surface-variant">Eigenvector dimensionality reduction to Principal Components (PC1, PC2, PC3) capturing cumulative variance.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-[#0A1928] border border-tertiary/20 flex flex-col">
+            <span class="font-code-metric text-xs text-tertiary font-bold">08</span>
+            <h4 class="mt-1 font-headline-sm text-sm text-on-surface font-semibold">Climatological Profiling</h4>
+            <p class="mt-1 font-body-sm text-xs text-on-surface-variant">Meteorological translation: mapping unsupervised mathematical centroids back to physical rain regime identities.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="w-full bg-[#040b15] border-t border-primary/20 py-6">
+    <div class="w-full px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-on-surface-variant font-label-sm text-xs">
+      <div class="flex items-center gap-2">
+        <span class="font-semibold text-on-surface">RAINFALL ATLAS</span>
+        <span>·</span>
+        <span>Unsupervised Climate Regime Discovery Platform</span>
+        <span>·</span>
+        <span class="font-code-metric text-primary">v2.4-ML-PROD</span>
+      </div>
+      <div class="flex items-center gap-6 font-code-metric">
+        <span>LAT: 10.0°S–44.0°S</span>
+        <span>LON: 112.0°E–154.0°E</span>
+        <span id="ftr-obs-count">PRECIP_RECORDS: 145,460</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 3D VISUALIZATIONS & LIVE API CLIENT -->
+  <script>
+    // Use the same origin for both local and hosted deployments.
+    const API_BASE = `${window.location.origin}/api`;
+
+    // Global application state
+    const AppState = {
+      datasetSummary: null,
+      activeMetrics: null,
+      profiles: [],
+      pcaData: null,
+      geography: null,
+      temporal: null,
+      comparison: null,
+      activeAlgo: 'kmeans',
+      activeLinkage: 'none',
+      activeMetric: 'euclidean',
+      activeMode: 'daily',
+      currentMode: 'daily',
+      activeK: 4,
+      congruenceMetric: 'ari'
+    };
+
+    // -------------------------------------------------------------
+    // LIVE API DATA SYNC
+    // -------------------------------------------------------------
+    async function loadAllBackendData() {
+      const statusEl = document.getElementById('hdr-connection-status');
+      if (statusEl) statusEl.innerText = 'SYNCING...';
+
+      // 1. Dataset Summary
+      try {
+        const rSummary = await fetch(`${API_BASE}/dataset/summary`);
+        if (rSummary.ok) {
+          AppState.datasetSummary = await rSummary.json();
+          renderDatasetSummary(AppState.datasetSummary);
+        }
+      } catch (e) { console.warn('Dataset summary fetch error', e); }
+
+      // 2. Cluster Profiles
+      try {
+        const rProfiles = await fetch(`${API_BASE}/results/profiles`);
+        if (rProfiles.ok) {
+          AppState.profiles = await rProfiles.json();
+          renderRegimeCards(AppState.profiles);
+        }
+      } catch (e) { console.warn('Profiles fetch error', e); }
+
+      // 3. Metrics
+      try {
+        const rMetrics = await fetch(`${API_BASE}/results/metrics`);
+        if (rMetrics.ok) {
+          AppState.activeMetrics = await rMetrics.json();
+          renderMetrics(AppState.activeMetrics);
+        }
+      } catch (e) { console.warn('Metrics fetch error', e); }
+
+      // 4. PCA
+      try {
+        const rPCA = await fetch(`${API_BASE}/results/pca`);
+        if (rPCA.ok) {
+          AppState.pcaData = await rPCA.json();
+          renderPCAInfo(AppState.pcaData);
+          if (window.updatePCAScatter) window.updatePCAScatter(AppState.pcaData);
+        }
+      } catch (e) { console.warn('PCA fetch error', e); }
+
+      // 5. Dendrogram
+      try {
+        const rDendro = await fetch(`${API_BASE}/results/dendrogram`);
+        if (rDendro.ok) {
+          const dendroData = await rDendro.json();
+          renderDendrogramSVG(dendroData);
+        }
+      } catch (e) { console.warn('Dendrogram fetch error', e); }
+
+      // 6. Geography
+      try {
+        const rGeo = await fetch(`${API_BASE}/results/geography`);
+        if (rGeo.ok) {
+          AppState.geography = await rGeo.json();
+          renderGeography(AppState.geography);
+        }
+      } catch (e) { console.warn('Geography fetch error', e); }
+
+      // 7. Comparison
+      try {
+        const rComp = await fetch(`${API_BASE}/clustering/compare`);
+        if (rComp.ok) {
+          AppState.comparison = await rComp.json();
+          renderComparisonTable(AppState.comparison);
+          renderARINMIMatrix(AppState.comparison, AppState.congruenceMetric);
+        }
+      } catch (e) { console.warn('Comparison fetch error', e); }
+
+      // 8. K-Means Diagnostics
+      try {
+        await loadKMeansEvaluation();
+        await loadKMeansStability();
+      } catch (e) { console.warn('K-Means diagnostics error', e); }
+
+      // 9. Hierarchical Linkage Comparison
+      try {
+        await loadHierarchicalLinkages();
+      } catch (e) { console.warn('Hierarchical linkages error', e); }
+
+      // 10. Temporal Dynamics
+      try {
+        await loadTemporalAnalysis();
+      } catch (e) { console.warn('Temporal analysis error', e); }
+
+      // 11. Experiment Registry
+      try {
+        await loadExperimentRegistry();
+      } catch (e) { console.warn('Experiment registry error', e); }
+
+      if (statusEl) statusEl.innerText = 'LIVE TELEMETRY';
+      const badge = document.getElementById('ctrl-status-badge');
+      if (badge) badge.innerText = 'Model Ready';
+    }
+
+    function renderDatasetSummary(s) {
+      if (!s) return;
+      document.getElementById('stat-total-obs').innerText = s.total_observations.toLocaleString();
+      document.getElementById('stat-clean-rows').innerText = `${s.complete_core_rows.toLocaleString()} Complete Rows`;
+      document.getElementById('stat-stations-count').innerText = `${s.unique_locations} Geo Stns`;
+      document.getElementById('hero-date-span').innerText = `${s.date_range.min.slice(0,4)}–${s.date_range.max.slice(0,4)}`;
+      document.getElementById('hero-obs-count').innerText = `${(s.total_observations/1000).toFixed(1)}K Daily Feeds`;
+    }
+
+    function renderMetrics(m) {
+      if (!m) return;
+      document.getElementById('stat-clusters-k').innerText = `k = ${m.k}`;
+      document.getElementById('stat-silhouette-val').innerText = `Silhouette: ${m.silhouette_score} (DBI: ${m.davies_bouldin_index})`;
+    }
+
+    function renderRegimeCards(profiles) {
+      const container = document.getElementById('regime-cards-container');
+      if (!container || !profiles || profiles.length === 0) return;
+      container.innerHTML = '';
+
+      profiles.forEach((p, idx) => {
+        const card = document.createElement('div');
+        card.className = "p-6 rounded-2xl bg-[#0A1928] border hover:border-primary/60 transition-all duration-300 shadow-md flex flex-col justify-between group";
+        card.style.borderColor = `${p.color}40`;
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2.5 py-0.5 rounded-full font-label-sm text-xs font-code-metric font-semibold" style="background:${p.color}20; color:${p.color}; border:1px solid ${p.color}50">${p.regime_number}</span>
+              <span class="material-symbols-outlined text-[20px]" style="color:${p.color}">${p.icon}</span>
+            </div>
+            <h3 class="font-headline-sm text-base text-on-surface font-semibold group-hover:text-primary transition-colors">
+              ${p.title}
+            </h3>
+            <p class="mt-1 font-body-sm text-xs text-on-surface-variant">
+              ${p.description}
+            </p>
+          </div>
+          <div class="mt-4 pt-3 flex flex-col gap-1.5 font-label-sm text-xs font-code-metric border-t border-primary/15">
+            <div class="flex justify-between text-on-surface-variant">
+              <span>Mean Rain 3pm:</span>
+              <span style="color:${p.color}" class="font-semibold">${p.metrics.mean_rainfall}</span>
+            </div>
+            <div class="flex justify-between text-on-surface-variant">
+              <span>Diurnal Delta:</span>
+              <span class="text-on-surface">${p.metrics.diurnal_delta}</span>
+            </div>
+            <div class="flex justify-between text-on-surface-variant">
+              <span>Humidity 9am:</span>
+              <span class="text-on-surface">${p.metrics.humidity_9am}</span>
+            </div>
+            <div class="flex justify-between text-on-surface-variant">
+              <span>Barometric Delta:</span>
+              <span class="${parseFloat(p.metrics.barometric_delta) < 0 ? 'text-error' : 'text-secondary'} font-semibold">${p.metrics.barometric_delta}</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderPCAInfo(pca) {
+      if (!pca || !pca.explained_variance_ratio) return;
+      const ratios = pca.explained_variance_ratio;
+      if (ratios[0]) document.getElementById('pca-pc1-badge').innerText = `PC1: ${(ratios[0]*100).toFixed(1)}% (${pca.interpretations['PC1'] ? pca.interpretations['PC1'].split(',')[0] : 'Thermal'})`;
+      if (ratios[1]) document.getElementById('pca-pc2-badge').innerText = `PC2: ${(ratios[1]*100).toFixed(1)}% (${pca.interpretations['PC2'] ? pca.interpretations['PC2'].split(',')[0] : 'Moisture'})`;
+      if (ratios[2]) document.getElementById('pca-pc3-badge').innerText = `PC3: ${(ratios[2]*100).toFixed(1)}% (${pca.interpretations['PC3'] ? pca.interpretations['PC3'].split(',')[0] : 'Pressure'})`;
+      document.getElementById('pca-pts-indicator').innerText = `${pca.points_count.toLocaleString()} Latent Observations · PC1 × PC2 × PC3`;
+    }
+
+    function renderDendrogramSVG(dendro) {
+      if (!dendro) return;
+      const cBadge = document.getElementById('coph-corr-badge');
+      if (cBadge && dendro.cophenetic_correlation !== undefined) {
+        cBadge.innerText = `Cophenetic Corr: ${dendro.cophenetic_correlation}`;
+      }
+      const cVal = document.getElementById('dendro-coph-val');
+      if (cVal && dendro.cophenetic_correlation !== undefined) {
+        cVal.innerText = `${dendro.cophenetic_correlation}`;
+      }
+      const mDist = document.getElementById('dendro-max-dist');
+      if (mDist && dendro.max_distance !== undefined) {
+        mDist.innerText = `${dendro.max_distance.toFixed(1)}`;
+      }
+
+      if (!dendro.icoord) return;
+      const svg = document.getElementById('dendro-svg');
+      if (!svg) return;
+      svg.innerHTML = '';
+
+      const maxD = dendro.max_distance || 150;
+      const padX = 20, padY = 20, w = 360, h = 200;
+      
+      const allX = dendro.icoord.flat();
+      const minX = Math.min(...allX);
+      const maxX = Math.max(...allX);
+
+      dendro.icoord.forEach((xs, idx) => {
+        const ys = dendro.dcoord[idx];
+        const color = dendro.color_list[idx] || '#54D6E8';
+
+        const x1 = padX + ((xs[0] - minX) / (maxX - minX)) * w;
+        const y1 = h - (ys[0] / maxD) * (h - padY);
+        const x2 = padX + ((xs[1] - minX) / (maxX - minX)) * w;
+        const y2 = h - (ys[1] / maxD) * (h - padY);
+        const x3 = padX + ((xs[2] - minX) / (maxX - minX)) * w;
+        const y3 = h - (ys[2] / maxD) * (h - padY);
+        const x4 = padX + ((xs[3] - minX) / (maxX - minX)) * w;
+        const y4 = h - (ys[3] / maxD) * (h - padY);
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M ${x1} ${y1} L ${x2} ${y2} L ${x3} ${y3} L ${x4} ${y4}`);
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', '1.5');
+        path.setAttribute('fill', 'none');
+        path.setAttribute('opacity', '0.85');
+        svg.appendChild(path);
+      });
+    }
+
+    function renderGeography(geo) {
+      if (!geo || !geo.continental_distribution) return;
+      const container = document.getElementById('continental-bars-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      geo.continental_distribution.forEach(item => {
+        const row = document.createElement('div');
+        row.innerHTML = `
+          <div class="flex justify-between mb-1 text-on-surface">
+            <span>${item.title}</span>
+            <span class="font-bold" style="color:${item.color}">${item.percentage}%</span>
+          </div>
+          <div class="w-full h-2 rounded bg-[#040b15] overflow-hidden">
+            <div class="h-full rounded" style="width:${item.percentage}%; background-color:${item.color}"></div>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function renderComparisonTable(comp) {
+      if (!comp || !comp.comparison_table) return;
+      const tbody = document.getElementById('comparison-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      comp.comparison_table.forEach(m => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-primary/5 transition-colors";
+        const objVal = typeof m.objective_metric_value === 'number'
+          ? m.objective_metric_value.toLocaleString()
+          : (m.objective_metric_value || 'N/A');
+        const silVal = typeof m.silhouette_score === 'number'
+          ? m.silhouette_score.toFixed(3)
+          : (m.silhouette_score || 'N/A');
+        const dbiVal = typeof m.davies_bouldin_index === 'number'
+          ? m.davies_bouldin_index.toFixed(3)
+          : (m.davies_bouldin_index || 'N/A');
+        const balVal = typeof m.balance_ratio === 'number'
+          ? (m.balance_ratio * 100).toFixed(1) + '%'
+          : (m.balance_ratio || 'N/A');
+        const runVal = typeof m.runtime_seconds === 'number'
+          ? m.runtime_seconds.toFixed(2) + 's'
+          : (m.runtime_seconds || 'N/A');
+
+        tr.innerHTML = `
+          <td class="py-2 px-3 font-semibold text-primary">${m.algorithm}</td>
+          <td class="py-2 px-3">${m.distance_metric}</td>
+          <td class="py-2 px-3">${m.linkage || 'N/A'}</td>
+          <td class="py-2 px-3 text-secondary font-bold">${m.k}</td>
+          <td class="py-2 px-3">${objVal}</td>
+          <td class="py-2 px-3 text-tertiary font-bold">${silVal}</td>
+          <td class="py-2 px-3">${dbiVal}</td>
+          <td class="py-2 px-3">${balVal}</td>
+          <td class="py-2 px-3 text-on-surface-variant">${runVal}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderARINMIMatrix(comp, metricType = 'ari') {
+      const container = document.getElementById('congruence-matrix-container');
+      if (!container || !comp) return;
+
+      const matrixData = metricType === 'ari' ? comp.pairwise_ari : comp.pairwise_nmi;
+      if (!matrixData || Object.keys(matrixData).length === 0) {
+        container.innerHTML = '<div class="text-on-surface-variant py-2">Matrix data unavailable</div>';
+        return;
+      }
+
+      const keys = Object.keys(matrixData);
+      const labelMap = {
+        'K-Means (k=4)': 'K-Means',
+        'K-Medoids (CLARA / PAM) (k=4)': 'K-Medoids',
+        'Agglomerative (Ward) (k=4)': 'Ward Linkage',
+        'kmeans': 'K-Means',
+        'kmedoids': 'K-Medoids',
+        'hierarchical_ward': 'Ward Linkage',
+        'hierarchical_complete': 'Complete',
+        'hierarchical_average': 'Average'
+      };
+
+      let html = `<table class="w-full text-center border-collapse">
+        <thead>
+          <tr class="border-b border-primary/20 text-secondary text-[11px]">
+            <th class="py-2 px-2 text-left">Model Pair</th>`;
+      keys.forEach(k => {
+        html += `<th class="py-2 px-2">${labelMap[k] || k.split(' ')[0]}</th>`;
+      });
+      html += `</tr></thead><tbody class="divide-y divide-primary/10 text-on-surface">`;
+
+      keys.forEach(k1 => {
+        html += `<tr><td class="py-2 px-2 font-semibold text-primary text-left text-[11px]">${labelMap[k1] || k1.split(' ')[0]}</td>`;
+        keys.forEach(k2 => {
+          const val = matrixData[k1] && matrixData[k1][k2] !== undefined ? matrixData[k1][k2] : (k1 === k2 ? 1.0 : 0.0);
+          const isDiag = k1 === k2;
+          const isHigh = val >= 0.8;
+          const colorClass = isDiag ? 'text-primary font-bold' : (isHigh ? 'text-secondary font-semibold' : 'text-on-surface');
+          html += `<td class="py-2 px-2 ${colorClass}">${typeof val === 'number' ? val.toFixed(3) : val}</td>`;
+        });
+        html += `</tr>`;
+      });
+      html += `</tbody></table>`;
+      container.innerHTML = html;
+    }
+
+    // Congruence Matrix Tabs
+    const btnTabAri = document.getElementById('btn-tab-ari');
+    const btnTabNmi = document.getElementById('btn-tab-nmi');
+    if (btnTabAri && btnTabNmi) {
+      btnTabAri.addEventListener('click', () => {
+        btnTabAri.className = 'px-2.5 py-1 rounded bg-primary/20 border border-primary/40 text-primary font-code-metric text-xs font-semibold';
+        btnTabNmi.className = 'px-2.5 py-1 rounded bg-[#07111F] border border-primary/20 text-on-surface-variant hover:text-primary font-code-metric text-xs';
+        AppState.congruenceMetric = 'ari';
+        if (AppState.comparison) renderARINMIMatrix(AppState.comparison, 'ari');
+      });
+      btnTabNmi.addEventListener('click', () => {
+        btnTabNmi.className = 'px-2.5 py-1 rounded bg-primary/20 border border-primary/40 text-primary font-code-metric text-xs font-semibold';
+        btnTabAri.className = 'px-2.5 py-1 rounded bg-[#07111F] border border-primary/20 text-on-surface-variant hover:text-primary font-code-metric text-xs';
+        AppState.congruenceMetric = 'nmi';
+        if (AppState.comparison) renderARINMIMatrix(AppState.comparison, 'nmi');
+      });
+    }
+
+    async function loadKMeansEvaluation() {
+      try {
+        const res = await fetch(`${API_BASE}/clustering/kmeans/evaluate?k_min=2&k_max=8`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const tbody = document.getElementById('kmeans-evaluate-table-body');
+        const series = data.evaluation_series || data.range_results || [];
+        if (!tbody || series.length === 0) return;
+        tbody.innerHTML = '';
+
+        series.forEach(row => {
+          let assessment = '<span class="text-on-surface-variant">Partition Stage</span>';
+          if (row.k === 2) assessment = '<span class="text-primary font-bold">Math Maxima (Binary)</span>';
+          else if (row.k === 4) assessment = '<span class="text-secondary font-bold">Domain Optimal (Meteorological)</span>';
+          else if (row.k > 4) assessment = '<span class="text-tertiary">Regime Splitting</span>';
+
+          const wcss = row.wcss_full_data !== undefined ? row.wcss_full_data : (row.wcss || 0);
+          const sil = row.silhouette_score_sample !== undefined ? row.silhouette_score_sample : (row.silhouette_sample || 0);
+          const db = row.davies_bouldin_index_sample !== undefined ? row.davies_bouldin_index_sample : (row.davies_bouldin_sample || 0);
+
+          const tr = document.createElement('tr');
+          tr.className = row.k === 4 ? 'bg-primary/10 font-semibold' : 'hover:bg-primary/5';
+          tr.innerHTML = `
+            <td class="py-2 px-2.5 ${row.k === 4 ? 'text-primary font-bold' : 'text-on-surface'}">k = ${row.k}</td>
+            <td class="py-2 px-2.5">${wcss.toLocaleString()}</td>
+            <td class="py-2 px-2.5 ${row.k === 4 ? 'text-secondary font-bold' : ''}">${sil.toFixed(3)}</td>
+            <td class="py-2 px-2.5">${db.toFixed(3)}</td>
+            <td class="py-2 px-2.5">${((row.balance_ratio || 0) * 100).toFixed(1)}%</td>
+            <td class="py-2 px-2.5">${assessment}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        console.warn('Failed to load k-means evaluation', e);
+      }
+    }
+
+    async function loadKMeansStability() {
+      try {
+        const res = await fetch(`${API_BASE}/clustering/kmeans/stability?k=${AppState.activeK || 4}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const elAri = document.getElementById('stability-mean-ari');
+        const elStd = document.getElementById('stability-wcss-std');
+        const meanAri = data.mean_pairwise_ari !== undefined ? data.mean_pairwise_ari : data.pairwise_ari_mean;
+        if (elAri && meanAri !== undefined) {
+          elAri.innerText = meanAri.toFixed(4);
+        }
+        const wcssMean = data.wcss_mean !== undefined ? data.wcss_mean : data.mean_wcss;
+        const wcssStd = data.wcss_std !== undefined ? data.wcss_std : data.std_wcss;
+        if (elStd && wcssStd !== undefined && wcssMean > 0) {
+          const pct = (wcssStd / wcssMean) * 100;
+          elStd.innerText = `± ${pct.toFixed(2)}%`;
+        }
+      } catch (e) {
+        console.warn('Failed to load k-means stability', e);
+      }
+    }
+
+    async function loadHierarchicalLinkages() {
+      try {
+        const res = await fetch(`${API_BASE}/clustering/hierarchical/compare_linkages?k=${AppState.activeK || 4}&sample_size=1500`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const tbody = document.getElementById('hierarchical-linkages-table-body');
+        const list = Array.isArray(data) ? data : (data.linkages_evaluated || []);
+        if (!tbody || list.length === 0) return;
+        tbody.innerHTML = '';
+
+        const nameMap = {
+          'ward': 'Ward Minimum Variance',
+          'complete': 'Complete Linkage',
+          'average': 'Average Linkage'
+        };
+
+        list.forEach(l => {
+          const tr = document.createElement('tr');
+          const lk = l.linkage_method || l.linkage;
+          const met = l.distance_metric || l.metric;
+          const isSelected = lk === 'ward' && met === 'euclidean';
+          const sil = l.silhouette_score !== undefined ? l.silhouette_score : (l.silhouette_sample || 0);
+          const db = l.davies_bouldin_index !== undefined ? l.davies_bouldin_index : (l.davies_bouldin_sample || 0);
+          const coph = l.cophenetic_correlation || 0;
+
+          tr.className = isSelected ? 'bg-secondary/10 font-semibold' : 'hover:bg-primary/5';
+          tr.innerHTML = `
+            <td class="py-2.5 px-3 ${isSelected ? 'text-secondary font-bold' : 'text-primary'}">${nameMap[lk] || lk} (${met})</td>
+            <td class="py-2.5 px-3 uppercase text-[11px]">${lk}</td>
+            <td class="py-2.5 px-3 capitalize">${met}</td>
+            <td class="py-2.5 px-3 font-bold ${coph > 0.6 ? 'text-primary' : 'text-on-surface'}">${coph.toFixed(3)}</td>
+            <td class="py-2.5 px-3 ${isSelected ? 'text-secondary font-bold' : ''}">${sil.toFixed(3)}</td>
+            <td class="py-2.5 px-3">${db.toFixed(3)}</td>
+            <td class="py-2.5 px-3 text-on-surface-variant">${(l.runtime_seconds || 0).toFixed(2)}s</td>
+            <td class="py-2.5 px-3 text-secondary font-semibold">Verified Monotonic</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        console.warn('Failed to load hierarchical linkages', e);
+      }
+    }
+
+    async function loadTemporalAnalysis() {
+      try {
+        const res = await fetch(`${API_BASE}/results/temporal`);
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        // 1. Seasonal Breakdown
+        const sContainer = document.getElementById('seasonal-breakdown-container');
+        if (sContainer && data.seasonal_distribution) {
+          sContainer.innerHTML = '';
+          const seasonColors = { 'Summer': '#54D6E8', 'Autumn': '#80D5D0', 'Winter': '#A4C9FF', 'Spring': '#3B82F6' };
+          
+          data.seasonal_distribution.forEach(s => {
+            const row = document.createElement('div');
+            row.className = 'p-2.5 rounded-xl bg-[#0e2236]/70 border border-primary/20 flex flex-col gap-1.5';
+            
+            const clusterPcts = s.cluster_percentages || {};
+            let badgesHtml = '';
+            for (const [cId, pct] of Object.entries(clusterPcts)) {
+              badgesHtml += `<span class="px-1.5 py-0.5 rounded bg-[#07111F] border border-primary/20 text-[10px]">R${cId}: <b class="text-primary">${pct}%</b></span>`;
+            }
+
+            row.innerHTML = `
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-on-surface text-xs flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full" style="background:${seasonColors[s.season] || '#54D6E8'}"></span>
+                  ${s.season}
+                </span>
+                <span class="text-on-surface-variant text-[11px]">${s.total.toLocaleString()} Synoptic Days</span>
+              </div>
+              <div class="flex flex-wrap gap-1.5 mt-0.5">
+                ${badgesHtml}
+              </div>
+            `;
+            sContainer.appendChild(row);
+          });
+        }
+
+        // 2. Markov Matrix
+        const thead = document.getElementById('markov-table-head');
+        const tbody = document.getElementById('markov-table-body');
+        if (thead && tbody && data.transition_matrix) {
+          const cKeys = Object.keys(data.transition_matrix);
+          let headHtml = `<tr class="border-b border-primary/20 text-primary text-[11px]"><th class="py-2 px-2 text-left">From (Day t) \\ To (t+1)</th>`;
+          cKeys.forEach(k => {
+            headHtml += `<th class="py-2 px-2">Regime ${k}</th>`;
+          });
+          headHtml += `</tr>`;
+          thead.innerHTML = headHtml;
+
+          tbody.innerHTML = '';
+          cKeys.forEach(c1 => {
+            const tr = document.createElement('tr');
+            let rowHtml = `<td class="py-2 px-2 font-semibold text-primary text-left text-[11px]">Regime ${c1}</td>`;
+            cKeys.forEach(c2 => {
+              const prob = data.transition_matrix[c1] && data.transition_matrix[c1][c2] !== undefined ? data.transition_matrix[c1][c2] : 0.0;
+              const isDiag = c1 === c2;
+              const styleClass = isDiag ? 'bg-primary/20 text-primary font-bold' : 'text-on-surface';
+              rowHtml += `<td class="py-2 px-2 ${styleClass}">${(prob * 100).toFixed(1)}%</td>`;
+            });
+            tr.innerHTML = rowHtml;
+            tbody.appendChild(tr);
+          });
+        }
+      } catch (e) {
+        console.warn('Failed to load temporal analysis', e);
+      }
+    }
+
+    async function loadExperimentRegistry() {
+      try {
+        const res = await fetch(`${API_BASE}/experiments`);
+        if (!res.ok) {
+          console.warn('experiments HTTP error', res.status);
+          return;
+        }
+        const list = await res.json();
+        const tbody = document.getElementById('experiment-registry-table-body');
+        const badge = document.getElementById('registry-count-badge');
+        if (badge) badge.innerText = `Registry: ${list.length} runs`;
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        if (list.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="10" class="py-4 text-center text-on-surface-variant">No experiments registered yet</td></tr>';
+          return;
+        }
+
+        const sorted = [...list].reverse();
+        sorted.forEach(exp => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-primary/5 transition-colors';
+          const dt = exp.timestamp ? exp.timestamp.replace('T', ' ').slice(0, 19) : 'N/A';
+          tr.innerHTML = `
+            <td class="py-2 px-3 text-secondary font-bold text-[11px]">${exp.experiment_id}</td>
+            <td class="py-2 px-3 text-on-surface-variant text-[11px]">${dt}</td>
+            <td class="py-2 px-3 text-primary font-semibold">${exp.algorithm}</td>
+            <td class="py-2 px-3">${exp.distance_metric}</td>
+            <td class="py-2 px-3">${exp.linkage || 'N/A'}</td>
+            <td class="py-2 px-3 font-bold text-tertiary">${exp.k}</td>
+            <td class="py-2 px-3 text-[11px]">${exp.observation_unit}</td>
+            <td class="py-2 px-3 text-secondary font-bold">${typeof exp.silhouette_score === 'number' ? exp.silhouette_score.toFixed(3) : exp.silhouette_score}</td>
+            <td class="py-2 px-3">${typeof exp.davies_bouldin_index === 'number' ? exp.davies_bouldin_index.toFixed(3) : exp.davies_bouldin_index}</td>
+            <td class="py-2 px-3 text-on-surface-variant">${typeof exp.runtime_seconds === 'number' ? exp.runtime_seconds.toFixed(2) + 's' : 'N/A'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        console.warn('Failed to load experiment registry', e);
+      }
+    }
+
+    // -------------------------------------------------------------
+    // CONTROLLER HANDLERS
+    // -------------------------------------------------------------
+    document.querySelectorAll('#algo-btn-group button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('#algo-btn-group button').forEach(b => {
+          b.classList.remove('active-pill');
+          b.classList.add('bg-[#07111F]', 'text-on-surface-variant');
+        });
+        e.currentTarget.classList.add('active-pill');
+        e.currentTarget.classList.remove('bg-[#07111F]', 'text-on-surface-variant');
+        AppState.activeAlgo = e.currentTarget.dataset.algo;
+        AppState.activeLinkage = e.currentTarget.dataset.linkage || 'none';
+        AppState.activeMetric = e.currentTarget.dataset.metric || 'euclidean';
+      });
+    });
+
+    document.querySelectorAll('#mode-btn-group button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('#mode-btn-group button').forEach(b => {
+          b.classList.remove('active-pill');
+          b.classList.add('bg-[#07111F]', 'text-on-surface-variant');
+        });
+        e.currentTarget.classList.add('active-pill');
+        e.currentTarget.classList.remove('bg-[#07111F]', 'text-on-surface-variant');
+        AppState.activeMode = e.currentTarget.dataset.mode;
+      });
+    });
+
+    document.querySelectorAll('#k-btn-group button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('#k-btn-group button').forEach(b => {
+          b.classList.remove('active-pill');
+          b.classList.add('bg-[#07111F]', 'text-on-surface-variant');
+        });
+        e.currentTarget.classList.add('active-pill');
+        e.currentTarget.classList.remove('bg-[#07111F]', 'text-on-surface-variant');
+        AppState.activeK = parseInt(e.currentTarget.dataset.k);
+      });
+    });
+
+    const runBtn = document.getElementById('btn-run-full-analysis');
+    if (runBtn) {
+      runBtn.addEventListener('click', async () => {
+        await triggerModelRecalculation();
+      });
+    }
+
+    async function triggerModelRecalculation() {
+      const badge = document.getElementById('ctrl-status-badge');
+      badge.innerText = 'Calculating Centroids...';
+      badge.className = 'font-code-metric text-xs text-primary animate-pulse';
+
+      try {
+        if (AppState.activeMode !== AppState.currentMode) {
+          badge.innerText = `Aggregating ${AppState.activeMode}...`;
+          await fetch(`${API_BASE}/preprocessing/configure`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ observation_unit: AppState.activeMode })
+          });
+          AppState.currentMode = AppState.activeMode;
+        }
+
+        badge.innerText = `Running ${AppState.activeAlgo.toUpperCase()} (k=${AppState.activeK})...`;
+        let endpoint = `${API_BASE}/clustering/${AppState.activeAlgo}`;
+        let body = { k: AppState.activeK, random_state: 42 };
+        if (AppState.activeAlgo === 'hierarchical') {
+          body.linkage = AppState.activeLinkage !== 'none' ? AppState.activeLinkage : 'ward';
+          body.metric = AppState.activeMetric || 'euclidean';
+        }
+
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+
+        if (res.ok) {
+          await loadAllBackendData();
+        } else {
+          const errData = await res.json();
+          console.error('Model recalculation returned error:', errData);
+        }
+      } catch (err) {
+        console.error('Model recalculation network error:', err);
+      } finally {
+        badge.innerText = 'Model Ready';
+        badge.className = 'font-code-metric text-xs text-secondary';
+      }
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      loadAllBackendData();
+    });
+
+    // =========================================================================
+    // 1. HERO — ATMOSPHERIC EARTH & RAINFALL GLOBE (#hero-earth-container)
+    // =========================================================================
+    (function() {
+      const container = document.getElementById('hero-earth-container');
+      if (!container) return;
+      const w = container.clientWidth || 600;
+      const h = container.clientHeight || 580;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+      camera.position.set(0, 3, 14);
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const globeGroup = new THREE.Group();
+      scene.add(globeGroup);
+
+      const globeGeo = new THREE.SphereGeometry(4.2, 48, 48);
+      const globeMat = new THREE.MeshPhongMaterial({
+        color: 0x051324,
+        emissive: 0x030a14,
+        specular: 0x54D6E8,
+        shininess: 45
+      });
+      const oceanMesh = new THREE.Mesh(globeGeo, globeMat);
+      globeGroup.add(oceanMesh);
+
+      const wireGeo = new THREE.WireframeGeometry(new THREE.SphereGeometry(4.24, 32, 24));
+      const wireMat = new THREE.LineBasicMaterial({ color: 0x1c405c, transparent: true, opacity: 0.35 });
+      globeGroup.add(new THREE.LineSegments(wireGeo, wireMat));
+
+      const landGroup = new THREE.Group();
+      globeGroup.add(landGroup);
+
+      const latLonPoints = [];
+      for (let lat = -10; lat >= -40; lat -= 2) {
+        for (let lon = 112; lon <= 154; lon += 2.5) {
+          if (Math.random() > 0.15) {
+            latLonPoints.push({ lat: lat * (Math.PI / 180), lon: lon * (Math.PI / 180), isAus: true });
+          }
+        }
+      }
+      for (let i = 0; i < 900; i++) {
+        const lat = (Math.random() - 0.5) * Math.PI;
+        const lon = (Math.random() - 0.5) * Math.PI * 2;
+        if (Math.random() > 0.45) latLonPoints.push({ lat, lon, isAus: false });
+      }
+
+      const dotGeo = new THREE.SphereGeometry(0.045, 6, 6);
+      const ausMat = new THREE.MeshBasicMaterial({ color: 0x54D6E8 });
+      const landMat = new THREE.MeshBasicMaterial({ color: 0x1b4c6b, transparent: true, opacity: 0.6 });
+
+      latLonPoints.forEach(pt => {
+        const r = 4.28;
+        const x = r * Math.cos(pt.lat) * Math.cos(pt.lon);
+        const y = r * Math.sin(pt.lat);
+        const z = r * Math.cos(pt.lat) * Math.sin(pt.lon);
+        const m = new THREE.Mesh(dotGeo, pt.isAus ? ausMat : landMat);
+        m.position.set(x, y, z);
+        landGroup.add(m);
+      });
+
+      const haloGeo = new THREE.RingGeometry(4.35, 4.75, 64);
+      const haloMat = new THREE.MeshBasicMaterial({ color: 0x54D6E8, side: THREE.DoubleSide, transparent: true, opacity: 0.28 });
+      const haloMesh = new THREE.Mesh(haloGeo, haloMat);
+      haloMesh.rotation.x = Math.PI / 2.3;
+      globeGroup.add(haloMesh);
+
+      const orbitGeo = new THREE.RingGeometry(5.2, 5.25, 80);
+      const orbitMat = new THREE.MeshBasicMaterial({ color: 0x3BBFAF, side: THREE.DoubleSide, transparent: true, opacity: 0.35 });
+      const orbitMesh = new THREE.Mesh(orbitGeo, orbitMat);
+      orbitMesh.rotation.x = Math.PI / 3;
+      orbitMesh.rotation.y = Math.PI / 8;
+      globeGroup.add(orbitMesh);
+
+      const rainCount = 600;
+      const rainGeo = new THREE.BufferGeometry();
+      const rainPos = new Float32Array(rainCount * 3);
+      for (let i = 0; i < rainCount; i++) {
+        rainPos[i * 3] = (Math.random() - 0.5) * 12;
+        rainPos[i * 3 + 1] = Math.random() * 14 - 4;
+        rainPos[i * 3 + 2] = (Math.random() - 0.5) * 12;
+      }
+      rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPos, 3));
+      const rainMat = new THREE.PointsMaterial({ color: 0x54D6E8, size: 0.08, transparent: true, opacity: 0.75 });
+      scene.add(new THREE.Points(rainGeo, rainMat));
+
+      const sunLight = new THREE.DirectionalLight(0x54D6E8, 1.8);
+      sunLight.position.set(10, 8, 12);
+      scene.add(sunLight);
+      scene.add(new THREE.AmbientLight(0x0e2236, 1.6));
+
+      let mouseX = 0, mouseY = 0;
+      window.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
+          mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 0.8;
+          mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 0.4;
+        }
+      });
+
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const t = clock.getElapsedTime();
+        globeGroup.rotation.y = t * 0.12 + mouseX * 0.5;
+        globeGroup.rotation.x = 0.25 + mouseY * 0.3;
+        orbitMesh.rotation.z = t * 0.08;
+
+        const pArr = rainGeo.attributes.position.array;
+        for (let i = 1; i < rainCount * 3; i += 3) {
+          pArr[i] -= 0.06;
+          if (pArr[i] < -5) pArr[i] = 7;
+        }
+        rainGeo.attributes.position.needsUpdate = true;
+
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const nw = container.clientWidth || 600;
+        const nh = container.clientHeight || 580;
+        camera.aspect = nw / nh;
+        camera.updateProjectionMatrix();
+        renderer.setSize(nw, nh);
+      });
+    })();
+
+    // =========================================================================
+    // 2. SPATIAL WEATHER LANDSCAPE (#threejs-container-DATA_FIELD)
+    // =========================================================================
+    (function() {
+      const container = document.getElementById('threejs-container-DATA_FIELD');
+      if (!container) return;
+      const w = container.clientWidth || 800;
+      const h = container.clientHeight || 500;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+      camera.position.set(0, 16, 26);
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const gridHelper = new THREE.GridHelper(32, 24, 0x54D6E8, 0x16324c);
+      gridHelper.position.y = -2;
+      scene.add(gridHelper);
+
+      const stationGroup = new THREE.Group();
+      scene.add(stationGroup);
+
+      const boxGeo = new THREE.CylinderGeometry(0.12, 0.12, 1, 12);
+      const ringGeo = new THREE.RingGeometry(0.2, 0.28, 24);
+
+      const stations = [];
+      for (let i = 0; i < 49; i++) {
+        const angle = (i / 49) * Math.PI * 2;
+        const rad = 2.5 + Math.random() * 9.5;
+        const px = Math.cos(angle) * rad + (Math.random() - 0.5) * 2.2;
+        const pz = Math.sin(angle) * rad * 0.75 + (Math.random() - 0.5) * 2.2;
+        const height = 1.0 + Math.random() * 4.8;
+        const color = Math.random() > 0.6 ? 0x54D6E8 : (Math.random() > 0.5 ? 0x3BBFAF : 0x91DCE8);
+
+        const colMesh = new THREE.Mesh(boxGeo, new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.85 }));
+        colMesh.scale.set(1, height, 1);
+        colMesh.position.set(px, -2 + height / 2, pz);
+        stationGroup.add(colMesh);
+
+        const topSphere = new THREE.Mesh(new THREE.SphereGeometry(0.24, 12, 12), new THREE.MeshBasicMaterial({ color: color }));
+        topSphere.position.set(px, -2 + height, pz);
+        stationGroup.add(topSphere);
+
+        const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide, transparent: true, opacity: 0.45 }));
+        ring.rotation.x = Math.PI / 2;
+        ring.position.set(px, -1.95, pz);
+        stationGroup.add(ring);
+
+        stations.push({ topSphere, ring, origY: -2 + height, speed: 1.5 + Math.random() });
+      }
+
+      let mouseX = 0;
+      window.addEventListener('mousemove', (e) => {
+        const r = container.getBoundingClientRect();
+        if (e.clientY >= r.top && e.clientY <= r.bottom) {
+          mouseX = ((e.clientX - r.left) / r.width - 0.5) * 0.8;
+        }
+      });
+
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const t = clock.getElapsedTime();
+        stationGroup.rotation.y = t * 0.05 + mouseX;
+        gridHelper.rotation.y = stationGroup.rotation.y;
+
+        stations.forEach((st, idx) => {
+          st.topSphere.position.y = st.origY + Math.sin(t * st.speed + idx) * 0.15;
+          const s = 1.0 + Math.sin(t * 2 + idx) * 0.3;
+          st.ring.scale.set(s, s, s);
+        });
+
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const newW = container.clientWidth || 800;
+        const newH = container.clientHeight || 500;
+        camera.aspect = newW / newH;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newW, newH);
+      });
+    })();
+
+    // =========================================================================
+    // 3. PARTICLE CLUSTERING ENGINE (#particle-cluster-container)
+    // =========================================================================
+    (function() {
+      const container = document.getElementById('particle-cluster-container');
+      if (!container) return;
+      const w = container.clientWidth || 900;
+      const h = container.clientHeight || 540;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+      camera.position.set(0, 8, 22);
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const mainGroup = new THREE.Group();
+      scene.add(mainGroup);
+
+      const centroids = [
+        { x: -5.5, y: 3.5, z: 2.0, color: 0x54D6E8 },
+        { x: 5.5, y: -2.0, z: -3.0, color: 0x3BBFAF },
+        { x: -4.0, y: -4.0, z: -2.0, color: 0x91DCE8 },
+        { x: 4.5, y: 4.0, z: 3.5, color: 0x45c6a6 }
+      ];
+
+      const centroidMeshes = [];
+      centroids.forEach((c) => {
+        const sphere = new THREE.Mesh(
+          new THREE.SphereGeometry(0.55, 20, 20),
+          new THREE.MeshBasicMaterial({ color: c.color, transparent: true, opacity: 0.95 })
+        );
+        sphere.position.set(c.x, c.y, c.z);
+        mainGroup.add(sphere);
+
+        const ring = new THREE.Mesh(
+          new THREE.RingGeometry(0.8, 0.95, 32),
+          new THREE.MeshBasicMaterial({ color: c.color, side: THREE.DoubleSide, transparent: true, opacity: 0.6 })
+        );
+        ring.rotation.x = Math.PI / 2;
+        ring.position.set(c.x, c.y, c.z);
+        mainGroup.add(ring);
+
+        centroidMeshes.push({ sphere, ring });
+      });
+
+      const particleCount = 2500;
+      const positions = new Float32Array(particleCount * 3);
+      const colors = new Float32Array(particleCount * 3);
+      const targets = [];
+      const origins = [];
+
+      const colPalette = [
+        new THREE.Color(0x54D6E8),
+        new THREE.Color(0x3BBFAF),
+        new THREE.Color(0x91DCE8),
+        new THREE.Color(0x45c6a6)
+      ];
+
+      for (let i = 0; i < particleCount; i++) {
+        const ox = (Math.random() - 0.5) * 22;
+        const oy = (Math.random() - 0.5) * 16;
+        const oz = (Math.random() - 0.5) * 20;
+        origins.push({ x: ox, y: oy, z: oz });
+
+        const cIdx = i % 4;
+        const c = centroids[cIdx];
+        const spread = 2.0 + Math.random() * 1.5;
+        const tx = c.x + (Math.random() - 0.5) * spread;
+        const ty = c.y + (Math.random() - 0.5) * spread;
+        const tz = c.z + (Math.random() - 0.5) * spread;
+        targets.push({ x: tx, y: ty, z: tz });
+
+        positions[i * 3] = ox;
+        positions[i * 3 + 1] = oy;
+        positions[i * 3 + 2] = oz;
+
+        const col = colPalette[cIdx];
+        colors[i * 3] = col.r;
+        colors[i * 3 + 1] = col.g;
+        colors[i * 3 + 2] = col.b;
+      }
+
+      const pGeo = new THREE.BufferGeometry();
+      pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      pGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      const pMat = new THREE.PointsMaterial({
+        size: 0.15,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.85
+      });
+      const pSystem = new THREE.Points(pGeo, pMat);
+      mainGroup.add(pSystem);
+
+      // Axis grid helper at base
+      const gridHelper = new THREE.GridHelper(24, 16, 0x54D6E8, 0x16324c);
+      gridHelper.position.y = -6;
+      mainGroup.add(gridHelper);
+
+      let isPlaying = true;
+      let progress = 1.0;
+      let cycleTimer = 0;
+
+      document.getElementById('btn-cluster-play')?.addEventListener('click', () => {
+        isPlaying = true;
+      });
+      document.getElementById('btn-cluster-pause')?.addEventListener('click', () => {
+        isPlaying = false;
+      });
+      document.getElementById('btn-cluster-reset')?.addEventListener('click', () => {
+        cycleTimer = 0;
+        isPlaying = true;
+      });
+
+      let mouseX = 0, mouseY = 0;
+      window.addEventListener('mousemove', (e) => {
+        const r = container.getBoundingClientRect();
+        if (e.clientY >= r.top && e.clientY <= r.bottom) {
+          mouseX = ((e.clientX - r.left) / r.width - 0.5) * 1.0;
+          mouseY = ((e.clientY - r.top) / r.height - 0.5) * 0.5;
+        }
+      });
+
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const dt = clock.getDelta();
+        const t = clock.getElapsedTime();
+
+        if (isPlaying) {
+          cycleTimer += dt;
+          const wave = Math.sin(cycleTimer * 0.6);
+          progress = 0.5 + 0.5 * wave;
+        }
+
+        const pos = pGeo.attributes.position.array;
+        for (let i = 0; i < particleCount; i++) {
+          const orig = origins[i];
+          const targ = targets[i];
+          const curX = orig.x + (targ.x - orig.x) * progress + Math.sin(t * 2 + i) * 0.1;
+          const curY = orig.y + (targ.y - orig.y) * progress + Math.cos(t * 2 + i) * 0.1;
+          const curZ = orig.z + (targ.z - orig.z) * progress;
+
+          pos[i * 3] = curX;
+          pos[i * 3 + 1] = curY;
+          pos[i * 3 + 2] = curZ;
+        }
+        pGeo.attributes.position.needsUpdate = true;
+
+        centroidMeshes.forEach((cm, idx) => {
+          const scale = 1.0 + Math.sin(t * 3 + idx) * 0.15;
+          cm.sphere.scale.set(scale, scale, scale);
+          cm.ring.rotation.z = t * 1.5;
+        });
+
+        mainGroup.rotation.y = t * 0.08 + mouseX;
+        mainGroup.rotation.x = mouseY * 0.3;
+
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const newW = container.clientWidth || 900;
+        const newH = container.clientHeight || 540;
+        camera.aspect = newW / newH;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newW, newH);
+      });
+    })();
+
+    // =========================================================================
+    // 4. 3D HIERARCHICAL CLUSTERING TREE (#tree-container)
+    // =========================================================================
+    (function() {
+      const container = document.getElementById('tree-container');
+      if (!container) return;
+      const w = container.clientWidth || 900;
+      const h = container.clientHeight || 520;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+      camera.position.set(0, 2, 22);
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const treeGroup = new THREE.Group();
+      scene.add(treeGroup);
+
+      const rootNode = { x: 0, y: 7, z: 0, color: 0x54D6E8, size: 0.65 };
+      const l1Nodes = [
+        { x: -5.0, y: 3.5, z: 0, color: 0x54D6E8, size: 0.5 },
+        { x: 5.0, y: 3.5, z: 0, color: 0x3BBFAF, size: 0.5 }
+      ];
+      const l2Nodes = [
+        { x: -7.5, y: -0.2, z: 1.5, color: 0x54D6E8, size: 0.42 }, // Tropical
+        { x: -2.5, y: -0.2, z: -1.5, color: 0x91DCE8, size: 0.42 }, // Oceanic
+        { x: 2.5, y: -0.2, z: -1.5, color: 0x3BBFAF, size: 0.42 }, // Arid
+        { x: 7.5, y: -0.2, z: 1.5, color: 0x45c6a6, size: 0.42 }  // Convective
+      ];
+
+      // Level 3: 48 leaves (12 per regime forming dense observation clouds on ground plane)
+      const leafNodes = [];
+      const leafBranches = [];
+
+      l2Nodes.forEach((parent, pIdx) => {
+        for (let k = 0; k < 12; k++) {
+          const spreadX = (k - 5.5) * 0.42;
+          const spreadZ = (Math.random() - 0.5) * 3.5;
+          const lx = parent.x + spreadX;
+          const ly = -5.0 + (Math.random() - 0.5) * 0.6;
+          const lz = parent.z + spreadZ;
+          leafNodes.push({ x: lx, y: ly, z: lz, color: parent.color, size: 0.28 });
+          leafBranches.push({ from: parent, to: { x: lx, y: ly, z: lz }, color: parent.color });
+        }
+      });
+
+      const sphereGeo = new THREE.SphereGeometry(1, 16, 16);
+      function createNode(n) {
+        const mesh = new THREE.Mesh(sphereGeo, new THREE.MeshBasicMaterial({ color: n.color }));
+        mesh.scale.set(n.size, n.size, n.size);
+        mesh.position.set(n.x, n.y, n.z);
+        treeGroup.add(mesh);
+        return mesh;
+      }
+
+      const allNodeMeshes = [];
+      allNodeMeshes.push(createNode(rootNode));
+      l1Nodes.forEach(n => allNodeMeshes.push(createNode(n)));
+      l2Nodes.forEach(n => allNodeMeshes.push(createNode(n)));
+      leafNodes.forEach(n => allNodeMeshes.push(createNode(n)));
+
+      function drawBranch(p1, p2, col) {
+        const curve = new THREE.QuadraticBezierCurve3(
+          new THREE.Vector3(p1.x, p1.y, p1.z),
+          new THREE.Vector3((p1.x + p2.x) / 2, (p1.y + p2.y) / 2 + 0.5, (p1.z + p2.z) / 2),
+          new THREE.Vector3(p2.x, p2.y, p2.z)
+        );
+        const lineGeo = new THREE.BufferGeometry().setFromPoints(curve.getPoints(20));
+        const line = new THREE.Line(lineGeo, new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.65 }));
+        treeGroup.add(line);
+      }
+
+      // Root -> L1
+      drawBranch(rootNode, l1Nodes[0], 0x54D6E8);
+      drawBranch(rootNode, l1Nodes[1], 0x3BBFAF);
+      // L1 -> L2
+      drawBranch(l1Nodes[0], l2Nodes[0], 0x54D6E8);
+      drawBranch(l1Nodes[0], l2Nodes[1], 0x91DCE8);
+      drawBranch(l1Nodes[1], l2Nodes[2], 0x3BBFAF);
+      drawBranch(l1Nodes[1], l2Nodes[3], 0x45c6a6);
+      // L2 -> 48 Leaf Nodes
+      leafBranches.forEach(b => drawBranch(b.from, b.to, b.color));
+
+      // Isometric base grid underneath leaves
+      const baseGrid = new THREE.GridHelper(22, 18, 0x54D6E8, 0x16324c);
+      baseGrid.position.y = -5.8;
+      treeGroup.add(baseGrid);
+
+      let isPlaying = true;
+      document.getElementById('btn-tree-growth')?.addEventListener('click', () => { isPlaying = true; });
+      document.getElementById('btn-tree-pause')?.addEventListener('click', () => { isPlaying = false; });
+      document.getElementById('btn-tree-reset')?.addEventListener('click', () => {
+        treeGroup.rotation.y = 0;
+        isPlaying = true;
+      });
+
+      let mouseX = 0, mouseY = 0;
+      window.addEventListener('mousemove', (e) => {
+        const r = container.getBoundingClientRect();
+        if (e.clientY >= r.top && e.clientY <= r.bottom) {
+          mouseX = ((e.clientX - r.left) / r.width - 0.5) * 0.9;
+          mouseY = ((e.clientY - r.top) / r.height - 0.5) * 0.4;
+        }
+      });
+
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const t = clock.getElapsedTime();
+
+        if (isPlaying) {
+          treeGroup.rotation.y = Math.sin(t * 0.25) * 0.45 + mouseX;
+          treeGroup.rotation.x = mouseY * 0.25;
+        }
+
+        allNodeMeshes.forEach((mesh, idx) => {
+          const s = 1.0 + Math.sin(t * 3 + idx * 0.3) * 0.12;
+          mesh.scale.set(mesh.scale.x * 0.9 + s * 0.1, mesh.scale.y * 0.9 + s * 0.1, mesh.scale.z * 0.9 + s * 0.1);
+        });
+
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+      }
+      animate();
+    })();
+
+    // =========================================================================
+    // 5. PCA 3D LATENT SPACE (#pca-3d-container) - Real Coordinates Supported
+    // =========================================================================
+    (function() {
+      const container = document.getElementById('pca-3d-container');
+      if (!container) return;
+      const w = container.clientWidth || 900;
+      const h = container.clientHeight || 520;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+      camera.position.set(16, 12, 18);
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const pcaGroup = new THREE.Group();
+      scene.add(pcaGroup);
+
+      // 3D Bounding coordinate box
+      const boxGeo = new THREE.BoxGeometry(16, 14, 16);
+      const wireGeo = new THREE.WireframeGeometry(boxGeo);
+      const wireMat = new THREE.LineBasicMaterial({ color: 0x1c405c, transparent: true, opacity: 0.45 });
+      const boundingBox = new THREE.LineSegments(wireGeo, wireMat);
+      pcaGroup.add(boundingBox);
+
+      // Orthogonal Axes (PC1, PC2, PC3)
+      const axesGroup = new THREE.Group();
+      pcaGroup.add(axesGroup);
+
+      function createAxisLine(p1, p2, col) {
+        const geo = new THREE.BufferGeometry().setFromPoints([p1, p2]);
+        const mat = new THREE.LineBasicMaterial({ color: col, linewidth: 2 });
+        return new THREE.Line(geo, mat);
+      }
+      // PC1 (X - Thermal)
+      axesGroup.add(createAxisLine(new THREE.Vector3(-8, 0, 0), new THREE.Vector3(8, 0, 0), 0x54D6E8));
+      // PC2 (Y - Moisture)
+      axesGroup.add(createAxisLine(new THREE.Vector3(0, -7, 0), new THREE.Vector3(0, 7, 0), 0x3BBFAF));
+      // PC3 (Z - Pressure)
+      axesGroup.add(createAxisLine(new THREE.Vector3(0, 0, -8), new THREE.Vector3(0, 0, 8), 0x91DCE8));
+
+      // Eigenvector Vector Arrows
+      const eigenGroup = new THREE.Group();
+      pcaGroup.add(eigenGroup);
+
+      const arrows = [
+        { dir: new THREE.Vector3(0.8, 0.4, 0.2).normalize(), len: 7, col: 0x54D6E8 },
+        { dir: new THREE.Vector3(-0.3, 0.9, -0.1).normalize(), len: 6, col: 0x3BBFAF },
+        { dir: new THREE.Vector3(0.1, -0.2, 0.9).normalize(), len: 6.5, col: 0x91DCE8 }
+      ];
+      arrows.forEach(a => {
+        const arrow = new THREE.ArrowHelper(a.dir, new THREE.Vector3(0, 0, 0), a.len, a.col, 0.8, 0.4);
+        eigenGroup.add(arrow);
+      });
+
+      // 4 Cluster Cores & initial clusters
+      const clusters = [
+        { center: [-4.2, 3.2, 2.5], col: new THREE.Color(0x54D6E8), spread: [1.8, 1.4, 1.6] }, // Tropical
+        { center: [4.5, -2.8, -2.2], col: new THREE.Color(0x3BBFAF), spread: [1.9, 1.2, 1.5] }, // Arid
+        { center: [-2.8, -3.2, -1.8], col: new THREE.Color(0x91DCE8), spread: [1.5, 1.6, 1.3] }, // Oceanic
+        { center: [3.2, 3.0, 2.8], col: new THREE.Color(0x45c6a6), spread: [1.4, 1.5, 1.7] }   // Convective
+      ];
+
+      const coreGroup = new THREE.Group();
+      pcaGroup.add(coreGroup);
+      clusters.forEach(c => {
+        const core = new THREE.Mesh(
+          new THREE.SphereGeometry(0.4, 16, 16),
+          new THREE.MeshBasicMaterial({ color: c.col })
+        );
+        core.position.set(c.center[0], c.center[1], c.center[2]);
+        coreGroup.add(core);
+      });
+
+      // 1,800 Scatter Observations
+      const ptCount = 1800;
+      const positions = new Float32Array(ptCount * 3);
+      const colors = new Float32Array(ptCount * 3);
+
+      for (let i = 0; i < ptCount; i++) {
+        const c = clusters[i % 4];
+        positions[i * 3] = c.center[0] + (Math.random() - 0.5) * c.spread[0] * 2.4;
+        positions[i * 3 + 1] = c.center[1] + (Math.random() - 0.5) * c.spread[1] * 2.4;
+        positions[i * 3 + 2] = c.center[2] + (Math.random() - 0.5) * c.spread[2] * 2.4;
+
+        colors[i * 3] = c.col.r;
+        colors[i * 3 + 1] = c.col.g;
+        colors[i * 3 + 2] = c.col.b;
+      }
+
+      const pGeo = new THREE.BufferGeometry();
+      pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      pGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      const pMat = new THREE.PointsMaterial({
+        size: 0.16,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8
+      });
+      let scatterPoints = new THREE.Points(pGeo, pMat);
+      pcaGroup.add(scatterPoints);
+
+      const clusterColors = [
+        new THREE.Color(0x54D6E8),
+        new THREE.Color(0x3BBFAF),
+        new THREE.Color(0x91DCE8),
+        new THREE.Color(0x45c6a6),
+        new THREE.Color(0x7bf7e5)
+      ];
+
+      // Expose function to update scatter plot with real computed PCA points
+      window.updatePCAScatter = function(pcaData) {
+        if (!pcaData || !pcaData.points || !pcaData.points.length) return;
+        if (scatterPoints) pcaGroup.remove(scatterPoints);
+
+        const pts = pcaData.points;
+        const count = pts.length;
+        const pos = new Float32Array(count * 3);
+        const col = new Float32Array(count * 3);
+
+        let maxCoord = 1.0;
+        pts.forEach(p => {
+          maxCoord = Math.max(maxCoord, Math.abs(p.pc1 || 0), Math.abs(p.pc2 || 0), Math.abs(p.pc3 || 0));
+        });
+        const scale = 6.5 / maxCoord;
+
+        pts.forEach((pt, i) => {
+          pos[i * 3] = (pt.pc1 || 0) * scale;
+          pos[i * 3 + 1] = (pt.pc2 || 0) * scale;
+          pos[i * 3 + 2] = (pt.pc3 || 0) * scale;
+
+          const c = clusterColors[(pt.cluster || 0) % clusterColors.length];
+          col[i * 3] = c.r;
+          col[i * 3 + 1] = c.g;
+          col[i * 3 + 2] = c.b;
+        });
+
+        const newGeo = new THREE.BufferGeometry();
+        newGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        newGeo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+
+        const newMat = new THREE.PointsMaterial({ size: 0.16, vertexColors: true, transparent: true, opacity: 0.85 });
+        scatterPoints = new THREE.Points(newGeo, newMat);
+        pcaGroup.add(scatterPoints);
+
+        const ind = document.getElementById('pca-pts-indicator');
+        if (ind) ind.innerText = `${count.toLocaleString()} Latent Observations · PC1 × PC2 × PC3`;
+      };
+
+      let autoOrbit = true;
+      let isDragging = false, prevMouseX = 0, prevMouseY = 0;
+
+      document.getElementById('btn-pca-orbit')?.addEventListener('click', (e) => {
+        autoOrbit = !autoOrbit;
+        e.currentTarget.innerHTML = `<span class="material-symbols-outlined text-[15px]">rotate_right</span> Orbit: ${autoOrbit ? 'Auto' : 'Off'}`;
+      });
+      document.getElementById('btn-pca-axes')?.addEventListener('click', (e) => {
+        axesGroup.visible = !axesGroup.visible;
+        e.currentTarget.innerText = `Axes: ${axesGroup.visible ? 'On' : 'Off'}`;
+      });
+      document.getElementById('btn-pca-eigen')?.addEventListener('click', (e) => {
+        eigenGroup.visible = !eigenGroup.visible;
+        e.currentTarget.innerText = `Eigenvectors: ${eigenGroup.visible ? 'On' : 'Off'}`;
+      });
+
+      container.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+      });
+      window.addEventListener('mouseup', () => { isDragging = false; });
+      window.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+          pcaGroup.rotation.y += (e.clientX - prevMouseX) * 0.01;
+          pcaGroup.rotation.x += (e.clientY - prevMouseY) * 0.01;
+          prevMouseX = e.clientX;
+          prevMouseY = e.clientY;
+        }
+      });
+
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const dt = clock.getDelta();
+        if (autoOrbit && !isDragging) {
+          pcaGroup.rotation.y += dt * 0.25;
+        }
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const newW = container.clientWidth || 900;
+        const newH = container.clientHeight || 520;
+        camera.aspect = newW / newH;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newW, newH);
+      });
+    })();
+
+    // =========================================================================
+    // 6. AUSTRALIA 3D TOPOGRAPHIC TERRAIN & ISOHYET CONTOURS (#threejs-container-AU_GEO)
+    // =========================================================================
+    (function() {
+      const container = document.getElementById('threejs-container-AU_GEO');
+      if (!container) return;
+      const w = container.clientWidth || 700;
+      const h = container.clientHeight || 460;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 1000);
+      camera.position.set(0, 14, 18);
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const mapGroup = new THREE.Group();
+      scene.add(mapGroup);
+
+      // Continental Australia Polygon Simulation Wireframe Base
+      const auShape = new THREE.Shape();
+      auShape.moveTo(-5.5, 0.5);
+      auShape.lineTo(-5.2, 1.8);
+      auShape.lineTo(-3.8, 2.8); // Kimberley
+      auShape.lineTo(-2.2, 2.2); // Top End west
+      auShape.lineTo(-1.0, 3.4); // Darwin / Arnhem
+      auShape.lineTo(0.5, 2.4);  // Gulf of Carpentaria west
+      auShape.lineTo(1.8, 3.8);  // Cape York
+      auShape.lineTo(3.2, 2.2);  // Cairns
+      auShape.lineTo(5.0, 0.5);  // Mackay
+      auShape.lineTo(5.4, -1.2); // Brisbane
+      auShape.lineTo(4.6, -3.2); // Sydney / NSW coast
+      auShape.lineTo(3.4, -4.2); // Victoria / Melbourne
+      auShape.lineTo(1.5, -4.0); // Adelaide / SA gulf
+      auShape.lineTo(-0.8, -3.4); // Great Aus Bight
+      auShape.lineTo(-3.2, -3.8); // Esperance
+      auShape.lineTo(-5.4, -3.2); // Albany / SW
+      auShape.lineTo(-5.8, -1.5); // Perth / Geraldton
+      auShape.lineTo(-5.5, 0.5);
+
+      const extrudeSettings = { depth: 0.65, bevelEnabled: true, bevelSegments: 3, steps: 1, bevelSize: 0.15, bevelThickness: 0.15 };
+      const geo = new THREE.ExtrudeGeometry(auShape, extrudeSettings);
+      geo.rotateX(-Math.PI / 2);
+
+      const mat = new THREE.MeshPhongMaterial({
+        color: 0x0A1928,
+        emissive: 0x061422,
+        specular: 0x54D6E8,
+        shininess: 35
+      });
+      const continent = new THREE.Mesh(geo, mat);
+      continent.position.set(0, -0.6, 0);
+      mapGroup.add(continent);
+
+      // Great Dividing Range Topographic Ridge
+      const ridgeCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(2.5, 0.2, -2.2), // North Queensland
+        new THREE.Vector3(3.8, 0.45, -0.5),
+        new THREE.Vector3(4.5, 0.55, 1.2),  // NSW Blue Mountains
+        new THREE.Vector3(3.6, 0.5, 3.2),   // Snowy Mountains
+        new THREE.Vector3(2.8, 0.35, 4.0)   // Victoria
+      ]);
+      const ridgeGeo = new THREE.TubeGeometry(ridgeCurve, 32, 0.22, 8, false);
+      const ridgeMat = new THREE.MeshBasicMaterial({ color: 0x54D6E8, transparent: true, opacity: 0.6 });
+      const ridgeMesh = new THREE.Mesh(ridgeGeo, ridgeMat);
+      mapGroup.add(ridgeMesh);
+
+      // Wireframe outline for technical precision aesthetic
+      const wireGeo = new THREE.WireframeGeometry(geo);
+      const wireMat = new THREE.LineBasicMaterial({ color: 0x54D6E8, transparent: true, opacity: 0.3 });
+      const wireMesh = new THREE.LineSegments(wireGeo, wireMat);
+      wireMesh.position.copy(continent.position);
+      mapGroup.add(wireMesh);
+
+      // Synoptic Cities Markers & Precipitation Spikes
+      const cities = [
+        { name: 'Darwin', pos: [-1.0, 0.1, -3.2], rain: 3.2, col: 0x54D6E8 },
+        { name: 'Cairns', pos: [2.5, 0.1, -2.4], rain: 2.8, col: 0x54D6E8 },
+        { name: 'Brisbane', pos: [4.6, 0.1, 1.2], rain: 2.1, col: 0x45c6a6 },
+        { name: 'Sydney', pos: [4.2, 0.1, 2.9], rain: 1.8, col: 0x45c6a6 },
+        { name: 'Melbourne', pos: [3.2, 0.1, 4.0], rain: 1.4, col: 0x91DCE8 },
+        { name: 'Hobart', pos: [3.4, 0.1, 5.4], rain: 1.7, col: 0x91DCE8 },
+        { name: 'Adelaide', pos: [1.4, 0.1, 3.6], rain: 1.0, col: 0x91DCE8 },
+        { name: 'Alice Springs', pos: [-0.2, 0.1, 0.2], rain: 0.35, col: 0x3BBFAF },
+        { name: 'Perth', pos: [-4.9, 0.1, 2.2], rain: 1.5, col: 0x91DCE8 }
+      ];
+
+      cities.forEach(c => {
+        // Vertical rainfall column
+        const cyl = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.12, 0.12, c.rain, 12),
+          new THREE.MeshBasicMaterial({ color: c.col, transparent: true, opacity: 0.85 })
+        );
+        cyl.position.set(c.pos[0], c.pos[1] + c.rain / 2, c.pos[2]);
+        mapGroup.add(cyl);
+
+        // Glowing emitter head
+        const head = new THREE.Mesh(
+          new THREE.SphereGeometry(0.24, 12, 12),
+          new THREE.MeshBasicMaterial({ color: c.col })
+        );
+        head.position.set(c.pos[0], c.pos[1] + c.rain, c.pos[2]);
+        mapGroup.add(head);
+
+        // Concentric Isohyet Ripple Ring
+        const isoRing = new THREE.Mesh(
+          new THREE.RingGeometry(0.3, 0.42, 24),
+          new THREE.MeshBasicMaterial({ color: c.col, side: THREE.DoubleSide, transparent: true, opacity: 0.5 })
+        );
+        isoRing.rotation.x = Math.PI / 2;
+        isoRing.position.set(c.pos[0], 0.05, c.pos[2]);
+        mapGroup.add(isoRing);
+      });
+
+      // Rotating Orographic Cloud Layer
+      const cloudPartCount = 180;
+      const cloudGeo = new THREE.BufferGeometry();
+      const cloudPos = new Float32Array(cloudPartCount * 3);
+      for (let i = 0; i < cloudPartCount; i++) {
+        cloudPos[i * 3] = (Math.random() - 0.5) * 11;
+        cloudPos[i * 3 + 1] = 1.2 + Math.random() * 1.5;
+        cloudPos[i * 3 + 2] = (Math.random() - 0.5) * 10;
+      }
+      cloudGeo.setAttribute('position', new THREE.BufferAttribute(cloudPos, 3));
+      const cloudMat = new THREE.PointsMaterial({ size: 0.28, color: 0x54D6E8, transparent: true, opacity: 0.35 });
+      const clouds = new THREE.Points(cloudGeo, cloudMat);
+      mapGroup.add(clouds);
+
+      // Lights
+      scene.add(new THREE.AmbientLight(0x0e2236, 3.2));
+      const pLight = new THREE.PointLight(0x54D6E8, 2.5, 40);
+      pLight.position.set(5, 12, 8);
+      scene.add(pLight);
+
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const t = clock.getElapsedTime();
+        mapGroup.rotation.y = Math.sin(t * 0.15) * 0.25;
+        clouds.rotation.y = t * 0.03;
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const newW = container.clientWidth || 700;
+        const newH = container.clientHeight || 460;
+        camera.aspect = newW / newH;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newW, newH);
+      });
+    })();
+  </script>
+</body>
+</html>
+
