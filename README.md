@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/banner.svg" alt="Rainfall Atlas banner" width="100%"/>
+<img src="banner.svg" alt="Rainfall Atlas banner" width="100%"/>
 
 <br/>
 
@@ -25,7 +25,7 @@
 
 ## 📖 Project Overview
 
-**Rainfall Atlas** is an end-to-end unsupervised machine learning platform that analyses **10 years of Australian Bureau of Meteorology (BOM) observations** to uncover hidden precipitation regimes, with no labels required. The results are presented in a WebGL-powered dashboard where you can orbit, probe and compare the discovered regimes in 3D.
+**Rainfall Atlas** is an end-to-end unsupervised machine learning platform that analyses **10 years of Australian Bureau of Meteorology (BOM) observations** to uncover hidden precipitation regimes.
 
 > ⏳ The demo runs on Render's free tier, so the first load can take 30–60 seconds while the server wakes up.
 
@@ -35,7 +35,7 @@
 
 ### ✨ Key Features
 
-<img src="assets/features.svg" alt="Feature overview" width="100%"/>
+<img src="features.svg" alt="Feature overview" width="100%"/>
 
 ### 🧠 Algorithms and Methods
 
@@ -50,10 +50,10 @@
 ### 🎯 Discovered Regimes
 
 <div align="center">
-<img src="assets/regimes.svg" alt="Latent regime space with four discovered clusters" width="85%"/>
+<img src="regimes.svg" alt="Latent regime space with four discovered clusters" width="85%"/>
 </div>
 
-Silhouette peaks mathematically at k = 2 (0.24), which only splits arid inland from coastal maritime. **k = 4** is chosen as the optimal *meteorological* solution because it isolates Tropical Monsoon, Subtropical Maritime, Temperate Mediterranean and Arid Interior regimes with strong stability and balanced cluster sizes.
+Silhouette peaks mathematically at k = 2 (0.24), which only splits arid inland from coastal maritime. **k = 4** is chosen as the optimal *meteorological* solution because it isolates Tropical Monsoon and subtropical regimes. This yields a more physically interpretable classification of Australian rainfall modes.
 
 ---
 
@@ -98,7 +98,7 @@ Silhouette peaks mathematically at k = 2 (0.24), which only splits arid inland f
 
 ## 🔬 ML Pipeline
 
-<img src="assets/pipeline.svg" alt="8-stage ML pipeline" width="100%"/>
+<img src="pipeline.svg" alt="8-stage ML pipeline" width="100%"/>
 
 <details>
 <summary><b>📋 Click for stage-by-stage details</b></summary>
