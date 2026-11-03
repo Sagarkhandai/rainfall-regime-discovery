@@ -429,3 +429,6 @@ No project-level `LICENSE` file is included in the current workspace. Add an exp
 ## Public Deployment (GitHub + Render)
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for the exact GitHub publishing steps and Render configuration. This project includes a `render.yaml` Blueprint and a pinned `.python-version` file. The hosted dashboard uses same-origin `/api` requests so the frontend works behind the public Render URL.
+
+Live deployment link-"https://rainfall-atlas-ca-eo9s.onrender.com/"
+
