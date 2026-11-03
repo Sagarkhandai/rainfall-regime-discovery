@@ -178,6 +178,7 @@ gunicorn app:app
 3. Set **Build Command** to `pip install -r requirements.txt`
 4. Set **Start Command** to `gunicorn app:app`
 5. Deploy 🚀
+6. Live Deployment Link-"https://rainfall-atlas-ca-eo9s.onrender.com/"
 
 ---
 
