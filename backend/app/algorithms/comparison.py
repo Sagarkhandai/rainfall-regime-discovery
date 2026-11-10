@@ -35,24 +35,21 @@ class ModelComparison:
                 labels_map[model_key] = res["labels"]
 
         # Determine common evaluation sample across models for fair ARI & NMI
-        common_indices = None
-        for res in model_results:
-            if "sample_indices" in res:
-                common_indices = res["sample_indices"]
-                break
-
-        # Build evaluation labels on identical common observations
+        valid_models = [res for res in model_results if "labels" in res and res["labels"] is not None and len(res["labels"]) > 0]
         eval_labels_map = {}
-        for idx, res in enumerate(model_results):
-            model_key = f"{res.get('algorithm')} (k={res.get('k')})"
-            if "sample_labels" in res:
-                eval_labels_map[model_key] = np.array(res["sample_labels"])
-            elif "labels" in res:
-                all_lbls = np.array(res["labels"])
-                if common_indices is not None and len(all_lbls) > len(common_indices):
-                    eval_labels_map[model_key] = all_lbls[common_indices]
-                else:
-                    eval_labels_map[model_key] = all_lbls
+        common_sample_count = 0
+
+        if valid_models:
+            min_len = min(len(res["labels"]) for res in valid_models)
+            eval_size = min(2500, min_len)
+            rng = np.random.RandomState(42)
+            eval_indices = rng.choice(min_len, size=eval_size, replace=False) if min_len > eval_size else np.arange(min_len)
+            common_sample_count = len(eval_indices)
+
+            for idx, res in enumerate(valid_models):
+                model_key = f"{res.get('algorithm')} (k={res.get('k')})"
+                lbls = np.asarray(res["labels"])
+                eval_labels_map[model_key] = lbls[eval_indices]
 
         # Label-invariant pairwise similarity matrix (ARI and NMI) on identical observations
         model_names = list(eval_labels_map.keys())
@@ -63,22 +60,26 @@ class ModelComparison:
             ari_matrix[m1] = {}
             nmi_matrix[m1] = {}
             for m2 in model_names:
-                ari = float(adjusted_rand_score(eval_labels_map[m1], eval_labels_map[m2]))
-                nmi = float(normalized_mutual_info_score(eval_labels_map[m1], eval_labels_map[m2]))
+                try:
+                    ari = float(adjusted_rand_score(eval_labels_map[m1], eval_labels_map[m2]))
+                    nmi = float(normalized_mutual_info_score(eval_labels_map[m1], eval_labels_map[m2]))
+                except Exception:
+                    ari = 1.0 if m1 == m2 else 0.0
+                    nmi = 1.0 if m1 == m2 else 0.0
                 ari_matrix[m1][m2] = round(ari, 4)
                 nmi_matrix[m1][m2] = round(nmi, 4)
 
         sample_note = (
-            f"ARI and NMI are evaluated strictly on the identical common stratified sample (N={len(common_indices)}) "
-            "where genuine hierarchical clustering was performed."
-            if common_indices is not None else
+            f"ARI and NMI are evaluated strictly on the identical common sample (N={common_sample_count}) "
+            "across all fitted models."
+            if common_sample_count > 0 else
             "ARI and NMI are evaluated on the shared observation partition."
         )
 
         return sanitize_for_json({
             "comparison_table": comparison_table,
             "models_count": len(comparison_table),
-            "common_sample_size": len(common_indices) if common_indices is not None else None,
+            "common_sample_size": common_sample_count,
             "pairwise_ari": ari_matrix,
             "pairwise_nmi": nmi_matrix,
             "evaluation_notes": [

@@ -1,0 +1,5 @@
+Project Title: Natural Rainfall Regime Discovery from Historical Weather Patterns
+Registration Number:12508282
+Deployment link-"https://rainfall-atlas-ca-eo9s.onrender.com/"
+
+GitHub Repository Link-"https://github.com/Sagarkhandai/rainfall-regime-discovery"

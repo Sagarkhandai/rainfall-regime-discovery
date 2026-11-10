@@ -218,11 +218,21 @@ def get_pca_projection():
 
 @router.get("/results/dendrogram", response_model=DendrogramResponse)
 def get_dendrogram():
-    # Retrieve hierarchical ward model
+    # If active model has a dendrogram, return it
+    active_model = clustering_service.models_cache.get(clustering_service.active_model_key)
+    if active_model and "dendrogram" in active_model:
+        return active_model["dendrogram"]
+
+    # Otherwise look up default or any cached hierarchical dendrogram
     hier_model = clustering_service.models_cache.get("hierarchical_ward_k4")
-    if not hier_model or "dendrogram" not in hier_model:
-        raise HTTPException(status_code=404, detail="Hierarchical dendrogram not found.")
-    return hier_model["dendrogram"]
+    if hier_model and "dendrogram" in hier_model:
+        return hier_model["dendrogram"]
+
+    for model in clustering_service.models_cache.values():
+        if "dendrogram" in model:
+            return model["dendrogram"]
+
+    raise HTTPException(status_code=404, detail="Hierarchical dendrogram not found.")
 
 @router.get("/results/geography", response_model=GeographyResponse)
 def get_geography_analysis():

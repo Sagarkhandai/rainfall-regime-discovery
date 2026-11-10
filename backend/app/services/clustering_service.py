@@ -53,6 +53,10 @@ class ClusteringService:
         and caches the primary analytics for instantaneous response.
         """
         print("[ClusteringService] Initializing data and warming cache...")
+        self.models_cache = {}
+        self.kmeans_eval_cache = {}
+        self.kmeans_stability_cache = {}
+        self.hierarchical_linkages_cache = {}
         self.raw_df = DataLoader.load_raw_dataset()
         self.pipeline = PreprocessingPipeline(
             features=features,
