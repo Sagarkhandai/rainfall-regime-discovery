@@ -1365,7 +1365,7 @@
 
     function renderMetrics(m) {
       if (!m) return;
-      const algoDisplay = m.algorithm || AppState.activeAlgo.toUpperCase();
+      const algoDisplay = m.algorithm || getActiveAlgoTitle();
       const kEl = document.getElementById('stat-clusters-k');
       const silEl = document.getElementById('stat-silhouette-val');
       if (kEl) kEl.innerText = `k = ${m.k}`;
@@ -1382,7 +1382,7 @@
           metricTag.innerText = 'Manhattan L1 (Cityblock SAD)';
         } else {
           const lk = (AppState.activeLinkage !== 'none' ? AppState.activeLinkage : 'ward').toUpperCase();
-          const met = AppState.activeMetric || 'Euclidean';
+          const met = (AppState.activeMetric || 'euclidean') === 'cityblock' ? 'Manhattan' : 'Euclidean';
           metricTag.innerText = `${lk} Linkage (${met})`;
         }
       }
@@ -1535,7 +1535,7 @@
       // Update benchmark / active badge
       const benchBadge = document.getElementById('comparison-benchmark-badge');
       if (benchBadge) {
-        const algoDisplay = AppState.activeAlgo === 'kmeans' ? 'K-Means' : (AppState.activeAlgo === 'kmedoids' ? 'K-Medoids' : 'Agglomerative');
+        const algoDisplay = getActiveAlgoTitle();
         benchBadge.innerText = `Active: ${algoDisplay} (k = ${AppState.activeK})`;
         benchBadge.className = 'px-2 py-0.5 rounded bg-primary/20 border border-primary/50 font-code-metric text-[11px] text-primary font-bold shadow-[0_0_8px_rgba(84,214,232,0.3)]';
       }
@@ -1545,9 +1545,17 @@
         
         // Match active model strictly
         const algoKey = (m.algorithm || '').toLowerCase();
-        const isAlgoMatch = (AppState.activeAlgo === 'kmeans' && (algoKey.includes('kmeans') || algoKey.includes('k-means'))) ||
-                            (AppState.activeAlgo === 'kmedoids' && (algoKey.includes('medoid') || algoKey.includes('clara') || algoKey.includes('pam'))) ||
-                            (AppState.activeAlgo === 'hierarchical' && (algoKey.includes('agglomerative') || algoKey.includes('ward') || algoKey.includes('hierarchical')));
+        const linkKey = (m.linkage || '').toLowerCase();
+        let isAlgoMatch = false;
+        if (AppState.activeAlgo === 'kmeans') {
+          isAlgoMatch = algoKey.includes('kmeans') || algoKey.includes('k-means');
+        } else if (AppState.activeAlgo === 'kmedoids') {
+          isAlgoMatch = algoKey.includes('medoid') || algoKey.includes('clara') || algoKey.includes('pam');
+        } else if (AppState.activeAlgo === 'hierarchical') {
+          const actLink = (AppState.activeLinkage || 'ward').toLowerCase();
+          isAlgoMatch = (algoKey.includes('agglomerative') || algoKey.includes('hierarchical')) &&
+                        (linkKey ? linkKey === actLink : algoKey.includes(actLink));
+        }
         const isKMatch = (m.k === AppState.activeK);
         const isActiveRow = isAlgoMatch && isKMatch;
 
@@ -1648,11 +1656,17 @@
       keys.forEach(k1 => {
         const rowLabel = formatModelKey(k1);
         const lowerK1 = k1.toLowerCase();
-        const isActiveRow = (
-          (AppState.activeAlgo === 'kmeans' && (lowerK1.includes('kmeans') || lowerK1.includes('k-means'))) ||
-          (AppState.activeAlgo === 'kmedoids' && (lowerK1.includes('medoid') || lowerK1.includes('clara') || lowerK1.includes('pam'))) ||
-          (AppState.activeAlgo === 'hierarchical' && (lowerK1.includes('agglomerative') || lowerK1.includes('ward') || lowerK1.includes('hierarchical')))
-        ) && (k1.includes(`k=${AppState.activeK}`) || k1.includes(`k = ${AppState.activeK}`));
+        let isAlgoMatch = false;
+        if (AppState.activeAlgo === 'kmeans') {
+          isAlgoMatch = lowerK1.includes('kmeans') || lowerK1.includes('k-means');
+        } else if (AppState.activeAlgo === 'kmedoids') {
+          isAlgoMatch = lowerK1.includes('medoid') || lowerK1.includes('clara') || lowerK1.includes('pam');
+        } else if (AppState.activeAlgo === 'hierarchical') {
+          const actLink = (AppState.activeLinkage || 'ward').toLowerCase();
+          isAlgoMatch = (lowerK1.includes('agglomerative') || lowerK1.includes('hierarchical') || lowerK1.includes('ward') || lowerK1.includes('complete') || lowerK1.includes('average')) &&
+                        lowerK1.includes(actLink);
+        }
+        const isActiveRow = isAlgoMatch && (k1.includes(`k=${AppState.activeK}`) || k1.includes(`k = ${AppState.activeK}`));
 
         const rowBg = isActiveRow ? 'bg-primary/10 font-bold' : '';
         html += `<tr class="${rowBg}"><td class="py-2 px-2 font-semibold ${isActiveRow ? 'text-primary' : 'text-primary'} text-left text-[11px] whitespace-nowrap">${rowLabel}</td>`;
@@ -2084,6 +2098,18 @@
       });
     }
 
+    function getActiveAlgoTitle() {
+      if (AppState.activeAlgo === 'kmeans') return 'K-Means (Euclidean)';
+      if (AppState.activeAlgo === 'kmedoids') return 'K-Medoids (Manhattan)';
+      if (AppState.activeAlgo === 'hierarchical') {
+        if (AppState.activeLinkage === 'ward') return 'Ward (Euclidean)';
+        if (AppState.activeLinkage === 'complete') return 'Complete (Manhattan)';
+        if (AppState.activeLinkage === 'average') return 'Average (Euclidean)';
+        return `Hierarchical (${AppState.activeLinkage})`;
+      }
+      return AppState.activeAlgo;
+    }
+
     async function triggerModelRecalculation() {
       const badge = document.getElementById('ctrl-status-badge');
       const runBtn = document.getElementById('btn-run-full-analysis');
@@ -2092,12 +2118,7 @@
         runBtn.classList.add('opacity-75', 'cursor-not-allowed');
       }
 
-      const algoLabels = {
-        'kmeans': 'K-Means',
-        'kmedoids': 'K-Medoids (Manhattan)',
-        'hierarchical': `Hierarchical (${AppState.activeLinkage || 'Ward'})`
-      };
-      const dispAlgo = algoLabels[AppState.activeAlgo] || AppState.activeAlgo.toUpperCase();
+      const dispAlgo = getActiveAlgoTitle();
 
       badge.innerHTML = `<span class="inline-block animate-spin mr-1">↻</span> Calculating ${dispAlgo} (k=${AppState.activeK})...`;
       badge.className = 'font-code-metric text-xs text-primary animate-pulse font-semibold';

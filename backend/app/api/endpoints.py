@@ -1,6 +1,7 @@
 from typing import Dict, Any, List
 from fastapi import APIRouter, HTTPException, Query
 
+from app.core.json_util import sanitize_for_json
 from app.preprocessing.data_loader import DataLoader
 from app.services.clustering_service import ClusteringService
 from app.schemas.schemas import (
@@ -100,7 +101,7 @@ def run_kmeans(req: KMeansRequest):
         res = clustering_service.run_custom_kmeans(k=req.k, random_state=req.random_state)
         # Exclude large raw labels from response, return metrics and centroids
         clean_res = {k: v for k, v in res.items() if k != "labels"}
-        return clean_res
+        return sanitize_for_json(clean_res)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"K-Means execution failed: {str(e)}")
 
@@ -111,7 +112,7 @@ def evaluate_kmeans_range(
     random_state: int = Query(42)
 ):
     try:
-        return clustering_service.evaluate_kmeans_range(k_min=k_min, k_max=k_max, random_state=random_state)
+        return sanitize_for_json(clustering_service.evaluate_kmeans_range(k_min=k_min, k_max=k_max, random_state=random_state))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"K-Means evaluation failed: {str(e)}")
 
@@ -120,7 +121,7 @@ def evaluate_kmeans_stability(
     k: int = Query(4, ge=2, le=10)
 ):
     try:
-        return clustering_service.evaluate_kmeans_stability(k=k)
+        return sanitize_for_json(clustering_service.evaluate_kmeans_stability(k=k))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"K-Means stability analysis failed: {str(e)}")
 
@@ -129,7 +130,7 @@ def run_kmedoids(req: KMedoidsRequest):
     try:
         res = clustering_service.run_custom_kmedoids(k=req.k, random_state=req.random_state)
         clean_res = {k: v for k, v in res.items() if k != "labels"}
-        return clean_res
+        return sanitize_for_json(clean_res)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"K-Medoids execution failed: {str(e)}")
 
@@ -139,8 +140,8 @@ def run_hierarchical(req: HierarchicalRequest):
         res = clustering_service.run_custom_hierarchical(
             k=req.k, linkage_method=req.linkage, metric=getattr(req, 'metric', 'euclidean') or 'euclidean', random_state=req.random_state
         )
-        clean_res = {k: v for k, v in res.items() if k not in ["labels", "sample_labels"]}
-        return clean_res
+        clean_res = {k: v for k, v in res.items() if k not in ["labels", "sample_labels", "sample_indices"]}
+        return sanitize_for_json(clean_res)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Hierarchical execution failed: {str(e)}")
 
@@ -151,7 +152,7 @@ def compare_hierarchical_linkages(
     random_state: int = Query(42)
 ):
     try:
-        return clustering_service.compare_hierarchical_linkages(k=k, sample_size=sample_size, random_state=random_state)
+        return sanitize_for_json(clustering_service.compare_hierarchical_linkages(k=k, sample_size=sample_size, random_state=random_state))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Hierarchical linkage comparison failed: {str(e)}")
 
@@ -182,55 +183,57 @@ def get_active_metrics():
     model = clustering_service.models_cache.get(clustering_service.active_model_key)
     if not model:
         raise HTTPException(status_code=404, detail="Active model metrics not found.")
-    return {
+    return sanitize_for_json({
         "active_model_key": clustering_service.active_model_key,
         "algorithm": model.get("algorithm"),
         "distance_metric": model.get("distance_metric"),
+        "linkage": model.get("linkage", "N/A"),
         "k": model.get("k"),
         "silhouette_score": model.get("silhouette_score"),
         "davies_bouldin_index": model.get("davies_bouldin_index"),
         "wcss": model.get("wcss"),
         "manhattan_cost_sad": model.get("manhattan_cost_sad"),
+        "cophenetic_correlation": model.get("cophenetic_correlation"),
         "balance_ratio": model.get("balance_ratio"),
         "cluster_sizes": model.get("cluster_sizes"),
         "cluster_percentages": model.get("cluster_percentages"),
         "runtime_seconds": model.get("runtime_seconds")
-    }
+    })
 
 @router.get("/results/clusters")
 def get_active_clusters():
-    return {
+    return sanitize_for_json({
         "active_model_key": clustering_service.active_model_key,
         "profiles": clustering_service.active_profiles
-    }
+    })
 
 @router.get("/results/profiles", response_model=List[ClusterProfileItem])
 def get_cluster_profiles():
     if clustering_service.active_profiles is None:
         raise HTTPException(status_code=400, detail="Active profiles not available.")
-    return clustering_service.active_profiles
+    return sanitize_for_json(clustering_service.active_profiles)
 
 @router.get("/results/pca", response_model=PCAResponse)
 def get_pca_projection():
     if clustering_service.active_pca is None:
         raise HTTPException(status_code=400, detail="PCA data not ready.")
-    return clustering_service.active_pca
+    return sanitize_for_json(clustering_service.active_pca)
 
 @router.get("/results/dendrogram", response_model=DendrogramResponse)
 def get_dendrogram():
     # If active model has a dendrogram, return it
     active_model = clustering_service.models_cache.get(clustering_service.active_model_key)
     if active_model and "dendrogram" in active_model:
-        return active_model["dendrogram"]
+        return sanitize_for_json(active_model["dendrogram"])
 
     # Otherwise look up default or any cached hierarchical dendrogram
     hier_model = clustering_service.models_cache.get("hierarchical_ward_k4")
     if hier_model and "dendrogram" in hier_model:
-        return hier_model["dendrogram"]
+        return sanitize_for_json(hier_model["dendrogram"])
 
     for model in clustering_service.models_cache.values():
         if "dendrogram" in model:
-            return model["dendrogram"]
+            return sanitize_for_json(model["dendrogram"])
 
     raise HTTPException(status_code=404, detail="Hierarchical dendrogram not found.")
 

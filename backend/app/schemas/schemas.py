@@ -78,6 +78,7 @@ class ModelMetricSummary(BaseModel):
     davies_bouldin_index: float
     wcss: Optional[float] = None
     manhattan_cost_sad: Optional[float] = None
+    cophenetic_correlation: Optional[float] = None
     balance_ratio: float
     cluster_sizes: Dict[str, int]
     runtime_seconds: float
